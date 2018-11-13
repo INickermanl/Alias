@@ -3,7 +3,9 @@ package com.nickrman.alias;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class StartActivity extends AppCompatActivity {
+import com.nickrman.alias.base.BaseActivity;
+
+public class StartActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
