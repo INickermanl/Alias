@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import com.nickrman.alias.R;
 import com.nickrman.alias.base.BaseActivity;
 import com.nickrman.alias.services.navigation.BackNavigator;
+import com.nickrman.alias.services.navigation.Screen;
 import com.nickrman.alias.services.navigation.managers.events.BackPressEvent;
 import com.nickrman.alias.services.navigation.managers.events.TryExitActivityEvent;
 import com.nickrman.alias.services.navigation.managers.events.TryNavigateBackEvent;
@@ -52,12 +53,12 @@ public class ScreenNavigationBackManager implements BackNavigator {
 
     public void tryExitActivity() {
         activity.hideKeyboard();
-        if (activity.isTaskRoot()) {
+        if (Screen.SETTINGS.equals(activity.getNavigator().getScreen())) {
             if (doubleBackToExitPressedOnce){
                 exit();
             }else {
                 doubleBackToExitPressedOnce = true;
-                Snackbar.make(activity.findViewById(R.id.content_frame), R.string.back_message, Snackbar.LENGTH_LONG)
+                Snackbar.make(activity.findViewById(R.id.root), R.string.back_message, Snackbar.LENGTH_LONG)
                         .show();
                 handler.postDelayed(() -> doubleBackToExitPressedOnce = false,TIME_OUT);
             }

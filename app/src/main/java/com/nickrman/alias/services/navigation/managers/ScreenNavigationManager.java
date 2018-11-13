@@ -23,6 +23,17 @@ public class ScreenNavigationManager implements Navigator {
     public final ScreenActivityFactory activityFactory;
     public final ScreenFragmentFactory fragmentFactory;
     public BaseActivity activity;
+    private Screen screen;
+
+    @Override
+    public Screen getScreen() {
+        return this.screen;
+    }
+
+    @Override
+    public void setScreen(Screen screen) {
+        this.screen = screen;
+    }
 
     public ScreenNavigationManager(BaseActivity activity) {
         this.activity = activity;
@@ -32,7 +43,7 @@ public class ScreenNavigationManager implements Navigator {
 
     @Override
     public void navigateTo(Screen screen, ScreenType type) {
-        navigateTo(screen,type,null);
+        navigateTo(screen, type, null);
     }
 
     @Override
@@ -48,9 +59,25 @@ public class ScreenNavigationManager implements Navigator {
     }
 
     private void navigateToActivity(Screen screen, Bundle args) {
-        switch (screen){
-
+        switch (screen) {
+            case START:
+                navigateToStart(args);
+                break;
+            case SETTINGS:
+                navigateToSettings(args);
+                break;
         }
+    }
+
+    //Activities
+    private void navigateToSettings(Bundle args) {
+        switchActivityScreen(Screen.SETTINGS,args,ScreenAnimType.NONE_TYPE,false);
+        activity.hideKeyboard();
+    }
+
+    private void navigateToStart(Bundle args) {
+        switchActivityScreen(Screen.START,args,ScreenAnimType.NONE_TYPE,false);
+        activity.hideKeyboard();
     }
 
     private void navigateToFragment(Screen screen, Bundle args) {
@@ -61,15 +88,10 @@ public class ScreenNavigationManager implements Navigator {
     }
 
 
-
-
-
     //Fragments
 
 
 
-
-    //Activities
 
 
     private void switchActivityScreen(Screen type, Bundle bundle, ScreenAnimType animate, boolean clearStack) {
@@ -128,7 +150,6 @@ public class ScreenNavigationManager implements Navigator {
         setAnimationForFragment(ScreenAnimType.BOTTOM_TO_TOP_TYPE, tran);
 
 
-
         Fragment fragment = fragmentFactory.getFragmentByType(type);
         if (bundle != null && !bundle.isEmpty()) {
             fragment.setArguments(bundle);
@@ -137,20 +158,20 @@ public class ScreenNavigationManager implements Navigator {
            /* if (animate) {
                 tran.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,android.R.anim.fade_in, android.R.anim.fade_out);
             }*/
-           // tran.replace(R.id.content_frame, fragment, fragment.getClass().getSimpleName());
+            // tran.replace(R.id.content_frame, fragment, fragment.getClass().getSimpleName());
             tran.addToBackStack(fragment.getClass().getSimpleName());
         } else {
 
-            setAnimationForFragment(ScreenAnimType.FADE_TYPE,tran);
+            setAnimationForFragment(ScreenAnimType.FADE_TYPE, tran);
 
-          //  tran.replace(R.id.content_frame, fragment);
+            //  tran.replace(R.id.content_frame, fragment);
         }
         tran.commit();
     }
 
-    private FragmentTransaction setAnimationForFragment(ScreenAnimType animate, FragmentTransaction tran){
+    private FragmentTransaction setAnimationForFragment(ScreenAnimType animate, FragmentTransaction tran) {
 
-        switch (animate){
+        switch (animate) {
             case NONE_TYPE:
                 tran.setCustomAnimations(0, 0);
                 break;
@@ -161,7 +182,7 @@ public class ScreenNavigationManager implements Navigator {
                 tran.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_up);
                 break;
             case TOP_TO_BOTTOM_TYPE:
-                tran.setCustomAnimations(R.anim.slide_out_up,R.anim.slide_in_up);
+                tran.setCustomAnimations(R.anim.slide_out_up, R.anim.slide_in_up);
                 break;
             /*case RIGHT_TO_LEFT_TYPE:
                 activity.overridePendingTransition(R.anim.right_to_left_in, R.anim.right_to_left_out);
@@ -175,7 +196,6 @@ public class ScreenNavigationManager implements Navigator {
         return tran;
 
     }
-
 
 
     private boolean isSameFragmentAlreadyPlaced(Screen type) {

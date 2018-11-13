@@ -56,6 +56,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     private BackNavigator navigationBackManager;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, " onCreate()" + (savedInstanceState != null ? " recreating" : ""));
+        super.onCreate(savedInstanceState);
+        handler = new Handler(Looper.getMainLooper());
+        bus = new Bus();
+        navigator = new ScreenNavigationManager(this);
+        navigationBackManager = new ScreenNavigationBackManager(this);
+        bus.register(navigator);
+        bus.register(navigationBackManager);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         Log.i(TAG, " onStart()");
@@ -81,16 +93,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, " onCreate()" + (savedInstanceState != null ? " recreating" : ""));
-        super.onCreate(savedInstanceState);
-        handler = new Handler(Looper.getMainLooper());
-        bus = new Bus();
-        navigator = new ScreenNavigationManager(this);
-        navigationBackManager = new ScreenNavigationBackManager(this);
-        bus.register(navigationBackManager);
-    }
 
     @Override
     public void onBackPressed() {
