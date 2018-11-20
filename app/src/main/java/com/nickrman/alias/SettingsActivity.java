@@ -1,13 +1,13 @@
 package com.nickrman.alias;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import com.nickrman.alias.base.BaseActivity;
-import com.nickrman.alias.screens.setting.SettingPresenter;
+import com.nickrman.alias.screens.setting.SettingsPresenter;
 import com.nickrman.alias.screens.setting.SettingView;
 import com.nickrman.alias.screens.setting.SettingsContract;
+import com.nickrman.alias.screens.setting.TeamAdapter;
 import com.nickrman.alias.services.navigation.Screen;
 
 public class SettingsActivity extends BaseActivity {
@@ -15,6 +15,7 @@ public class SettingsActivity extends BaseActivity {
     private View root;
     private SettingsContract.View view;
     private SettingsContract.Presenter presenter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,7 @@ public class SettingsActivity extends BaseActivity {
 
         root = findViewById(R.id.root);
         view = new SettingView(root);
-        presenter = new SettingPresenter();
+        presenter = new SettingsPresenter();
 
     }
 
@@ -32,6 +33,8 @@ public class SettingsActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         presenter.start(view);
+        presenter.setNavigation(getNavigator());
+        presenter.setBackNavigator(getNavigationBackManager());
     }
 
     @Override

@@ -1,5 +1,11 @@
 package com.nickrman.alias.screens.setting;
 
+import com.nickrman.alias.services.Navigator;
+import com.nickrman.alias.services.navigation.BackNavigator;
+import com.nickrman.alias.utils.TeamItem;
+
+import java.util.List;
+
 import io.reactivex.Observable;
 
 public interface SettingsContract {
@@ -21,6 +27,26 @@ public interface SettingsContract {
         Observable<Object> takeAwayTenWordsButtonAction();
 
         Observable<Object> infoButtonAction();
+
+        int getCurrentTimeMinute();
+
+        void setCurrentTimeMinute(int min);
+
+        int getCurrentTimeSecond();
+
+        void setCurrentTimeSecond(int sec);
+
+        void setVisibleTimeSecond(Boolean visible);
+        void setEnabledAddTenSecondButton(Boolean enabled);
+        void setEnabledTakeAwayTenSecondButton(Boolean enabled);
+
+        int getCurrentCountWords();
+        void setCurrentCountWords(int countWords);
+
+        void setEnabledAddWordButton(Boolean enabled);
+        void setEnabledTakeAwayWordsButton(Boolean enabled);
+
+        void setTeamList(List<TeamItem> items, TeamCallback teamCallback);
     }
 
     interface Presenter {
@@ -29,7 +55,9 @@ public interface SettingsContract {
 
         void stop();
 
-        void setNavigation();
+        void setNavigation(Navigator navigator);
+
+        void setBackNavigator(BackNavigator navigator);
 
         void startGame();
     }

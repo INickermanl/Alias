@@ -15,7 +15,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="54dp"
         android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toTopOf="@+id/start_game"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
@@ -128,13 +128,14 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recycler_view"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="8dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/section_tv_team">
+                        app:layout_constraintTop_toBottomOf="@+id/section_tv_team"
+                        app:layout_constraintBottom_toTopOf="@+id/add_team_button">
 
                     </android.support.v7.widget.RecyclerView>
 
@@ -232,15 +233,42 @@
                             app:layout_constraintTop_toBottomOf="@+id/tv_round_time" />
 
                         <TextView
-                            android:id="@+id/count_time_in_game"
+                            android:id="@+id/time_in_game_sec"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="25sp"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toTopOf="@+id/text_min"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/time_in_game_min"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="1.0" />
+
+                        <TextView
+                            android:id="@+id/text_min"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:text="min"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="25sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/time_in_game_min"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+
+                            android:id="@+id/time_in_game_min"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:layout_marginEnd="15dp"
+                            android:layout_marginEnd="45dp"
                             android:layout_marginBottom="8dp"
-                            android:text="1 min"
+                            android:text="1"
                             android:textColor="@color/colorBlack"
-                            android:textSize="25sp"
+                            android:textSize="45sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -251,29 +279,15 @@
                             android:layout_marginTop="16dp"
                             android:orientation="horizontal"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.24"
+                            app:layout_constraintHorizontal_bias="0.30"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tv_clarification">
 
                             <FrameLayout
-                                android:id="@+id/add_count_time_in_game"
-                                android:layout_width="64dp"
-                                android:layout_height="32dp"
-                                android:layout_marginEnd="15dp"
-                                android:background="@drawable/button">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:text="+10 sec"
-                                    android:textColor="@color/colorBlack" />
-                            </FrameLayout>
-
-                            <FrameLayout
                                 android:id="@+id/take_away_count_time_in_game"
-                                android:layout_width="64dp"
-                                android:layout_height="32dp"
+                                android:layout_width="76dp"
+                                android:layout_height="42dp"
+                                android:layout_marginEnd="30dp"
                                 android:background="@drawable/button">
 
                                 <TextView
@@ -281,7 +295,23 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:text="-10 sec"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="18sp" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:id="@+id/add_count_time_in_game"
+                                android:layout_width="76dp"
+                                android:layout_height="42dp"
+                                android:background="@drawable/button">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="+10 sec"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="18sp" />
                             </FrameLayout>
 
                         </LinearLayout>
@@ -334,11 +364,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:layout_marginEnd="15dp"
+                            android:layout_marginEnd="4dp"
                             android:layout_marginBottom="8dp"
                             android:text="100"
                             android:textColor="@color/colorBlack"
-                            android:textSize="25sp"
+                            android:textSize="45sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -349,30 +379,15 @@
                             android:layout_marginTop="16dp"
                             android:orientation="horizontal"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.24"
+                            app:layout_constraintHorizontal_bias="0.30"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tv_clarification_round_words">
 
                             <FrameLayout
-                                android:id="@+id/add_count_words_in_game"
-                                android:layout_width="64dp"
-                                android:layout_height="32dp"
-                                android:layout_marginEnd="15dp"
-                                android:background="@drawable/button">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:text="+10 word"
-                                    android:textColor="@color/colorBlack" />
-                            </FrameLayout>
-
-                            <FrameLayout
                                 android:id="@+id/take_away_count_words_in_game"
-                                android:layout_width="64dp"
-                                android:layout_height="32dp"
+                                android:layout_width="76dp"
+                                android:layout_height="42dp"
+                                android:layout_marginEnd="30dp"
                                 android:background="@drawable/button">
 
                                 <TextView
@@ -380,7 +395,23 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:text="-10 word"
-                                    android:textColor="@color/colorBlack" />
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="18sp" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:id="@+id/add_count_words_in_game"
+                                android:layout_width="76dp"
+                                android:layout_height="42dp"
+                                android:background="@drawable/button">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="+10 word"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="18sp" />
                             </FrameLayout>
 
                         </LinearLayout>
