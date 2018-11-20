@@ -1,10 +1,15 @@
 package com.nickrman.alias.screens.setting;
 
+import android.os.Handler;
+import android.os.Looper;
+
+import com.nickrman.alias.R;
 import com.nickrman.alias.base.BaseActivity;
 import com.nickrman.alias.services.Navigator;
 import com.nickrman.alias.services.navigation.BackNavigator;
 import com.nickrman.alias.utils.TeamItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -20,8 +25,13 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private BackNavigator backNavigator;
 
     //create listItems and set him to adapter and create callback for item in adapter
-    private List<TeamItem> list;
+    private List<TeamItem> list = new ArrayList<>();
+    private Handler handler;
 
+    public SettingsPresenter() {
+        this.handler = new Handler(Looper.getMainLooper());
+        makeList();
+    }
 
     @Override
     public void start(SettingsContract.View view) {
@@ -29,8 +39,6 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         setupView();
         setupAction();
 
-
-        //setTeamList(list);
 
     }
 
@@ -111,24 +119,24 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         view.addTenWordsButtonAction().subscribe(new Observer<Object>() {
             @Override
             public void onSubscribe(Disposable d) {
-               subscription.add(d);
+                subscription.add(d);
             }
 
             @Override
             public void onNext(Object o) {
-               if(view.getCurrentCountWords() == 190){
+                if (view.getCurrentCountWords() == 190) {
 
-                   view.setEnabledAddWordButton(false);
-                   addCurrentCountWords();
+                    view.setEnabledAddWordButton(false);
+                    addCurrentCountWords();
 
-               }else if(view.getCurrentCountWords() == 10){
-                   addCurrentCountWords();
-                   view.setEnabledTakeAwayWordsButton(true);
+                } else if (view.getCurrentCountWords() == 10) {
+                    addCurrentCountWords();
+                    view.setEnabledTakeAwayWordsButton(true);
 
-               }else{
-                   addCurrentCountWords();
+                } else {
+                    addCurrentCountWords();
 
-               }
+                }
             }
 
             @Override
@@ -144,18 +152,18 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         view.takeAwayTenWordsButtonAction().subscribe(new Observer<Object>() {
             @Override
             public void onSubscribe(Disposable d) {
-               subscription.add(d);
+                subscription.add(d);
             }
 
             @Override
             public void onNext(Object o) {
-                if(view.getCurrentCountWords() == 20){
+                if (view.getCurrentCountWords() == 20) {
                     view.setEnabledTakeAwayWordsButton(false);
                     takeAwayCurrentCountWords();
-                }else if(view.getCurrentCountWords() == 200){
+                } else if (view.getCurrentCountWords() == 200) {
                     view.setEnabledAddWordButton(true);
                     takeAwayCurrentCountWords();
-                }else{
+                } else {
                     takeAwayCurrentCountWords();
                 }
             }
@@ -170,6 +178,46 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
             }
         });
+        view.addTeamButtonAction().subscribe(new Observer<Object>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                subscription.add(d);
+            }
+
+            @Override
+            public void onNext(Object o) {
+                list.add(new TeamItem(R.mipmap.cat, "test3"));
+                view.updateItemList(list);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
+        view.setTeamList(list, new TeamCallback() {
+            @Override
+            public void deleteTeam(int position, TeamItem item) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (list.size() > 2) {
+                            list.remove(item);
+                            view.updateItemList(list);
+                        }
+                    }
+                }, 40);
+
+
+            }
+        });
+
 
     }
 
@@ -261,21 +309,19 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         this.backNavigator = backNavigator;
     }
 
-    private void setTeamList(List<TeamItem> items){
-        view.setTeamList(items, new TeamCallback() {
-            @Override
-            public void deleteTeam(int position) {
+    void makeList() {
+        TeamItem item1 = new TeamItem();
+        item1.setNameTeam("test test");
+        item1.setImageTeam(R.mipmap.images);
 
-            }
 
-            @Override
-            public void addTeam(TeamItem item) {
+        TeamItem item2 = new TeamItem(R.mipmap.images, "shit Team");
+        TeamItem item3 = new TeamItem(R.mipmap.pic, "test 3");
 
-            }
-        });
+        list.add(item1);
+        list.add(item2);
+        list.add(item3);
     }
-
-
 
 
 }

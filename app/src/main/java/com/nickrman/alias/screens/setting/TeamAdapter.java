@@ -17,9 +17,9 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
     private List<TeamItem> listTeam;
     private TeamCallback calback;
 
-    public TeamAdapter(List<TeamItem> list, TeamCallback callback) {
+    public TeamAdapter(List<TeamItem> list, TeamCallback calback) {
         this.listTeam = list;
-        this.calback = callback;
+        this.calback = calback;
     }
 
 
@@ -33,15 +33,27 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         TeamItem item = listTeam.get(position);
 
+
         holder.teamName.setText(item.getNameTeam());
+
+
         Picasso.get()
                 .load(item.getImageTeam())
                 .into(holder.teamImage);
+
+
         Picasso.get()
                 .load(R.drawable.ic_cross)
                 .into(holder.crossButton);
 
 
+
+            holder.crossButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    calback.deleteTeam(position, item);
+                }
+            });
     }
 
     @Override

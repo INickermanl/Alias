@@ -1,6 +1,7 @@
 package com.nickrman.alias.screens.setting;
 
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -172,10 +173,17 @@ public class SettingView implements SettingsContract.View {
     }
 
     @Override
-    public void setTeamList(List<TeamItem> items, TeamCallback teamCallback) {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(root.getContext(), 2, GridLayoutManager.VERTICAL,false);
-        adapter = new TeamAdapter(items,teamCallback);
-        recyclerView.setLayoutManager(gridLayoutManager);
+    public void setTeamList(List<TeamItem> items, TeamCallback callback) {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(root.getContext(), LinearLayoutManager.VERTICAL,false);
+        adapter = new TeamAdapter(items, callback);
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+    }
+
+
+
+    @Override
+    public void updateItemList(List<TeamItem> item) {
+        adapter.notifyDataSetChanged();
     }
 }

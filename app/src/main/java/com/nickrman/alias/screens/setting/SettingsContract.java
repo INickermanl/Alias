@@ -46,7 +46,10 @@ public interface SettingsContract {
         void setEnabledAddWordButton(Boolean enabled);
         void setEnabledTakeAwayWordsButton(Boolean enabled);
 
-        void setTeamList(List<TeamItem> items, TeamCallback teamCallback);
+        void setTeamList(List<TeamItem> items,TeamCallback callback);
+
+        //void removeItemFromList(int position);
+        void updateItemList(List<TeamItem> item);
     }
 
     interface Presenter {
@@ -60,5 +63,6 @@ public interface SettingsContract {
         void setBackNavigator(BackNavigator navigator);
 
         void startGame();
+
     }
 }
