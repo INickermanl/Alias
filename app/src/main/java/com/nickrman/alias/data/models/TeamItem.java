@@ -1,4 +1,4 @@
-package com.nickrman.alias.utils;
+package com.nickrman.alias.data.models;
 
 import android.graphics.drawable.Drawable;
 

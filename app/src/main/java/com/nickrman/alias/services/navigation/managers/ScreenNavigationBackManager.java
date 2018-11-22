@@ -38,14 +38,28 @@ public class ScreenNavigationBackManager implements BackNavigator {
         this.couldNavigateBack = couldNavigateBack;
     }
 
-    public void navigateBack(){
+    public void navigateBack() {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         if (fragmentManager.getBackStackEntryCount() > 0) {
             Timber.d("pop fragment from backstack");
+            if (Screen.SCORE.equals(activity.getNavigator().getScreen())) {
+                if (doubleBackToExitPressedOnce) {
+                    exit();
+                } else {
+                    doubleBackToExitPressedOnce = true;
+                    Snackbar.make(activity.findViewById(R.id.root), R.string.back_message, Snackbar.LENGTH_LONG)
+                            .show();
+                    handler.postDelayed(() -> doubleBackToExitPressedOnce = false, TIME_OUT);
+                }
 
-            FragmentManager.BackStackEntry backEntry = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
-            String fragmentName = backEntry.getName();
-            fragmentManager.popBackStackImmediate(fragmentName, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            } else {
+                FragmentManager.BackStackEntry backEntry = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
+                String fragmentName = backEntry.getName();
+
+                fragmentManager.popBackStackImmediate(fragmentName, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            }
         } else {
             tryExitActivity();
         }
@@ -53,16 +67,16 @@ public class ScreenNavigationBackManager implements BackNavigator {
 
     public void tryExitActivity() {
         activity.hideKeyboard();
-        if (Screen.SETTINGS.equals(activity.getNavigator().getScreen())) {
-            if (doubleBackToExitPressedOnce){
+        if (Screen.SCORE.equals(activity.getNavigator().getScreen())) {
+            if (doubleBackToExitPressedOnce) {
                 exit();
-            }else {
+            } else {
                 doubleBackToExitPressedOnce = true;
                 Snackbar.make(activity.findViewById(R.id.root), R.string.back_message, Snackbar.LENGTH_LONG)
                         .show();
-                handler.postDelayed(() -> doubleBackToExitPressedOnce = false,TIME_OUT);
+                handler.postDelayed(() -> doubleBackToExitPressedOnce = false, TIME_OUT);
             }
-        }else {
+        } else {
             exit();
         }
     }
@@ -73,16 +87,16 @@ public class ScreenNavigationBackManager implements BackNavigator {
     }
 
     @Subscribe
-    public void onEvent(BackPressEvent event){
-        if (couldNavigateBack){
+    public void onEvent(BackPressEvent event) {
+        if (couldNavigateBack) {
             navigateBack();
-        }else {
+        } else {
             activity.getBus().post(new TryNavigateBackEvent());
         }
     }
 
     @Subscribe
-    public void onEvent(TryExitActivityEvent event){
+    public void onEvent(TryExitActivityEvent event) {
         tryExitActivity();
     }
 }

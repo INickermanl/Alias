@@ -37,10 +37,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import rx.Subscriber;
 import timber.log.Timber;
 
-/**
- * Created by max_ermakov on 1/13/17.
- */
-
 public abstract class BaseActivity extends AppCompatActivity {
     protected final String TAG = getClass().getSimpleName();
     private Bus bus;

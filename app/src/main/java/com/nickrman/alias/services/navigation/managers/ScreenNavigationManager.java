@@ -25,15 +25,18 @@ public class ScreenNavigationManager implements Navigator {
     public BaseActivity activity;
     private Screen screen;
 
+    public BaseActivity getActivity() {
+        return activity;
+    }
+
+
+
     @Override
     public Screen getScreen() {
         return this.screen;
     }
 
-    @Override
-    public void setScreen(Screen screen) {
-        this.screen = screen;
-    }
+
 
     public ScreenNavigationManager(BaseActivity activity) {
         this.activity = activity;
@@ -51,9 +54,11 @@ public class ScreenNavigationManager implements Navigator {
         switch (type) {
             case ACTIVITY:
                 navigateToActivity(screen, args);
+                this.screen = screen;
                 break;
             case FRAGMENT:
                 navigateToFragment(screen, args);
+                this.screen = screen;
                 break;
         }
     }
@@ -66,31 +71,51 @@ public class ScreenNavigationManager implements Navigator {
             case SETTINGS:
                 navigateToSettings(args);
                 break;
+            case GAME:
+                navigateToGame(args);
+                break;
         }
-    }
-
-    //Activities
-    private void navigateToSettings(Bundle args) {
-        switchActivityScreen(Screen.SETTINGS,args,ScreenAnimType.NONE_TYPE,false);
-        activity.hideKeyboard();
-    }
-
-    private void navigateToStart(Bundle args) {
-        switchActivityScreen(Screen.START,args,ScreenAnimType.NONE_TYPE,false);
-        activity.hideKeyboard();
     }
 
     private void navigateToFragment(Screen screen, Bundle args) {
         switch (screen) {
-
+            case SCORE:
+                navigateToScoreFragment(args);
+                break;
 
         }
     }
 
 
-    //Fragments
 
 
+    //Activity
+    private void navigateToSettings(Bundle args) {
+        switchActivityScreen(Screen.SETTINGS, args, ScreenAnimType.NONE_TYPE, false);
+        activity.hideKeyboard();
+
+    }
+
+    private void navigateToStart(Bundle args) {
+        switchActivityScreen(Screen.START, args, ScreenAnimType.NONE_TYPE, false);
+        activity.hideKeyboard();
+        activity.finish();
+        activity.freeMemory();
+    }
+
+    private void navigateToGame(Bundle args) {
+        switchActivityScreen(Screen.GAME, args, ScreenAnimType.NONE_TYPE, false);
+        activity.hideKeyboard();
+        activity.finish();
+        activity.freeMemory();
+    }
+
+
+    //Fragment
+    private void navigateToScoreFragment(Bundle args) {
+        switchFragmentScreen(Screen.SCORE, args, ScreenAnimType.NONE_TYPE, true);
+        activity.hideKeyboard();
+    }
 
 
 
@@ -147,7 +172,7 @@ public class ScreenNavigationManager implements Navigator {
         FragmentTransaction tran = fragmentManager.beginTransaction();
 
 
-        setAnimationForFragment(ScreenAnimType.BOTTOM_TO_TOP_TYPE, tran);
+        setAnimationForFragment(animate, tran);
 
 
         Fragment fragment = fragmentFactory.getFragmentByType(type);
@@ -158,7 +183,7 @@ public class ScreenNavigationManager implements Navigator {
            /* if (animate) {
                 tran.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,android.R.anim.fade_in, android.R.anim.fade_out);
             }*/
-            // tran.replace(R.id.content_frame, fragment, fragment.getClass().getSimpleName());
+            tran.replace(R.id.root, fragment, fragment.getClass().getSimpleName());
             tran.addToBackStack(fragment.getClass().getSimpleName());
         } else {
 
@@ -199,14 +224,13 @@ public class ScreenNavigationManager implements Navigator {
 
 
     private boolean isSameFragmentAlreadyPlaced(Screen type) {
-       /*Fragment existing = activity.getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        Fragment existing = activity.getSupportFragmentManager().findFragmentById(R.id.root);
         if (existing != null) {
             Class<? extends Fragment> requested = fragmentFactory.getFragmentClassByType(type);
             if (existing.getClass().equals(requested)) {
                 return true;
             }
         }
-        */
         return false;
     }
 }

@@ -12,9 +12,6 @@ import com.squareup.otto.Bus;
 
 import timber.log.Timber;
 
-/**
- * Created by max_ermakov on 1/13/17.
- */
 
 public class BaseFragment extends Fragment {
     protected Bus bus ;

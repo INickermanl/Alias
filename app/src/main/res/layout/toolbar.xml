@@ -24,9 +24,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="20dp"
             android:textColor="@color/colorBlack"
-            android:text="Select you words book"
+            android:textSize="20dp"
             app:layout_constraintEnd_toStartOf="@id/info"
             app:layout_constraintStart_toEndOf="@id/navigation_back" />
 

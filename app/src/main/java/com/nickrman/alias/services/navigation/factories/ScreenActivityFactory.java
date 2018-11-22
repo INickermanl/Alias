@@ -3,6 +3,7 @@ package com.nickrman.alias.services.navigation.factories;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.nickrman.alias.GameActivity;
 import com.nickrman.alias.SettingsActivity;
 import com.nickrman.alias.StartActivity;
 import com.nickrman.alias.base.App;
@@ -21,6 +22,8 @@ public class ScreenActivityFactory {
                 return StartActivity.class;
             case SETTINGS:
                 return SettingsActivity.class;
+            case GAME:
+                return GameActivity.class;
 
 
             default:

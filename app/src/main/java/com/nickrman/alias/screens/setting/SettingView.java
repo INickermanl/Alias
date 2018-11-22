@@ -1,6 +1,5 @@
 package com.nickrman.alias.screens.setting;
 
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -8,7 +7,7 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.nickrman.alias.R;
-import com.nickrman.alias.utils.TeamItem;
+import com.nickrman.alias.data.models.TeamItem;
 
 import java.util.List;
 
@@ -33,6 +32,8 @@ public class SettingView implements SettingsContract.View {
     private TextView currentGameTimeMinute;
     private TextView currentGameTimeSecond;
     private TextView currentCountGameWords;
+    private TextView textToolbar;
+    private View content;
 
     private TeamAdapter adapter;
     private RecyclerView recyclerView;
@@ -51,6 +52,9 @@ public class SettingView implements SettingsContract.View {
         addTeamButton = root.findViewById(R.id.add_team_button);
         infoButton = root.findViewById(R.id.info);
 
+        textToolbar = root.findViewById(R.id.toolbar_text);
+        textToolbar.setText(R.string.setting_text_toolbar);
+
         addTenSecondsButton = root.findViewById(R.id.add_count_time_in_game);
         takeAwayTenSecondButton = root.findViewById(R.id.take_away_count_time_in_game);
 
@@ -64,7 +68,7 @@ public class SettingView implements SettingsContract.View {
 
         recyclerView = root.findViewById(R.id.recycler_view);
 
-
+        content = root.findViewById(R.id.content);
     }
 
     @Override
@@ -174,16 +178,17 @@ public class SettingView implements SettingsContract.View {
 
     @Override
     public void setTeamList(List<TeamItem> items, TeamCallback callback) {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(root.getContext(), LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(root.getContext(), LinearLayoutManager.VERTICAL, false);
         adapter = new TeamAdapter(items, callback);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
     }
 
 
-
     @Override
     public void updateItemList(List<TeamItem> item) {
         adapter.notifyDataSetChanged();
     }
+
+
 }

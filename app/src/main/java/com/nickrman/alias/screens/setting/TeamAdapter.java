@@ -8,18 +8,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nickrman.alias.R;
-import com.nickrman.alias.utils.TeamItem;
+import com.nickrman.alias.data.models.TeamItem;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
     private List<TeamItem> listTeam;
-    private TeamCallback calback;
+    private TeamCallback callback;
 
     public TeamAdapter(List<TeamItem> list, TeamCallback calback) {
         this.listTeam = list;
-        this.calback = calback;
+        this.callback = calback;
     }
 
 
@@ -39,6 +39,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
 
         Picasso.get()
                 .load(item.getImageTeam())
+                .resize(128, 128)
                 .into(holder.teamImage);
 
 
@@ -47,13 +48,12 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
                 .into(holder.crossButton);
 
 
-
-            holder.crossButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    calback.deleteTeam(position, item);
-                }
-            });
+        holder.crossButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callback.deleteTeam(position, item);
+            }
+        });
     }
 
     @Override

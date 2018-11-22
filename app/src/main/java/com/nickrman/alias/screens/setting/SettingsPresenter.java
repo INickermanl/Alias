@@ -5,9 +5,13 @@ import android.os.Looper;
 
 import com.nickrman.alias.R;
 import com.nickrman.alias.base.BaseActivity;
+import com.nickrman.alias.data.models.CollectionImage;
+import com.nickrman.alias.data.models.CollectionTeamName;
 import com.nickrman.alias.services.Navigator;
 import com.nickrman.alias.services.navigation.BackNavigator;
-import com.nickrman.alias.utils.TeamItem;
+import com.nickrman.alias.data.models.TeamItem;
+import com.nickrman.alias.services.navigation.Screen;
+import com.nickrman.alias.services.navigation.ScreenType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +19,7 @@ import java.util.List;
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import timber.log.Timber;
 
 public class SettingsPresenter implements SettingsContract.Presenter {
 
@@ -170,7 +175,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
             @Override
             public void onError(Throwable e) {
-
+                Timber.e(e);
             }
 
             @Override
@@ -214,6 +219,49 @@ public class SettingsPresenter implements SettingsContract.Presenter {
                     }
                 }, 40);
 
+
+            }
+        });
+
+        view.startGameButtonAction().subscribe(new Observer<Object>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                subscription.add(d);
+            }
+
+            @Override
+            public void onNext(Object o) {
+                navigator.navigateTo(Screen.GAME, ScreenType.ACTIVITY);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        view.infoButtonAction().subscribe(new Observer<Object>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                subscription.add(d);
+            }
+
+            @Override
+            public void onNext(Object o) {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
 
             }
         });
@@ -310,13 +358,14 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     }
 
     void makeList() {
+
         TeamItem item1 = new TeamItem();
-        item1.setNameTeam("test test");
-        item1.setImageTeam(R.mipmap.images);
+        item1.setNameTeam(CollectionTeamName.team3);
+        item1.setImageTeam(CollectionImage.test3);
 
 
-        TeamItem item2 = new TeamItem(R.mipmap.images, "shit Team");
-        TeamItem item3 = new TeamItem(R.mipmap.pic, "test 3");
+        TeamItem item2 = new TeamItem(CollectionImage.test1, CollectionTeamName.team2);
+        TeamItem item3 = new TeamItem(CollectionImage.test2, CollectionTeamName.test);
 
         list.add(item1);
         list.add(item2);
