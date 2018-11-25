@@ -1,5 +1,9 @@
 package com.nickrman.alias.screens.start;
 
+import com.nickrman.alias.base.App;
+import com.nickrman.alias.data.db.AppDatabase;
+import com.nickrman.alias.data.db.model.Book;
+import com.nickrman.alias.data.db.model.Word;
 import com.nickrman.alias.services.Navigator;
 import com.nickrman.alias.services.navigation.Screen;
 import com.nickrman.alias.services.navigation.ScreenType;
@@ -14,12 +18,38 @@ public class StartPresenter implements StartContract.Presenter {
     private StartContract.View view;
     private CompositeDisposable subscriptions;
     private Navigator navigator;
+    private AppDatabase db;
+
+
+
+    //insertBookInBD();
+    // insertWordInDB();
+
+
+    public StartPresenter() {
+        db = AppDatabase.getFileDatabase(App.getInstance());
+    }
 
     @Override
     public void start(StartContract.View view) {
         this.view = view;
         setupView();
         setupAction();
+    }
+    private void insertWordInDB() {
+
+
+
+    }
+
+
+    private void insertBookInBD() {
+
+
+
+
+
+
     }
 
     private void setupView() {

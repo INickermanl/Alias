@@ -2,9 +2,13 @@ package com.nickrman.alias.screens.setting;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.nickrman.alias.R;
+import com.nickrman.alias.base.App;
 import com.nickrman.alias.base.BaseActivity;
+import com.nickrman.alias.data.db.AppDatabase;
+import com.nickrman.alias.data.db.model.Book;
 import com.nickrman.alias.data.models.CollectionImage;
 import com.nickrman.alias.data.models.CollectionTeamName;
 import com.nickrman.alias.services.Navigator;
@@ -28,6 +32,8 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private Navigator navigator;
     private BaseActivity activity;
     private BackNavigator backNavigator;
+    private AppDatabase db;
+    private String CON = "TEST";
 
     //create listItems and set him to adapter and create callback for item in adapter
     private List<TeamItem> list = new ArrayList<>();
@@ -35,7 +41,17 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
     public SettingsPresenter() {
         this.handler = new Handler(Looper.getMainLooper());
+        db = AppDatabase.getInMemoryDatabase(App.getInstance());
+
         makeList();
+
+        List<Book> bookList = db.booksDao().getAll();
+        Book b1 = bookList.get(0);
+
+        String s = b1.getNameBook();
+
+        Log.d("TAG",s);
+
     }
 
     @Override
