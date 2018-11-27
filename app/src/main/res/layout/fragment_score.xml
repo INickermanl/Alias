@@ -5,10 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar" />
-
 
     <include
         android:id="@+id/main_player_score_board"
@@ -17,7 +13,7 @@
         android:layout_height="229dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/container_recycler_view"

@@ -13,7 +13,6 @@ public interface SettingsContract {
     interface View {
         Observable<Object> startGameButtonAction();
 
-        Observable<Object> backButtonAction();
 
         Observable<Object> selectBookButtonAction();
 
@@ -27,7 +26,6 @@ public interface SettingsContract {
 
         Observable<Object> takeAwayTenWordsButtonAction();
 
-        Observable<Object> infoButtonAction();
 
         int getCurrentTimeMinute();
 

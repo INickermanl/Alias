@@ -27,7 +27,7 @@ public class StartPresenter implements StartContract.Presenter {
 
 
     public StartPresenter() {
-        db = AppDatabase.getFileDatabase(App.getInstance());
+    //    db = AppDatabase.getFileDatabase(App.getInstance());
     }
 
     @Override

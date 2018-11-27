@@ -19,7 +19,7 @@ public class StartActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        root = findViewById(R.id.content);
+        root = findViewById(R.id.root);
 
 
         view = new StartView(root);

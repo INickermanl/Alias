@@ -32,7 +32,6 @@ public class SettingView implements SettingsContract.View {
     private TextView currentGameTimeMinute;
     private TextView currentGameTimeSecond;
     private TextView currentCountGameWords;
-    private TextView textToolbar;
     private View content;
 
     private TeamAdapter adapter;
@@ -52,8 +51,6 @@ public class SettingView implements SettingsContract.View {
         addTeamButton = root.findViewById(R.id.add_team_button);
         infoButton = root.findViewById(R.id.info);
 
-        textToolbar = root.findViewById(R.id.toolbar_text);
-        textToolbar.setText(R.string.setting_text_toolbar);
 
         addTenSecondsButton = root.findViewById(R.id.add_count_time_in_game);
         takeAwayTenSecondButton = root.findViewById(R.id.take_away_count_time_in_game);
@@ -76,10 +73,6 @@ public class SettingView implements SettingsContract.View {
         return RxView.clicks(startGameButton);
     }
 
-    @Override
-    public Observable<Object> backButtonAction() {
-        return RxView.clicks(backButton);
-    }
 
     @Override
     public Observable<Object> selectBookButtonAction() {
@@ -111,10 +104,7 @@ public class SettingView implements SettingsContract.View {
         return RxView.clicks(takeAwayTenWordsButton);
     }
 
-    @Override
-    public Observable<Object> infoButtonAction() {
-        return RxView.clicks(infoButton);
-    }
+
 
     @Override
     public int getCurrentTimeMinute() {

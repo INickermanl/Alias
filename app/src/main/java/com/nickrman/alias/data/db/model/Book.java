@@ -25,6 +25,9 @@ public class Book {
         this.nameBook = nameBook;
     }
 
+    public Book() {
+    }
+
     public String getNameBook() {
         return nameBook;
     }

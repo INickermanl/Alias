@@ -41,16 +41,8 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
     public SettingsPresenter() {
         this.handler = new Handler(Looper.getMainLooper());
-        db = AppDatabase.getInMemoryDatabase(App.getInstance());
+        //db = AppDatabase.getInMemoryDatabase(App.getInstance());
 
-        makeList();
-
-        List<Book> bookList = db.booksDao().getAll();
-        Book b1 = bookList.get(0);
-
-        String s = b1.getNameBook();
-
-        Log.d("TAG",s);
 
     }
 
@@ -68,27 +60,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     }
 
     private void setupAction() {
-        view.backButtonAction().subscribe(new Observer<Object>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                subscription.add(d);
-            }
 
-            @Override
-            public void onNext(Object o) {
-                backNavigator.navigateBack();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
 
         view.addTenSecondsButtonAction().subscribe(new Observer<Object>() {
             @Override
@@ -260,27 +232,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
             }
         });
-        view.infoButtonAction().subscribe(new Observer<Object>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                subscription.add(d);
-            }
 
-            @Override
-            public void onNext(Object o) {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
 
 
     }

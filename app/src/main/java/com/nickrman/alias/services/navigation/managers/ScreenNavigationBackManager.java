@@ -24,6 +24,7 @@ public class ScreenNavigationBackManager implements BackNavigator {
     private boolean doubleBackToExitPressedOnce = false;
     private static final int TIME_OUT = 2000;
     private Handler handler;
+    private FragmentManager fragmentManager;
 
     public ScreenNavigationBackManager(BaseActivity activity) {
         this.activity = activity;
@@ -39,35 +40,24 @@ public class ScreenNavigationBackManager implements BackNavigator {
     }
 
     public void navigateBack() {
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        if (fragmentManager.getBackStackEntryCount() > 0) {
+       fragmentManager = activity.getSupportFragmentManager();
+
+        if (fragmentManager.getBackStackEntryCount() > 1) {
             Timber.d("pop fragment from backstack");
-            if (Screen.SCORE.equals(activity.getNavigator().getScreen())) {
-                if (doubleBackToExitPressedOnce) {
-                    exit();
-                } else {
-                    doubleBackToExitPressedOnce = true;
-                    Snackbar.make(activity.findViewById(R.id.root), R.string.back_message, Snackbar.LENGTH_LONG)
-                            .show();
-                    handler.postDelayed(() -> doubleBackToExitPressedOnce = false, TIME_OUT);
-                }
 
-
-            } else {
-                FragmentManager.BackStackEntry backEntry = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
-                String fragmentName = backEntry.getName();
-
-                fragmentManager.popBackStackImmediate(fragmentName, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-            }
-        } else {
+            FragmentManager.BackStackEntry backEntry = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
+            String fragmentName = backEntry.getName();
+            fragmentManager.popBackStackImmediate(fragmentName, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        } else if(fragmentManager.getBackStackEntryCount() == 1){
+            tryExitActivity();
+        }else {
             tryExitActivity();
         }
     }
 
     public void tryExitActivity() {
         activity.hideKeyboard();
-        if (Screen.SCORE.equals(activity.getNavigator().getScreen())) {
+        if (fragmentManager.getBackStackEntryCount() == 1) {
             if (doubleBackToExitPressedOnce) {
                 exit();
             } else {
@@ -80,6 +70,7 @@ public class ScreenNavigationBackManager implements BackNavigator {
             exit();
         }
     }
+
 
     private void exit() {
         activity.finish();
@@ -99,4 +90,9 @@ public class ScreenNavigationBackManager implements BackNavigator {
     public void onEvent(TryExitActivityEvent event) {
         tryExitActivity();
     }
+    @Subscribe
+    public void onEvent(TryNavigateBackEvent event){
+        tryExitActivity();
+    }
+
 }
