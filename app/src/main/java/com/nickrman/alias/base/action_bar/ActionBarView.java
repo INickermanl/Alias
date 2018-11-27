@@ -134,5 +134,8 @@ public class ActionBarView implements ActionBarContract.View {
         }
     }
 
-
+    @Override
+    public void setBackgroundAB(int res) {
+        root.setBackgroundColor(res);
+    }
 }

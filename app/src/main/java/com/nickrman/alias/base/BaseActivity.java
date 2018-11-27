@@ -11,12 +11,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
+import com.nickrman.alias.base.action_bar.ActionBarContract;
 import com.nickrman.alias.services.Navigator;
 import com.nickrman.alias.services.navigation.BackNavigator;
 import com.nickrman.alias.services.navigation.managers.ScreenNavigationBackManager;
 import com.nickrman.alias.services.navigation.managers.ScreenNavigationManager;
 import com.nickrman.alias.services.navigation.managers.events.BackPressEvent;
 import com.squareup.otto.Bus;
+
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
@@ -150,5 +153,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public BackNavigator getNavigationBackManager() {
         return navigationBackManager;
     }
+
+    public abstract ActionBarContract.View getActionBarView();
 }
 

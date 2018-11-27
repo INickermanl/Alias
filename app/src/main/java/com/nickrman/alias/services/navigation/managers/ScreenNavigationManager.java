@@ -30,12 +30,10 @@ public class ScreenNavigationManager implements Navigator {
     }
 
 
-
     @Override
     public Screen getScreen() {
         return this.screen;
     }
-
 
 
     public ScreenNavigationManager(BaseActivity activity) {
@@ -71,8 +69,8 @@ public class ScreenNavigationManager implements Navigator {
             case SETTINGS:
                 navigateToSettings(args);
                 break;
-            case GAME:
-                navigateToGame(args);
+            case GAMING:
+                navigateToGaming(args);
                 break;
         }
     }
@@ -82,11 +80,12 @@ public class ScreenNavigationManager implements Navigator {
             case SCORE:
                 navigateToScoreFragment(args);
                 break;
+            case GAME:
+                navigateToGameFragment(args);
+                break;
 
         }
     }
-
-
 
 
     //Activity
@@ -103,8 +102,8 @@ public class ScreenNavigationManager implements Navigator {
         activity.freeMemory();
     }
 
-    private void navigateToGame(Bundle args) {
-        switchActivityScreen(Screen.GAME, args, ScreenAnimType.NONE_TYPE, false);
+    private void navigateToGaming(Bundle args) {
+        switchActivityScreen(Screen.GAMING, args, ScreenAnimType.NONE_TYPE, false);
         activity.hideKeyboard();
         activity.finish();
         activity.freeMemory();
@@ -117,6 +116,10 @@ public class ScreenNavigationManager implements Navigator {
         activity.hideKeyboard();
     }
 
+    private void navigateToGameFragment(Bundle args) {
+        switchFragmentScreen(Screen.GAME, args, ScreenAnimType.NONE_TYPE, true);
+        activity.hideKeyboard();
+    }
 
 
     private void switchActivityScreen(Screen type, Bundle bundle, ScreenAnimType animate, boolean clearStack) {
@@ -180,16 +183,12 @@ public class ScreenNavigationManager implements Navigator {
             fragment.setArguments(bundle);
         }
         if (addToBackStack) {
-           /* if (animate) {
-                tran.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,android.R.anim.fade_in, android.R.anim.fade_out);
-            }*/
-            tran.replace(R.id.root, fragment, fragment.getClass().getSimpleName());
+
+            tran.replace(R.id.content_frame, fragment, fragment.getClass().getSimpleName());
             tran.addToBackStack(fragment.getClass().getSimpleName());
         } else {
 
-            setAnimationForFragment(ScreenAnimType.FADE_TYPE, tran);
-
-            //  tran.replace(R.id.content_frame, fragment);
+            tran.replace(R.id.content_frame, fragment);
         }
         tran.commit();
     }

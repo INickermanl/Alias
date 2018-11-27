@@ -1,10 +1,9 @@
 package com.nickrman.alias.data.models;
 
-import android.graphics.drawable.Drawable;
-
 public class TeamItem {
     private int imageTeam;
     private String nameTeam;
+    private int scoreTeam = 0;
 
 
     public TeamItem(int imageTeam, String nameTeam) {
@@ -29,5 +28,13 @@ public class TeamItem {
 
     public void setNameTeam(String nameTeam) {
         this.nameTeam = nameTeam;
+    }
+
+    public int getScoreTeam() {
+        return scoreTeam;
+    }
+
+    public void setScoreTeam(int scoreTeam) {
+        this.scoreTeam = scoreTeam;
     }
 }

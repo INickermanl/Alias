@@ -34,7 +34,7 @@ public class SettingView implements SettingsContract.View {
     private TextView currentCountGameWords;
     private View content;
 
-    private TeamAdapter adapter;
+    private TeamAdapterSetting adapter;
     private RecyclerView recyclerView;
 
 
@@ -169,7 +169,7 @@ public class SettingView implements SettingsContract.View {
     @Override
     public void setTeamList(List<TeamItem> items, TeamCallback callback) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(root.getContext(), LinearLayoutManager.VERTICAL, false);
-        adapter = new TeamAdapter(items, callback);
+        adapter = new TeamAdapterSetting(items, callback);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
     }

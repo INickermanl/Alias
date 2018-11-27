@@ -1,12 +1,9 @@
 package com.nickrman.alias.base.action_bar;
 
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
 
 import com.nickrman.alias.R;
 import com.nickrman.alias.base.BaseActivity;
-import com.nickrman.alias.base.action_bar.ActionBarContract;
 import com.nickrman.alias.services.navigation.managers.events.BackPressEvent;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -15,14 +12,21 @@ public class GeneralActionBarPresenter implements ActionBarContract.Presenter {
     private BaseActivity activity;
     private ActionBarContract.View view;
     private CompositeDisposable disposable;
-    private int titleText;
+    private int titleResText = R.string.empty_string;
+    private String titleStringText;
 
 
-    public GeneralActionBarPresenter(BaseActivity activity, ActionBarContract.View view, @Nullable int titleText) {
+    public GeneralActionBarPresenter(BaseActivity activity, ActionBarContract.View view, int titleResText) {
         this.activity = activity;
         this.view = view;
         this.disposable = new CompositeDisposable();
-        this.titleText = titleText;
+        this.titleResText = titleResText;
+    }
+
+    public GeneralActionBarPresenter(BaseActivity activity, ActionBarContract.View view, String titleStringText) {
+        this.activity = activity;
+        this.view = view;
+        this.titleStringText = titleStringText;
     }
 
     @Override
@@ -31,7 +35,12 @@ public class GeneralActionBarPresenter implements ActionBarContract.Presenter {
         View backLeftIcon = activity.getLayoutInflater().inflate(R.layout.ab_back, null);
 
         view.setupLeftButton(backLeftIcon);
-        view.setupCenterTitleText(titleText);
+
+        if (titleStringText.isEmpty() && titleStringText == null) {
+            view.setupCenterTitleText(titleResText);
+        } else {
+            view.setupCenterTitleText(titleStringText);
+        }
     }
 
     @Override

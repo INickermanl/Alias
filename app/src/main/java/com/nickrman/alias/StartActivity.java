@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.nickrman.alias.base.BaseActivity;
+import com.nickrman.alias.base.action_bar.ActionBarContract;
 import com.nickrman.alias.screens.start.StartContract;
 import com.nickrman.alias.screens.start.StartPresenter;
 import com.nickrman.alias.screens.start.StartView;
@@ -41,5 +42,10 @@ public class StartActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         presenter.stop();
+    }
+
+    @Override
+    public ActionBarContract.View getActionBarView() {
+        return null;
     }
 }

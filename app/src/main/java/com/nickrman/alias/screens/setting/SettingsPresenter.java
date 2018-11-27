@@ -2,13 +2,10 @@ package com.nickrman.alias.screens.setting;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.nickrman.alias.R;
-import com.nickrman.alias.base.App;
 import com.nickrman.alias.base.BaseActivity;
 import com.nickrman.alias.data.db.AppDatabase;
-import com.nickrman.alias.data.db.model.Book;
 import com.nickrman.alias.data.models.CollectionImage;
 import com.nickrman.alias.data.models.CollectionTeamName;
 import com.nickrman.alias.services.Navigator;
@@ -219,7 +216,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
             @Override
             public void onNext(Object o) {
-                navigator.navigateTo(Screen.GAME, ScreenType.ACTIVITY);
+                startGame();
             }
 
             @Override
@@ -317,7 +314,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
     @Override
     public void startGame() {
-
+        navigator.navigateTo(Screen.GAMING, ScreenType.ACTIVITY);
     }
 
     @Override

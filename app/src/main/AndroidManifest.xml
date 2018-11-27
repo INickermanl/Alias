@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nickrman.alias">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <application
         android:name=".base.App"
         android:allowBackup="true"
@@ -27,7 +24,7 @@
         <activity
             android:name=".SettingsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".GameActivity"></activity>
+        <activity android:name=".GamingActivity"></activity>
 
     </application>
 

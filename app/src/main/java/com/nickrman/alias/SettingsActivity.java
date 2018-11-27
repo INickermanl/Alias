@@ -60,6 +60,8 @@ public class SettingsActivity extends BaseActivity {
         presenter.stop();
     }
 
-
-
+    @Override
+    public ActionBarContract.View getActionBarView() {
+        return actionBarView;
+    }
 }

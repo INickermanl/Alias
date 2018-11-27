@@ -18,6 +18,7 @@ public interface ActionBarContract {
     void showCenterSubtitleText(boolean show);
     void setupCenterSubtitleText(int res);
     void setupCenterSubtitleText(String string);
+    void setBackgroundAB(int res);
 
 
 

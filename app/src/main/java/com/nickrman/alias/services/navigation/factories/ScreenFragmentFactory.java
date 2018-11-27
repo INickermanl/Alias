@@ -4,6 +4,7 @@ package com.nickrman.alias.services.navigation.factories;
 import android.support.v4.app.Fragment;
 
 import com.nickrman.alias.base.App;
+import com.nickrman.alias.screens.game.GameFragment;
 import com.nickrman.alias.screens.score.ScoreFragment;
 import com.nickrman.alias.services.navigation.Screen;
 
@@ -19,6 +20,8 @@ public class ScreenFragmentFactory {
         switch (screen) {
             case SCORE:
                 return ScoreFragment.class;
+            case GAME:
+                return GameFragment.class;
 
             default:
                 return ScoreFragment.class;

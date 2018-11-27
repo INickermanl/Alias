@@ -13,11 +13,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
+public class TeamAdapterSetting extends RecyclerView.Adapter<TeamAdapterSetting.ViewHolder> {
     private List<TeamItem> listTeam;
     private TeamCallback callback;
 
-    public TeamAdapter(List<TeamItem> list, TeamCallback calback) {
+    public TeamAdapterSetting(List<TeamItem> list, TeamCallback calback) {
         this.listTeam = list;
         this.callback = calback;
     }
