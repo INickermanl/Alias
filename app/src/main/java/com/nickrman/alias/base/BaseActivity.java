@@ -131,7 +131,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         View okBtn = view.findViewById(R.id.ok_button);
         messageLabel.setText(message);
         okBtn.setOnClickListener(v -> getBus().post(new HideDialogEvent()));
-        bus.post(new ShowDialogEvent(view));
+        bus.post(new ShowDialogEvent(view, R.layout.dialog_base_info,R.id.message));
 
     }
     public void dialogDismissed(){

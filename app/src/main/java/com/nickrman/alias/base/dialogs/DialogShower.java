@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -27,21 +28,24 @@ public class DialogShower {
     private BaseActivity context;
     private BaseDialog dialog;
 
+
     public DialogShower(BaseActivity context) {
         this.context = context;
+
     }
 
-    public  void showDialog(View view) {
+
+    public void showDialog(View view, int resLayout, int resBaseId) {
         dialog = new BaseDialog(context);
         dialog.setCanceledOnTouchOutside(false);
-        BaseDialogView dialogView = new BaseDialogView(context);
+        BaseDialogView dialogView = new BaseDialogView(context, resLayout, resBaseId);
 
         final ViewGroup contentContainer = dialogView.getContentContainer();
         contentContainer.addView(view);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideSoftKeyboard(context,dialog);
+                hideSoftKeyboard(context, dialog);
             }
         });
 
@@ -59,23 +63,23 @@ public class DialogShower {
     }
 
     @Subscribe
-    public void onEvent(ShowDialogEvent showDialogEvent){
-        if (dialog==null||!dialog.isShowing()) {
-            showDialog(showDialogEvent.view);
-        }else {
+    public void onEvent(ShowDialogEvent showDialogEvent) {
+        if (dialog == null || !dialog.isShowing()) {
+            showDialog(showDialogEvent.view, showDialogEvent.resLayout, showDialogEvent.resBaseId);
+        } else {
             dialog.dismiss();
-            showDialog(showDialogEvent.view);
+            showDialog(showDialogEvent.view, showDialogEvent.resLayout, showDialogEvent.resBaseId);
         }
     }
 
     @Subscribe
-    public void onEvent(HideDialogEvent event){
+    public void onEvent(HideDialogEvent event) {
         hideDialog();
     }
 
     @Subscribe
-    public void onEvent(SetDialogCancelableEvent event){
-        if (dialog!=null){
+    public void onEvent(SetDialogCancelableEvent event) {
+        if (dialog != null) {
             dialog.setCancelable(event.cancelable);
         }
     }
@@ -102,8 +106,8 @@ public class DialogShower {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
                         Activity.INPUT_METHOD_SERVICE);
-        if (dialog!=null) {
-            if (dialog.getCurrentFocus()!=null){
+        if (dialog != null) {
+            if (dialog.getCurrentFocus() != null) {
                 inputMethodManager.hideSoftInputFromWindow(
                         dialog.getCurrentFocus().getWindowToken(), 0);
             }

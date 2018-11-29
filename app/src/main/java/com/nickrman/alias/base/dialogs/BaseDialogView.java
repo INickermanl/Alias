@@ -19,9 +19,13 @@ public class BaseDialogView extends FrameLayout {
 
     private ViewGroup contentContainer;
     private ViewGroup actionsContainer;
+    private int resLayout;
+    private int resBaseId;
 
-    public BaseDialogView(Context context) {
+    public BaseDialogView(Context context, int resLayout, int reBaseId) {
         super(context);
+        this.resLayout = resLayout;
+        this.resBaseId = reBaseId;
         init();
     }
 
@@ -42,8 +46,8 @@ public class BaseDialogView extends FrameLayout {
 
     private void init() {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.dialog_base, this, true);
-        contentContainer = view.findViewById(R.id.dialog_container);
+        View view = inflater.inflate(resLayout, this, true);
+        contentContainer = view.findViewById(resBaseId);
     }
 
     public ViewGroup getContentContainer() {

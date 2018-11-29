@@ -7,8 +7,12 @@ import android.view.View;
  */
 public class ShowDialogEvent {
     public View view;
+    public int resLayout;
+    public int resBaseId;
 
-    public ShowDialogEvent(View view) {
+    public ShowDialogEvent(View view, int resLayout, int resBaseId) {
         this.view = view;
+        this.resLayout = resLayout;
+        this.resBaseId = resBaseId;
     }
 }

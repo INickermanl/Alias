@@ -5,6 +5,7 @@ import android.os.Looper;
 
 import com.nickrman.alias.R;
 import com.nickrman.alias.base.BaseActivity;
+import com.nickrman.alias.base.dialogs.DialogShower;
 import com.nickrman.alias.data.db.AppDatabase;
 import com.nickrman.alias.data.models.CollectionImage;
 import com.nickrman.alias.data.models.CollectionTeamName;
