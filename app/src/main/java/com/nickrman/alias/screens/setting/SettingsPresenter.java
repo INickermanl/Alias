@@ -32,6 +32,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private AppDatabase db;
     private String CON = "TEST";
 
+    private static int hello = 0;
     //create listItems and set him to adapter and create callback for item in adapter
     private List<TeamItem> list = new ArrayList<>();
     private Handler handler;
@@ -176,7 +177,16 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
             @Override
             public void onNext(Object o) {
-                list.add(new TeamItem(R.mipmap.cat, "test3"));
+
+                TeamItem item1 = new TeamItem(R.mipmap.cat, "test3");
+                TeamItem item2 = new TeamItem(R.mipmap.pic, "test3");
+                if (hello == 0) {
+                    list.add(item1);
+                    hello++;
+                } else {
+                    list.add(item2);
+                }
+
                 view.updateItemList(list);
             }
 
@@ -229,7 +239,6 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
             }
         });
-
 
 
     }

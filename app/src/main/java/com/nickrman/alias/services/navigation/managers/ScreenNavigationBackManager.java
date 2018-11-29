@@ -42,14 +42,13 @@ public class ScreenNavigationBackManager implements BackNavigator {
     public void navigateBack() {
        fragmentManager = activity.getSupportFragmentManager();
 
+
         if (fragmentManager.getBackStackEntryCount() > 1) {
             Timber.d("pop fragment from backstack");
 
             FragmentManager.BackStackEntry backEntry = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
             String fragmentName = backEntry.getName();
             fragmentManager.popBackStackImmediate(fragmentName, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        } else if(fragmentManager.getBackStackEntryCount() == 1){
-            tryExitActivity();
         }else {
             tryExitActivity();
         }
@@ -57,7 +56,9 @@ public class ScreenNavigationBackManager implements BackNavigator {
 
     public void tryExitActivity() {
         activity.hideKeyboard();
-        if (fragmentManager.getBackStackEntryCount() == 1) {
+
+        //fragmentManager.getBackStackEntryCount() == 1
+        if (false) {
             if (doubleBackToExitPressedOnce) {
                 exit();
             } else {

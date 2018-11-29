@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.nickrman.alias.R;
+import com.nickrman.alias.base.BaseActivity;
 import com.nickrman.alias.data.models.TeamItem;
 
 import java.util.List;
@@ -38,15 +39,14 @@ public class SettingView implements SettingsContract.View {
     private RecyclerView recyclerView;
 
 
-    public SettingView(View root) {
-        this.root = root;
 
+    public SettingView(View root ) {
+        this.root = root;
         initView();
     }
 
     private void initView() {
         startGameButton = root.findViewById(R.id.start_game);
-        backButton = root.findViewById(R.id.navigation_back);
         selectBookButton = root.findViewById(R.id.select_vocabulary);
         addTeamButton = root.findViewById(R.id.add_team_button);
         infoButton = root.findViewById(R.id.info);
@@ -179,6 +179,5 @@ public class SettingView implements SettingsContract.View {
     public void updateItemList(List<TeamItem> item) {
         adapter.notifyDataSetChanged();
     }
-
 
 }

@@ -27,6 +27,7 @@ public interface SettingsContract {
         Observable<Object> takeAwayTenWordsButtonAction();
 
 
+
         int getCurrentTimeMinute();
 
         void setCurrentTimeMinute(int min);

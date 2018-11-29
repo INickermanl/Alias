@@ -13,12 +13,13 @@ public class GeneralActionBarPresenter implements ActionBarContract.Presenter {
     private ActionBarContract.View view;
     private CompositeDisposable disposable;
     private int titleResText = R.string.empty_string;
-    private String titleStringText;
+    private String titleStringText = "";
 
 
     public GeneralActionBarPresenter(BaseActivity activity, ActionBarContract.View view, int titleResText) {
         this.activity = activity;
         this.view = view;
+        view.showRightButton(false);
         this.disposable = new CompositeDisposable();
         this.titleResText = titleResText;
     }
@@ -26,12 +27,13 @@ public class GeneralActionBarPresenter implements ActionBarContract.Presenter {
     public GeneralActionBarPresenter(BaseActivity activity, ActionBarContract.View view, String titleStringText) {
         this.activity = activity;
         this.view = view;
+        view.showRightButton(false);
         this.titleStringText = titleStringText;
     }
 
     @Override
     public void setupView() {
-        view.showRightButton(false);
+
         View backLeftIcon = activity.getLayoutInflater().inflate(R.layout.ab_back, null);
 
         view.setupLeftButton(backLeftIcon);
@@ -41,6 +43,7 @@ public class GeneralActionBarPresenter implements ActionBarContract.Presenter {
         } else {
             view.setupCenterTitleText(titleStringText);
         }
+
     }
 
     @Override
@@ -75,6 +78,7 @@ public class GeneralActionBarPresenter implements ActionBarContract.Presenter {
     public void start() {
         setupView();
         setupAction();
+
 
     }
 

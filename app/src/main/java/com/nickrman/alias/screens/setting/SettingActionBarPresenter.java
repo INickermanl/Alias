@@ -15,20 +15,36 @@ public class SettingActionBarPresenter extends GeneralActionBarPresenter {
     private int titleText;
 
 
-    public SettingActionBarPresenter(BaseActivity activity, ActionBarContract.View view, @Nullable int titleText) {
+    public SettingActionBarPresenter(BaseActivity activity, ActionBarContract.View view, int titleText) {
         super(activity, view, titleText);
         this.activity = activity;
         this.view = view;
+        view.showRightButton(true);
         this.titleText = titleText;
     }
 
+
     @Override
     public void setupView() {
-        View backLeftIcon = activity.getLayoutInflater().inflate(R.layout.ab_back, null);
+        super.setupView();
 
-        view.setupLeftButton(backLeftIcon);
         view.setupCenterTitleText(titleText);
         View infoRightIcon = activity.getLayoutInflater().inflate(R.layout.ab_info,null);
         view.setupRightButton(infoRightIcon);
+
+    }
+
+    @Override
+    public void setupAction() {
+        super.setupAction();
+        view.rightButtonAction()
+                .subscribe(v ->{
+                    rightButtonAction();
+                });
+    }
+
+    @Override
+    public void rightButtonAction() {
+        activity.showInfoDialog("Game Rules");
     }
 }

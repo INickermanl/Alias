@@ -9,10 +9,17 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.nickrman.alias.R;
 import com.nickrman.alias.base.action_bar.ActionBarContract;
+import com.nickrman.alias.base.dialogs.DialogShower;
+import com.nickrman.alias.base.dialogs.events.DialogWasDissmisedEvent;
+import com.nickrman.alias.base.dialogs.events.HideDialogEvent;
+import com.nickrman.alias.base.dialogs.events.ShowDialogEvent;
 import com.nickrman.alias.services.Navigator;
 import com.nickrman.alias.services.navigation.BackNavigator;
 import com.nickrman.alias.services.navigation.managers.ScreenNavigationBackManager;
@@ -31,6 +38,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     private Handler handler;
     private Navigator navigator;
     private BackNavigator navigationBackManager;
+    private DialogShower dialogShower;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +47,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         handler = new Handler(Looper.getMainLooper());
         bus = new Bus();
+        dialogShower = new DialogShower(this);
         navigator = new ScreenNavigationManager(this);
         navigationBackManager = new ScreenNavigationBackManager(this);
         bus.register(navigator);
         bus.register(navigationBackManager);
+        bus.register(dialogShower);
     }
 
     @Override
@@ -114,6 +125,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         Log.d(TAG, "onNewIntent() Intent=" + intent);
     }
 
+    public void showInfoDialog(String message){
+        View view = getLayoutInflater().inflate(R.layout.dialog_rules, null);
+        TextView messageLabel = view.findViewById(R.id.message);
+        View okBtn = view.findViewById(R.id.ok_button);
+        messageLabel.setText(message);
+        okBtn.setOnClickListener(v -> getBus().post(new HideDialogEvent()));
+        bus.post(new ShowDialogEvent(view));
+
+    }
+    public void dialogDismissed(){
+
+        getBus().post(new DialogWasDissmisedEvent());
+    }
 
     public Bus getBus() {
         return bus;
@@ -145,6 +169,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             Timber.e(e.getLocalizedMessage());
         }
     }
+
 
     public Navigator getNavigator() {
         return navigator;

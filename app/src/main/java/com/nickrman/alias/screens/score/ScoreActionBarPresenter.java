@@ -12,7 +12,7 @@ public class ScoreActionBarPresenter extends GeneralActionBarPresenter {
     private ActionBarContract.View presenterView;
     private BaseActivity activity;
 
-    public ScoreActionBarPresenter(BaseActivity activity, ActionBarContract.View view, @Nullable int titleText) {
+    public ScoreActionBarPresenter(BaseActivity activity, ActionBarContract.View view, int titleText) {
         super(activity, view, titleText);
         this.presenterView = view;
         this.activity = activity;

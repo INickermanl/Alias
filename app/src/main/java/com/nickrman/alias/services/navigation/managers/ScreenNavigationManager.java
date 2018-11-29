@@ -98,15 +98,15 @@ public class ScreenNavigationManager implements Navigator {
     private void navigateToStart(Bundle args) {
         switchActivityScreen(Screen.START, args, ScreenAnimType.NONE_TYPE, false);
         activity.hideKeyboard();
-        activity.finish();
-        activity.freeMemory();
+        /*activity.finish();
+        activity.freeMemory();*/
     }
 
     private void navigateToGaming(Bundle args) {
         switchActivityScreen(Screen.GAMING, args, ScreenAnimType.NONE_TYPE, false);
         activity.hideKeyboard();
-        activity.finish();
-        activity.freeMemory();
+        /*activity.finish();
+        activity.freeMemory();*/
     }
 
 

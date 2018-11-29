@@ -17,9 +17,9 @@ public class TeamAdapterSetting extends RecyclerView.Adapter<TeamAdapterSetting.
     private List<TeamItem> listTeam;
     private TeamCallback callback;
 
-    public TeamAdapterSetting(List<TeamItem> list, TeamCallback calback) {
+    public TeamAdapterSetting(List<TeamItem> list, TeamCallback callback) {
         this.listTeam = list;
-        this.callback = calback;
+        this.callback = callback;
     }
 
 
