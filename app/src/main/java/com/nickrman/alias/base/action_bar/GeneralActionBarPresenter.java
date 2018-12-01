@@ -5,6 +5,7 @@ import android.view.View;
 import com.nickrman.alias.R;
 import com.nickrman.alias.base.BaseActivity;
 import com.nickrman.alias.services.navigation.managers.events.BackPressEvent;
+import com.squareup.otto.Bus;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -86,4 +87,5 @@ public class GeneralActionBarPresenter implements ActionBarContract.Presenter {
     public void stop() {
         dispose();
     }
+
 }

@@ -10,6 +10,7 @@ import com.nickrman.alias.screens.setting.SettingActionBarPresenter;
 import com.nickrman.alias.screens.setting.SettingsPresenter;
 import com.nickrman.alias.screens.setting.SettingView;
 import com.nickrman.alias.screens.setting.SettingsContract;
+import com.squareup.otto.Bus;
 
 public class SettingsActivity extends BaseActivity {
 
@@ -19,20 +20,22 @@ public class SettingsActivity extends BaseActivity {
     private View actionBar;
     private ActionBarContract.View actionBarView;
     private ActionBarContract.Presenter actionBarPresenter;
+    private Bus bus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-
+        bus = new Bus();
         root = findViewById(R.id.root);
         actionBar = root.findViewById(R.id.action_bar);
         actionBarView = new ActionBarView(actionBar);
-        actionBarPresenter = new SettingActionBarPresenter(this,actionBarView,R.string.setting_text_toolbar);
+        actionBarPresenter = new SettingActionBarPresenter(this,actionBarView,R.string.setting_text_toolbar,bus);
 
-        view = new SettingView(root);
-        presenter = new SettingsPresenter();
+        view = new SettingView(root,this);
+        presenter = new SettingsPresenter(this);
+
 
 
 
@@ -44,8 +47,11 @@ public class SettingsActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        bus.register(actionBarPresenter);
+
         actionBarPresenter.start();
         presenter.start(view);
+
         presenter.setNavigation(getNavigator());
         presenter.setBackNavigator(getNavigationBackManager());
 
@@ -58,6 +64,8 @@ public class SettingsActivity extends BaseActivity {
         super.onStop();
         actionBarPresenter.stop();
         presenter.stop();
+        bus.unregister(presenter);
+        bus = null;
     }
 
     @Override

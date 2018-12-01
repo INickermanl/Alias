@@ -2,18 +2,30 @@ package com.nickrman.alias.screens.setting;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.nickrman.alias.R;
+import com.nickrman.alias.base.App;
 import com.nickrman.alias.base.BaseActivity;
+import com.nickrman.alias.base.dialogs.BaseDialog;
 import com.nickrman.alias.base.dialogs.DialogShower;
+import com.nickrman.alias.base.dialogs.events.HideDialogEvent;
+import com.nickrman.alias.base.dialogs.events.ShowDialogEvent;
 import com.nickrman.alias.data.db.AppDatabase;
 import com.nickrman.alias.data.models.CollectionImage;
 import com.nickrman.alias.data.models.CollectionTeamName;
+import com.nickrman.alias.data.models.VocabularyItem;
 import com.nickrman.alias.services.Navigator;
 import com.nickrman.alias.services.navigation.BackNavigator;
 import com.nickrman.alias.data.models.TeamItem;
 import com.nickrman.alias.services.navigation.Screen;
 import com.nickrman.alias.services.navigation.ScreenType;
+import com.squareup.otto.Bus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +44,34 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private BackNavigator backNavigator;
     private AppDatabase db;
     private String CON = "TEST";
+    private DialogShower dialogVocabulary;
+    private List<VocabularyItem> vocabularyItemList = new ArrayList();
+    private BaseDialog baseDialog;
+
+    private void initVocabularyList() {
+
+        VocabularyItem item1 = new VocabularyItem("book 1");
+        VocabularyItem item2 = new VocabularyItem("book 2");
+        VocabularyItem item3 = new VocabularyItem("book 3");
+        VocabularyItem item4 = new VocabularyItem("book 4");
+        vocabularyItemList.add(item1);
+        vocabularyItemList.add(item2);
+        vocabularyItemList.add(item3);
+        vocabularyItemList.add(item4);
+
+    }
 
     private static int hello = 0;
     //create listItems and set him to adapter and create callback for item in adapter
     private List<TeamItem> list = new ArrayList<>();
     private Handler handler;
 
-    public SettingsPresenter() {
+    public SettingsPresenter(BaseActivity activity) {
         this.handler = new Handler(Looper.getMainLooper());
+        initVocabularyList();
+        this.activity = activity;
+
+        this.dialogVocabulary = new DialogShower(activity);
         //db = AppDatabase.getInMemoryDatabase(App.getInstance());
 
 
@@ -49,6 +81,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     public void start(SettingsContract.View view) {
         this.view = view;
         setupView();
+
         setupAction();
 
 
@@ -58,7 +91,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         subscription = new CompositeDisposable();
     }
 
-    private void setupAction() {
+    public void setupAction() {
 
 
         view.addTenSecondsButtonAction().subscribe(new Observer<Object>() {
@@ -96,6 +129,36 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
                 logicTakeAwayTenSecondButton();
 
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        view.selectVocabularyButtonAction().subscribe(new Observer<Object>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                subscription.add(d);
+            }
+
+            @Override
+            public void onNext(Object o) {
+
+
+                view.showVocabularyDialog(vocabularyItemList, new SelectVocabularyCallback() {
+                    @Override
+                    public void itemVocabularyCallback(VocabularyItem item) {
+                        Log.d("LOG", item.getNameVocabulary());
+                        view.setCurrentVocabularyName(item.getNameVocabulary());
+                        view.hideVocabularyDialog();
+                    }
+                });
             }
 
             @Override

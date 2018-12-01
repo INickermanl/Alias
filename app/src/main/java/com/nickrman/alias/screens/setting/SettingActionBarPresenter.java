@@ -20,19 +20,19 @@ public class SettingActionBarPresenter extends GeneralActionBarPresenter {
     private Bus bus;
 
 
-    public SettingActionBarPresenter(BaseActivity activity, ActionBarContract.View view, int titleText) {
+    public SettingActionBarPresenter(BaseActivity activity, ActionBarContract.View view, int titleText, Bus bus) {
         super(activity, view, titleText);
         this.activity = activity;
         this.view = view;
         dialogShower = new DialogShower(activity);
         view.showRightButton(true);
         this.titleText = titleText;
+        this.bus = bus;
     }
 
     @Override
     public void start() {
         super.start();
-        bus = new Bus();
         bus.register(dialogShower);
     }
 

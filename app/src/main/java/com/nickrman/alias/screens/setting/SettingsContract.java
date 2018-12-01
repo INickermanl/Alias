@@ -1,6 +1,7 @@
 package com.nickrman.alias.screens.setting;
 
 import com.nickrman.alias.base.BaseActivity;
+import com.nickrman.alias.data.models.VocabularyItem;
 import com.nickrman.alias.services.Navigator;
 import com.nickrman.alias.services.navigation.BackNavigator;
 import com.nickrman.alias.data.models.TeamItem;
@@ -14,7 +15,7 @@ public interface SettingsContract {
         Observable<Object> startGameButtonAction();
 
 
-        Observable<Object> selectBookButtonAction();
+        Observable<Object> selectVocabularyButtonAction();
 
         Observable<Object> addTeamButtonAction();
 
@@ -54,6 +55,11 @@ public interface SettingsContract {
 
         void updateItemList(List<TeamItem> item);
 
+        void setCurrentVocabularyName(String nameVocabulary);
+
+        void showVocabularyDialog(List<VocabularyItem> itemList, SelectVocabularyCallback callback);
+
+        void hideVocabularyDialog();
 
     }
 

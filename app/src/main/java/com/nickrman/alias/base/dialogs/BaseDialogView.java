@@ -29,21 +29,6 @@ public class BaseDialogView extends FrameLayout {
         init();
     }
 
-    public BaseDialogView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-    public BaseDialogView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init();
-    }
-
-    public BaseDialogView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init();
-    }
-
     private void init() {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(resLayout, this, true);

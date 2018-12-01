@@ -1,26 +1,34 @@
 package com.nickrman.alias.screens.setting;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.nickrman.alias.R;
 import com.nickrman.alias.base.BaseActivity;
+import com.nickrman.alias.base.dialogs.BaseDialog;
+import com.nickrman.alias.base.dialogs.BaseDialogView;
 import com.nickrman.alias.data.models.TeamItem;
+import com.nickrman.alias.data.models.VocabularyItem;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import timber.log.Timber;
 
 public class SettingView implements SettingsContract.View {
 
 
     private View root;
     private View startGameButton;
-    private View backButton;
-    private View selectBookButton;
+    private View selectVocabularyButton;
     private View addTeamButton;
     private View infoButton;
 
@@ -34,23 +42,27 @@ public class SettingView implements SettingsContract.View {
     private TextView currentGameTimeSecond;
     private TextView currentCountGameWords;
     private View content;
+    private TextView currentVocabularyName;
 
     private TeamAdapterSetting adapter;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerViewTeam;
+    private BaseDialog dialog;
+    private BaseActivity baseActivity;
 
 
-
-    public SettingView(View root ) {
+    public SettingView(View root, BaseActivity baseActivity) {
         this.root = root;
+        this.baseActivity = baseActivity;
         initView();
     }
 
     private void initView() {
         startGameButton = root.findViewById(R.id.start_game);
-        selectBookButton = root.findViewById(R.id.select_vocabulary);
+        selectVocabularyButton = root.findViewById(R.id.select_vocabulary_button);
         addTeamButton = root.findViewById(R.id.add_team_button);
         infoButton = root.findViewById(R.id.info);
 
+        currentVocabularyName = root.findViewById(R.id.name_vocabulary);
 
         addTenSecondsButton = root.findViewById(R.id.add_count_time_in_game);
         takeAwayTenSecondButton = root.findViewById(R.id.take_away_count_time_in_game);
@@ -63,7 +75,7 @@ public class SettingView implements SettingsContract.View {
 
         currentCountGameWords = root.findViewById(R.id.count_words);
 
-        recyclerView = root.findViewById(R.id.recycler_view);
+        recyclerViewTeam = root.findViewById(R.id.recycler_view);
 
         content = root.findViewById(R.id.content);
     }
@@ -75,8 +87,8 @@ public class SettingView implements SettingsContract.View {
 
 
     @Override
-    public Observable<Object> selectBookButtonAction() {
-        return RxView.clicks(selectBookButton);
+    public Observable<Object> selectVocabularyButtonAction() {
+        return RxView.clicks(selectVocabularyButton);
     }
 
     @Override
@@ -103,7 +115,6 @@ public class SettingView implements SettingsContract.View {
     public Observable<Object> takeAwayTenWordsButtonAction() {
         return RxView.clicks(takeAwayTenWordsButton);
     }
-
 
 
     @Override
@@ -170,10 +181,70 @@ public class SettingView implements SettingsContract.View {
     public void setTeamList(List<TeamItem> items, TeamCallback callback) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(root.getContext(), LinearLayoutManager.VERTICAL, false);
         adapter = new TeamAdapterSetting(items, callback);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
+        recyclerViewTeam.setLayoutManager(linearLayoutManager);
+        recyclerViewTeam.setAdapter(adapter);
     }
 
+    @Override
+    public void showVocabularyDialog(List<VocabularyItem> itemList, SelectVocabularyCallback callback) {
+
+        View view = baseActivity.getLayoutInflater().inflate(R.layout.dialog_vocabulary, null);
+
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+        LinearLayoutManager llm = new LinearLayoutManager(baseActivity, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(llm);
+        RecyclerView.Adapter adapter = new VocabularyAdapter(itemList, callback);
+        recyclerView.setAdapter(adapter);
+
+        dialog = new BaseDialog(baseActivity);
+
+        dialog.setCanceledOnTouchOutside(false);
+        BaseDialogView dialogView = new BaseDialogView(baseActivity, R.layout.dialog_base_vocabulary, R.id.dialog_container);
+
+        final ViewGroup contentContainer = dialogView.getContentContainer();
+        contentContainer.addView(view);
+
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(dialogView);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                contentContainer.removeAllViews();
+                /*context.dialogDismissed();*/
+            }
+        });
+        dialog.show();
+
+        recyclerView.getAdapter().notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void hideVocabularyDialog() {
+
+        baseActivity.hideKeyboard();
+
+        try {
+            if ((this.dialog != null) && this.dialog.isShowing()) {
+                this.dialog.dismiss();
+            }
+        } catch (final IllegalArgumentException e) {
+            // Handle or log or ignore
+            Timber.e(e.getLocalizedMessage());
+        } catch (final Exception e) {
+            // Handle or log or ignore
+            Timber.e(e.getLocalizedMessage());
+        } finally {
+            this.dialog = null;
+        }
+    }
+
+    @Override
+    public void setCurrentVocabularyName(String nameVocabulary) {
+        currentVocabularyName.setText(nameVocabulary);
+    }
 
     @Override
     public void updateItemList(List<TeamItem> item) {
