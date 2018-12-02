@@ -1,6 +1,7 @@
 package com.nickrman.alias.screens.setting;
 
 import com.nickrman.alias.base.BaseActivity;
+import com.nickrman.alias.base.dialogs.BaseDialog;
 import com.nickrman.alias.data.models.TeamAvatarItem;
 import com.nickrman.alias.data.models.VocabularyItem;
 import com.nickrman.alias.services.Navigator;
@@ -59,12 +60,28 @@ public interface SettingsContract {
 
         void showVocabularyDialog(List<VocabularyItem> itemList, SelectVocabularyCallback callback);
 
-        void hideDialog();
+        void hideDialog(BaseDialog dialog);
 
-        void showSelectTeamDialog(List<TeamAvatarItem> teamAvatarItemList, SelectAvatarCallback callback, Runnable runnable);
+        void showSelectTeamDialog(List<TeamAvatarItem> teamAvatarItemList,
+                                  SelectAvatarCallback callback,
+                                  Runnable runnable,
+                                  Runnable runnableOkButton,
+                                  Runnable runnableAddTeamNameDialogButton);
 
         void updateItemTeamAvatar(int i, TeamAvatarItem item);
 
+        public String getTeamNameFromDialog();
+
+
+        void showChangeNameTeamDialog(Runnable runnable);
+
+        void setNameTimeIntoDialog(String nameTeam);
+
+        BaseDialog getDialogVocabulary();
+
+        BaseDialog getDialogAddTeam();
+
+        String getUserTeamName();
 
 
     }

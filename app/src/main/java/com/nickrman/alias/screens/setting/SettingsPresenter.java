@@ -39,8 +39,9 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private static int hello = 0;
     //create listItems and set him to adapter and create callback for item in adapter
     private Handler handler;
+    private TeamItem teamItem;
 
-    private List<TeamItem> list = new ArrayList<>();
+    private List<TeamItem> teamItemList = new ArrayList<>();
     private List<VocabularyItem> vocabularyItemList = new ArrayList();
     private List<TeamAvatarItem> avatarItemList = new ArrayList<>();
 
@@ -170,7 +171,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
                     public void itemVocabularyCallback(VocabularyItem item) {
                         Log.d("LOG", item.getNameVocabulary());
                         view.setCurrentVocabularyName(item.getNameVocabulary());
-                        view.hideDialog();
+                        view.hideDialog(view.getDialogVocabulary());
                     }
                 });
             }
@@ -196,20 +197,35 @@ public class SettingsPresenter implements SettingsContract.Presenter {
                 view.showSelectTeamDialog(avatarItemList, new SelectAvatarCallback() {
 
 
-                    @Override
-                    public void selectAvatarCallback(TeamAvatarItem item, int position, Runnable runnable) {
-                        TeamAvatarItem item1 = avatarItemList.get(position);
+                            @Override
+                            public void selectAvatarCallback(TeamAvatarItem item, int position, Runnable runnable) {
 
-                        if (item1.isBackground()) {
-                            item1.setBackground(false);
-                        } else {
-                            item1.setBackground(true);
-                        }
-                        avatarItemList.remove(position);
-                        avatarItemList.add(position, item1);
-                        runnable.run();
-                    }
-                }, () -> view.hideDialog());
+                                for (int i = 0; i < avatarItemList.size(); i++) {
+                                    if (!(i == position)) {
+                                        teamItem = new TeamItem(item.getAvatar(), view.getTeamNameFromDialog());
+                                        avatarItemList.get(i).setBackground(false);
+                                    } else {
+                                        if (avatarItemList.get(position).isBackground() == true) {
+                                            avatarItemList.get(position).setBackground(false);
+                                        } else {
+                                            avatarItemList.get(position).setBackground(true);
+                                        }
+                                    }
+                                }
+                                runnable.run();
+                            }
+                        },
+                        () -> view.hideDialog(view.getDialogAddTeam()),
+                        () -> {
+                            teamItemList.add(teamItem);
+                            view.updateItemList(teamItemList);
+                            view.hideDialog(view.getDialogAddTeam());
+                        },
+                        () -> view.showChangeNameTeamDialog(
+                                () -> {
+
+                                }));
+
 
             }
 
@@ -223,6 +239,8 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
             }
         });
+
+
         view.addTenWordsButtonAction().subscribe(new Observer<Object>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -287,15 +305,15 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         });
 
 
-        view.setTeamList(list, new TeamCallback() {
+        view.setTeamList(teamItemList, new TeamCallback() {
             @Override
             public void deleteTeam(int position, TeamItem item) {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (list.size() > 2) {
-                            list.remove(item);
-                            view.updateItemList(list);
+                        if (teamItemList.size() > 2) {
+                            teamItemList.remove(item);
+                            view.updateItemList(teamItemList);
                         }
                     }
                 }, 40);
@@ -427,9 +445,9 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         TeamItem item2 = new TeamItem(CollectionImage.test1, CollectionTeamName.team2);
         TeamItem item3 = new TeamItem(CollectionImage.test2, CollectionTeamName.test);
 
-        list.add(item1);
-        list.add(item2);
-        list.add(item3);
+        teamItemList.add(item1);
+        teamItemList.add(item2);
+        teamItemList.add(item3);
     }
 
 

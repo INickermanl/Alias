@@ -38,14 +38,14 @@ public class AvatarTeamAdapter extends RecyclerView.Adapter<AvatarTeamAdapter.Vi
 
         TeamAvatarItem item = teamAvatarItemList.get(position);
 
-        if(item.isBackground()){
+        if(item.isBackground() == true){
             holder.container.setBackgroundColor(App.getInstance().getResources().getColor(R.color.colorWhite));
         }else{
             holder.container.setBackgroundColor(App.getInstance().getResources().getColor(R.color.colorBackgroundAvatar));
         }
         Picasso.get()
                 .load(item.getAvatar())
-                .resize(64, 64)
+                .resize(124, 124)
                 .into(holder.circleImageView);
 
 

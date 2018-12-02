@@ -3,6 +3,7 @@ package com.nickrman.alias.screens.setting;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,8 +49,16 @@ public class SettingView implements SettingsContract.View {
 
     private TeamAdapterSetting adapter;
     private RecyclerView recyclerViewTeam;
-    private BaseDialog dialog;
+
     private BaseActivity baseActivity;
+
+    private TextView teamNameDialogField;
+    private View addTeamNameDialogButton;
+    private AppCompatEditText userNameTeam;
+
+    private BaseDialog dialogVocabulary;
+    private BaseDialog dialogAddTeam;
+    private BaseDialog  dialogChangeUserTeamName;
 
 
     public SettingView(View root, BaseActivity baseActivity) {
@@ -198,26 +207,29 @@ public class SettingView implements SettingsContract.View {
         recyclerView.setLayoutManager(llm);
         RecyclerView.Adapter adapter = new VocabularyAdapter(itemList, callback);
         recyclerView.setAdapter(adapter);
+        dialogVocabulary = new BaseDialog(baseActivity);
 
-        createBaseDialog(view, R.layout.dialog_base_vocabulary, R.id.dialog_container);
+        createBaseDialog(dialogVocabulary, view, R.layout.dialog_base_vocabulary, R.id.dialog_container);
 
     }
 
 
     @Override
-    public void showSelectTeamDialog(List<TeamAvatarItem> teamAvatarItemList, SelectAvatarCallback callback, Runnable runnable) {
+    public void showSelectTeamDialog(List<TeamAvatarItem> teamAvatarItemList, SelectAvatarCallback callback,
+                                     Runnable runnable, Runnable runnableOkButton, Runnable runnableAddTeamNameDialogButton) {
 
         View view = baseActivity.getLayoutInflater().inflate(R.layout.dialog_select_team, null);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
-        TextView TeamName = view.findViewById(R.id.name_team_text_view);
-        View addTeamName = view.findViewById(R.id.add_teamName);
+        teamNameDialogField = view.findViewById(R.id.name_team_text_view);
+        addTeamNameDialogButton = view.findViewById(R.id.add_teamName);
         View cancel = view.findViewById(R.id.cancel_btn);
         View ok = view.findViewById(R.id.ok_btn);
         View leftBackButton = view.findViewById(R.id.left_container);
 
         cancel.setOnClickListener(v -> runnable.run());
-        ok.setOnClickListener(v -> runnable.run());
+        ok.setOnClickListener(v -> runnableOkButton.run());
         leftBackButton.setOnClickListener(v -> runnable.run());
+        addTeamNameDialogButton.setOnClickListener(v ->runnableAddTeamNameDialogButton.run());
 
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(root.getContext(), 4, GridLayoutManager.VERTICAL, false);
@@ -225,41 +237,65 @@ public class SettingView implements SettingsContract.View {
         RecyclerView.Adapter adapter = new AvatarTeamAdapter(teamAvatarItemList, callback);
         recyclerView.setAdapter(adapter);
 
+        dialogAddTeam = new BaseDialog(baseActivity);
 
-        createBaseDialog(view, R.layout.dialog_base_choose_team, R.id.dialog_content_container);
+        createBaseDialog(dialogAddTeam, view, R.layout.dialog_base_choose_team, R.id.dialog_content_container);
     }
 
-    private void createBaseDialog(View view, int resBaseDialog, int resContainerForData) {
-        dialog = new BaseDialog(baseActivity);
+    @Override
+    public void showChangeNameTeamDialog(Runnable runnable) {
+        View view = baseActivity.getLayoutInflater().inflate(R.layout.dialog_change_team_name, null);
 
-        dialog.setCanceledOnTouchOutside(false);
+         userNameTeam = view.findViewById(R.id.team_name_et_dialog_change_team_name);
+        View ok = view.findViewById(R.id.ok_button_dialog_change_team_name);
+
+        dialogChangeUserTeamName = new BaseDialog(baseActivity);
+
+        ok.setOnClickListener(v -> runnable.run());
+
+        createBaseDialog(dialogChangeUserTeamName,view,R.layout.dialog_base_change_team_name,R.id.dialog_content_container);
+    }
+
+
+    @Override
+    public String getTeamNameFromDialog() {
+
+        return teamNameDialogField.getText().toString().trim();
+    }
+
+    private void createBaseDialog(BaseDialog baseDialog, View view, int resBaseDialog, int resContainerForData) {
+        if(baseDialog == dialogChangeUserTeamName){
+            baseActivity.showKeyboard(userNameTeam);
+        }
+
+        baseDialog.setCanceledOnTouchOutside(false);
         BaseDialogView dialogView = new BaseDialogView(baseActivity, resBaseDialog, resContainerForData);
 
         final ViewGroup contentContainer = dialogView.getContentContainer();
         contentContainer.addView(view);
 
 
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(dialogView);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        baseDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        baseDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        baseDialog.setContentView(dialogView);
+        baseDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 contentContainer.removeAllViews();
             }
         });
-        dialog.show();
+        baseDialog.show();
     }
 
 
     @Override
-    public void hideDialog() {
+    public void hideDialog(BaseDialog dialog) {
 
         baseActivity.hideKeyboard();
 
         try {
-            if ((this.dialog != null) && this.dialog.isShowing()) {
-                this.dialog.dismiss();
+            if ((dialog != null) && dialog.isShowing()) {
+                dialog.dismiss();
             }
         } catch (final IllegalArgumentException e) {
             // Handle or log or ignore
@@ -268,7 +304,7 @@ public class SettingView implements SettingsContract.View {
             // Handle or log or ignore
             Timber.e(e.getLocalizedMessage());
         } finally {
-            this.dialog = null;
+            dialog = null;
         }
     }
 
@@ -285,5 +321,26 @@ public class SettingView implements SettingsContract.View {
     @Override
     public void updateItemTeamAvatar(int position, TeamAvatarItem item) {
         adapter.notifyItemChanged(position);
+    }
+
+
+    @Override
+    public void setNameTimeIntoDialog(String nameTeam) {
+        teamNameDialogField.setText(nameTeam.toString().trim());
+    }
+
+    @Override
+    public BaseDialog getDialogVocabulary() {
+        return this.dialogVocabulary;
+    }
+
+    @Override
+    public BaseDialog getDialogAddTeam() {
+        return dialogAddTeam;
+    }
+
+    @Override
+    public String getUserTeamName() {
+        return userNameTeam.getText().toString().trim();
     }
 }

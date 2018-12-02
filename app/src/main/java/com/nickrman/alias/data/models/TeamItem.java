@@ -3,12 +3,13 @@ package com.nickrman.alias.data.models;
 public class TeamItem {
     private int imageTeam;
     private String nameTeam;
-    private int scoreTeam = 0;
+    private int scoreTeam ;
 
 
     public TeamItem(int imageTeam, String nameTeam) {
         this.imageTeam = imageTeam;
         this.nameTeam = nameTeam;
+        this.scoreTeam = 0;
     }
 
     public TeamItem() {
