@@ -1,6 +1,7 @@
 package com.nickrman.alias.screens.setting;
 
 import com.nickrman.alias.base.BaseActivity;
+import com.nickrman.alias.data.models.TeamAvatarItem;
 import com.nickrman.alias.data.models.VocabularyItem;
 import com.nickrman.alias.services.Navigator;
 import com.nickrman.alias.services.navigation.BackNavigator;
@@ -28,7 +29,6 @@ public interface SettingsContract {
         Observable<Object> takeAwayTenWordsButtonAction();
 
 
-
         int getCurrentTimeMinute();
 
         void setCurrentTimeMinute(int min);
@@ -53,13 +53,19 @@ public interface SettingsContract {
 
         void setTeamList(List<TeamItem> items, TeamCallback callback);
 
-        void updateItemList(List<TeamItem> item);
+        void updateItemList(List<?> item);
 
         void setCurrentVocabularyName(String nameVocabulary);
 
         void showVocabularyDialog(List<VocabularyItem> itemList, SelectVocabularyCallback callback);
 
-        void hideVocabularyDialog();
+        void hideDialog();
+
+        void showSelectTeamDialog(List<TeamAvatarItem> teamAvatarItemList, SelectAvatarCallback callback, Runnable runnable);
+
+        void updateItemTeamAvatar(int i, TeamAvatarItem item);
+
+
 
     }
 

@@ -3,6 +3,7 @@ package com.nickrman.alias.screens.setting;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.nickrman.alias.R;
 import com.nickrman.alias.base.BaseActivity;
 import com.nickrman.alias.base.dialogs.BaseDialog;
 import com.nickrman.alias.base.dialogs.BaseDialogView;
+import com.nickrman.alias.data.models.TeamAvatarItem;
 import com.nickrman.alias.data.models.TeamItem;
 import com.nickrman.alias.data.models.VocabularyItem;
 
@@ -191,15 +193,47 @@ public class SettingView implements SettingsContract.View {
         View view = baseActivity.getLayoutInflater().inflate(R.layout.dialog_vocabulary, null);
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+
         LinearLayoutManager llm = new LinearLayoutManager(baseActivity, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(llm);
         RecyclerView.Adapter adapter = new VocabularyAdapter(itemList, callback);
         recyclerView.setAdapter(adapter);
 
+        createBaseDialog(view, R.layout.dialog_base_vocabulary, R.id.dialog_container);
+
+    }
+
+
+    @Override
+    public void showSelectTeamDialog(List<TeamAvatarItem> teamAvatarItemList, SelectAvatarCallback callback, Runnable runnable) {
+
+        View view = baseActivity.getLayoutInflater().inflate(R.layout.dialog_select_team, null);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+        TextView TeamName = view.findViewById(R.id.name_team_text_view);
+        View addTeamName = view.findViewById(R.id.add_teamName);
+        View cancel = view.findViewById(R.id.cancel_btn);
+        View ok = view.findViewById(R.id.ok_btn);
+        View leftBackButton = view.findViewById(R.id.left_container);
+
+        cancel.setOnClickListener(v -> runnable.run());
+        ok.setOnClickListener(v -> runnable.run());
+        leftBackButton.setOnClickListener(v -> runnable.run());
+
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(root.getContext(), 4, GridLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(gridLayoutManager);
+        RecyclerView.Adapter adapter = new AvatarTeamAdapter(teamAvatarItemList, callback);
+        recyclerView.setAdapter(adapter);
+
+
+        createBaseDialog(view, R.layout.dialog_base_choose_team, R.id.dialog_content_container);
+    }
+
+    private void createBaseDialog(View view, int resBaseDialog, int resContainerForData) {
         dialog = new BaseDialog(baseActivity);
 
         dialog.setCanceledOnTouchOutside(false);
-        BaseDialogView dialogView = new BaseDialogView(baseActivity, R.layout.dialog_base_vocabulary, R.id.dialog_container);
+        BaseDialogView dialogView = new BaseDialogView(baseActivity, resBaseDialog, resContainerForData);
 
         final ViewGroup contentContainer = dialogView.getContentContainer();
         contentContainer.addView(view);
@@ -212,17 +246,14 @@ public class SettingView implements SettingsContract.View {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 contentContainer.removeAllViews();
-                /*context.dialogDismissed();*/
             }
         });
         dialog.show();
-
-        recyclerView.getAdapter().notifyDataSetChanged();
-
     }
 
+
     @Override
-    public void hideVocabularyDialog() {
+    public void hideDialog() {
 
         baseActivity.hideKeyboard();
 
@@ -247,8 +278,12 @@ public class SettingView implements SettingsContract.View {
     }
 
     @Override
-    public void updateItemList(List<TeamItem> item) {
+    public void updateItemList(List<?> item) {
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void updateItemTeamAvatar(int position, TeamAvatarItem item) {
+        adapter.notifyItemChanged(position);
+    }
 }

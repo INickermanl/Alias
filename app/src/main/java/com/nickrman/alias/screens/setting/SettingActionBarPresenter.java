@@ -40,7 +40,6 @@ public class SettingActionBarPresenter extends GeneralActionBarPresenter {
     public void stop() {
         super.stop();
         bus.unregister(dialogShower);
-        bus = null;
     }
 
     @Override

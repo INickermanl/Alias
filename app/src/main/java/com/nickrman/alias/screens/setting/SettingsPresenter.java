@@ -2,30 +2,21 @@ package com.nickrman.alias.screens.setting;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
 
 import com.nickrman.alias.R;
-import com.nickrman.alias.base.App;
 import com.nickrman.alias.base.BaseActivity;
-import com.nickrman.alias.base.dialogs.BaseDialog;
 import com.nickrman.alias.base.dialogs.DialogShower;
-import com.nickrman.alias.base.dialogs.events.HideDialogEvent;
-import com.nickrman.alias.base.dialogs.events.ShowDialogEvent;
 import com.nickrman.alias.data.db.AppDatabase;
 import com.nickrman.alias.data.models.CollectionImage;
 import com.nickrman.alias.data.models.CollectionTeamName;
+import com.nickrman.alias.data.models.TeamAvatarItem;
 import com.nickrman.alias.data.models.VocabularyItem;
 import com.nickrman.alias.services.Navigator;
 import com.nickrman.alias.services.navigation.BackNavigator;
 import com.nickrman.alias.data.models.TeamItem;
 import com.nickrman.alias.services.navigation.Screen;
 import com.nickrman.alias.services.navigation.ScreenType;
-import com.squareup.otto.Bus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +36,14 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private AppDatabase db;
     private String CON = "TEST";
     private DialogShower dialogVocabulary;
+    private static int hello = 0;
+    //create listItems and set him to adapter and create callback for item in adapter
+    private Handler handler;
+
+    private List<TeamItem> list = new ArrayList<>();
     private List<VocabularyItem> vocabularyItemList = new ArrayList();
-    private BaseDialog baseDialog;
+    private List<TeamAvatarItem> avatarItemList = new ArrayList<>();
+
 
     private void initVocabularyList() {
 
@@ -61,14 +58,30 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
     }
 
-    private static int hello = 0;
-    //create listItems and set him to adapter and create callback for item in adapter
-    private List<TeamItem> list = new ArrayList<>();
-    private Handler handler;
+    private void initAvatarItemList() {
+        TeamAvatarItem item = new TeamAvatarItem(R.mipmap.cat);
+        TeamAvatarItem item1 = new TeamAvatarItem(R.mipmap.cat_like);
+        TeamAvatarItem item2 = new TeamAvatarItem(R.mipmap.pic);
+        TeamAvatarItem item3 = new TeamAvatarItem(R.mipmap.cat);
+        TeamAvatarItem item4 = new TeamAvatarItem(R.mipmap.cat);
+        TeamAvatarItem item5 = new TeamAvatarItem(R.mipmap.cat);
+        TeamAvatarItem item6 = new TeamAvatarItem(R.mipmap.cat_like);
+        TeamAvatarItem item7 = new TeamAvatarItem(R.mipmap.cat);
+
+        avatarItemList.add(item);
+        avatarItemList.add(item1);
+        avatarItemList.add(item2);
+        avatarItemList.add(item3);
+        avatarItemList.add(item4);
+        avatarItemList.add(item5);
+        avatarItemList.add(item6);
+        avatarItemList.add(item7);
+    }
 
     public SettingsPresenter(BaseActivity activity) {
         this.handler = new Handler(Looper.getMainLooper());
         initVocabularyList();
+        initAvatarItemList();
         this.activity = activity;
 
         this.dialogVocabulary = new DialogShower(activity);
@@ -76,6 +89,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
 
     }
+
 
     @Override
     public void start(SettingsContract.View view) {
@@ -156,9 +170,47 @@ public class SettingsPresenter implements SettingsContract.Presenter {
                     public void itemVocabularyCallback(VocabularyItem item) {
                         Log.d("LOG", item.getNameVocabulary());
                         view.setCurrentVocabularyName(item.getNameVocabulary());
-                        view.hideVocabularyDialog();
+                        view.hideDialog();
                     }
                 });
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        view.addTeamButtonAction().subscribe(new Observer<Object>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                subscription.add(d);
+            }
+
+            @Override
+            public void onNext(Object o) {
+                view.showSelectTeamDialog(avatarItemList, new SelectAvatarCallback() {
+
+
+                    @Override
+                    public void selectAvatarCallback(TeamAvatarItem item, int position, Runnable runnable) {
+                        TeamAvatarItem item1 = avatarItemList.get(position);
+
+                        if (item1.isBackground()) {
+                            item1.setBackground(false);
+                        } else {
+                            item1.setBackground(true);
+                        }
+                        avatarItemList.remove(position);
+                        avatarItemList.add(position, item1);
+                        runnable.run();
+                    }
+                }, () -> view.hideDialog());
+
             }
 
             @Override
@@ -233,37 +285,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
             }
         });
-        view.addTeamButtonAction().subscribe(new Observer<Object>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                subscription.add(d);
-            }
 
-            @Override
-            public void onNext(Object o) {
-
-                TeamItem item1 = new TeamItem(R.mipmap.cat, "test3");
-                TeamItem item2 = new TeamItem(R.mipmap.pic, "test3");
-                if (hello == 0) {
-                    list.add(item1);
-                    hello++;
-                } else {
-                    list.add(item2);
-                }
-
-                view.updateItemList(list);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
 
         view.setTeamList(list, new TeamCallback() {
             @Override

@@ -65,7 +65,7 @@ public class SettingsActivity extends BaseActivity {
         actionBarPresenter.stop();
         presenter.stop();
         bus.unregister(presenter);
-        bus = null;
+
     }
 
     @Override

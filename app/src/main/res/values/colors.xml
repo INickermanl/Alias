@@ -8,5 +8,6 @@
     <color name="colorBlackGray">#10FFFFFF</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorDialogBackground">#F3F3F3</color>
+    <color name="colorBackgroundAvatar">#03a9f4</color>
 
 </resources>
