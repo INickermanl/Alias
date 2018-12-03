@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.AppCompatEditText
+    <EditText
         android:id="@+id/team_name_et_dialog_change_team_name"
         android:layout_width="0dp"
         android:layout_height="42dp"

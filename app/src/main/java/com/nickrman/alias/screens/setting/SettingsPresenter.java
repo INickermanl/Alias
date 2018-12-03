@@ -39,7 +39,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private static int hello = 0;
     //create listItems and set him to adapter and create callback for item in adapter
     private Handler handler;
-    private TeamItem teamItem;
+    private TeamItem teamItem = new TeamItem();
 
     private List<TeamItem> teamItemList = new ArrayList<>();
     private List<VocabularyItem> vocabularyItemList = new ArrayList();
@@ -194,36 +194,79 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
             @Override
             public void onNext(Object o) {
+                avatarItemList.get(0).setBackground(true);
                 view.showSelectTeamDialog(avatarItemList, new SelectAvatarCallback() {
-
 
                             @Override
                             public void selectAvatarCallback(TeamAvatarItem item, int position, Runnable runnable) {
 
                                 for (int i = 0; i < avatarItemList.size(); i++) {
-                                    if (!(i == position)) {
-                                        teamItem = new TeamItem(item.getAvatar(), view.getTeamNameFromDialog());
+                                    if (i != position) {
                                         avatarItemList.get(i).setBackground(false);
                                     } else {
-                                        if (avatarItemList.get(position).isBackground() == true) {
-                                            avatarItemList.get(position).setBackground(false);
-                                        } else {
-                                            avatarItemList.get(position).setBackground(true);
-                                        }
+
+                                        avatarItemList.get(position).setBackground(true);
+
                                     }
                                 }
                                 runnable.run();
                             }
                         },
-                        () -> view.hideDialog(view.getDialogAddTeam()),
-                        () -> {
-                            teamItemList.add(teamItem);
-                            view.updateItemList(teamItemList);
+                        () -> {//cancel
+                            for (int i = 0; i < avatarItemList.size(); i++) {
+                                avatarItemList.get(i).setBackground(false);
+                            }
                             view.hideDialog(view.getDialogAddTeam());
                         },
-                        () -> view.showChangeNameTeamDialog(
-                                () -> {
+                        () -> {//add button
+                            TeamItem itemForItemList = new TeamItem();
 
+                            if (teamItem.getImageTeam() == 0) {
+                                for (TeamAvatarItem avatarItem : avatarItemList) {
+                                    if (avatarItem.isBackground()) {
+                                        itemForItemList.setImageTeam(avatarItem.getAvatar());
+
+                                    }
+                                }
+
+                            } else {
+                                itemForItemList.setImageTeam(teamItem.getImageTeam());
+                            }
+
+                            itemForItemList.setNameTeam(view.getTeamNameFromDialog());
+                            teamItemList.add(itemForItemList);
+                            view.updateItemList(teamItemList);
+
+                            TeamAvatarItem avatarItemMain = new TeamAvatarItem();
+
+                            for (TeamAvatarItem avatarItem : avatarItemList) {
+                                if (avatarItem.getAvatar() == itemForItemList.getImageTeam()) {
+                                    avatarItemMain = avatarItem;
+                                } else {
+                                    avatarItemList.get(0).setBackground(false);
+                                }
+
+                            }
+
+
+                            avatarItemList.remove(avatarItemMain);
+                           /* for (int i = 0; i < avatarItemList.size(); i++) {
+
+                            }*/
+
+                            view.hideDialog(view.getDialogAddTeam());
+
+
+                        },
+                        () ->//add teamName dialog
+                                view.showChangeNameTeamDialog(
+                                () -> {
+                                    if (!view.getTeamNameFromDialogChangeUserName().equals("")) {
+                                        view.setTeamNameDialogField(view.getTeamNameFromDialogChangeUserName());
+                                    }
+
+
+                                    view.hideDialog(view.getDialogChangeUserTeamName());
                                 }));
 
 
@@ -311,8 +354,16 @@ public class SettingsPresenter implements SettingsContract.Presenter {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (teamItemList.size() > 2) {
+                        if (teamItemList.size() > 0) {
                             teamItemList.remove(item);
+
+
+                            TeamAvatarItem teamAvatarItem = new TeamAvatarItem(item.getImageTeam());
+                            avatarItemList.add(0, teamAvatarItem);
+
+                            for (int i = 0; i < avatarItemList.size(); i++) {
+                                avatarItemList.get(i).setBackground(false);
+                            }
                             view.updateItemList(teamItemList);
                         }
                     }

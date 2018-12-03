@@ -9,6 +9,9 @@ public class TeamAvatarItem {
         this.background = false;
     }
 
+    public TeamAvatarItem() {
+    }
+
     public int getAvatar() {
         return avatar;
     }

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
@@ -54,12 +55,14 @@ public class SettingView implements SettingsContract.View {
 
     private TextView teamNameDialogField;
     private View addTeamNameDialogButton;
-    private AppCompatEditText userNameTeam;
+    private EditText userNameTeam;
 
     private BaseDialog dialogVocabulary;
     private BaseDialog dialogAddTeam;
-    private BaseDialog  dialogChangeUserTeamName;
+    private BaseDialog dialogChangeUserTeamName;
 
+    private String TeamNameFromDialog;
+    private RecyclerView.Adapter adapterAvatarItem;
 
     public SettingView(View root, BaseActivity baseActivity) {
         this.root = root;
@@ -216,7 +219,7 @@ public class SettingView implements SettingsContract.View {
 
     @Override
     public void showSelectTeamDialog(List<TeamAvatarItem> teamAvatarItemList, SelectAvatarCallback callback,
-                                     Runnable runnable, Runnable runnableOkButton, Runnable runnableAddTeamNameDialogButton) {
+                                     Runnable runnableCancel, Runnable runnableOkButton, Runnable runnableAddTeamNameDialogButton) {
 
         View view = baseActivity.getLayoutInflater().inflate(R.layout.dialog_select_team, null);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
@@ -225,17 +228,18 @@ public class SettingView implements SettingsContract.View {
         View cancel = view.findViewById(R.id.cancel_btn);
         View ok = view.findViewById(R.id.ok_btn);
         View leftBackButton = view.findViewById(R.id.left_container);
+        teamNameDialogField.setText("test");
 
-        cancel.setOnClickListener(v -> runnable.run());
+        cancel.setOnClickListener(v -> runnableCancel.run());
         ok.setOnClickListener(v -> runnableOkButton.run());
-        leftBackButton.setOnClickListener(v -> runnable.run());
-        addTeamNameDialogButton.setOnClickListener(v ->runnableAddTeamNameDialogButton.run());
+        leftBackButton.setOnClickListener(v -> runnableCancel.run());
+        addTeamNameDialogButton.setOnClickListener(v -> runnableAddTeamNameDialogButton.run());
 
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(root.getContext(), 4, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(gridLayoutManager);
-        RecyclerView.Adapter adapter = new AvatarTeamAdapter(teamAvatarItemList, callback);
-        recyclerView.setAdapter(adapter);
+        adapterAvatarItem = new AvatarTeamAdapter(teamAvatarItemList, callback);
+        recyclerView.setAdapter(adapterAvatarItem);
 
         dialogAddTeam = new BaseDialog(baseActivity);
 
@@ -246,14 +250,14 @@ public class SettingView implements SettingsContract.View {
     public void showChangeNameTeamDialog(Runnable runnable) {
         View view = baseActivity.getLayoutInflater().inflate(R.layout.dialog_change_team_name, null);
 
-         userNameTeam = view.findViewById(R.id.team_name_et_dialog_change_team_name);
+        userNameTeam = view.findViewById(R.id.team_name_et_dialog_change_team_name);
         View ok = view.findViewById(R.id.ok_button_dialog_change_team_name);
 
         dialogChangeUserTeamName = new BaseDialog(baseActivity);
 
         ok.setOnClickListener(v -> runnable.run());
 
-        createBaseDialog(dialogChangeUserTeamName,view,R.layout.dialog_base_change_team_name,R.id.dialog_content_container);
+        createBaseDialog(dialogChangeUserTeamName, view, R.layout.dialog_base_change_team_name, R.id.dialog_content_container);
     }
 
 
@@ -264,7 +268,7 @@ public class SettingView implements SettingsContract.View {
     }
 
     private void createBaseDialog(BaseDialog baseDialog, View view, int resBaseDialog, int resContainerForData) {
-        if(baseDialog == dialogChangeUserTeamName){
+        if (baseDialog.equals(dialogChangeUserTeamName)) {
             baseActivity.showKeyboard(userNameTeam);
         }
 
@@ -293,6 +297,7 @@ public class SettingView implements SettingsContract.View {
 
         baseActivity.hideKeyboard();
 
+
         try {
             if ((dialog != null) && dialog.isShowing()) {
                 dialog.dismiss();
@@ -319,13 +324,7 @@ public class SettingView implements SettingsContract.View {
     }
 
     @Override
-    public void updateItemTeamAvatar(int position, TeamAvatarItem item) {
-        adapter.notifyItemChanged(position);
-    }
-
-
-    @Override
-    public void setNameTimeIntoDialog(String nameTeam) {
+    public void setTeamNameDialogField(String nameTeam) {
         teamNameDialogField.setText(nameTeam.toString().trim());
     }
 
@@ -340,7 +339,17 @@ public class SettingView implements SettingsContract.View {
     }
 
     @Override
-    public String getUserTeamName() {
+    public BaseDialog getDialogChangeUserTeamName() {
+        return dialogChangeUserTeamName;
+    }
+
+    @Override
+    public String getTeamNameFromDialogChangeUserName() {
         return userNameTeam.getText().toString().trim();
+    }
+
+    @Override
+    public RecyclerView.Adapter getAdapterAvatarItem() {
+        return adapterAvatarItem;
     }
 }

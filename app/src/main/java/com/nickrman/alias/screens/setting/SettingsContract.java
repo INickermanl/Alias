@@ -1,5 +1,7 @@
 package com.nickrman.alias.screens.setting;
 
+import android.support.v7.widget.RecyclerView;
+
 import com.nickrman.alias.base.BaseActivity;
 import com.nickrman.alias.base.dialogs.BaseDialog;
 import com.nickrman.alias.data.models.TeamAvatarItem;
@@ -60,7 +62,6 @@ public interface SettingsContract {
 
         void showVocabularyDialog(List<VocabularyItem> itemList, SelectVocabularyCallback callback);
 
-        void hideDialog(BaseDialog dialog);
 
         void showSelectTeamDialog(List<TeamAvatarItem> teamAvatarItemList,
                                   SelectAvatarCallback callback,
@@ -68,22 +69,25 @@ public interface SettingsContract {
                                   Runnable runnableOkButton,
                                   Runnable runnableAddTeamNameDialogButton);
 
-        void updateItemTeamAvatar(int i, TeamAvatarItem item);
-
-        public String getTeamNameFromDialog();
-
-
         void showChangeNameTeamDialog(Runnable runnable);
 
-        void setNameTimeIntoDialog(String nameTeam);
+
+        String getTeamNameFromDialog();
+
+
+        void setTeamNameDialogField(String nameTeam);
 
         BaseDialog getDialogVocabulary();
 
         BaseDialog getDialogAddTeam();
 
-        String getUserTeamName();
+        BaseDialog getDialogChangeUserTeamName();
 
+        void hideDialog(BaseDialog dialog);
 
+        String getTeamNameFromDialogChangeUserName();
+
+        RecyclerView.Adapter getAdapterAvatarItem();
     }
 
     interface Presenter {
