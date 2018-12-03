@@ -38,11 +38,17 @@ public class AvatarTeamAdapter extends RecyclerView.Adapter<AvatarTeamAdapter.Vi
 
         TeamAvatarItem item = teamAvatarItemList.get(position);
 
-        if(item.isBackground() == true){
-            holder.container.setBackgroundColor(App.getInstance().getResources().getColor(R.color.colorWhite));
+        if(item.isBackground()){
+            holder.circleAcant.setVisibility(View.VISIBLE);
+            Picasso.get()
+                    .load(R.mipmap.ic_launcher)
+                    .resize(48, 48)
+                    .into(holder.circleAcant);
         }else{
-            holder.container.setBackgroundColor(App.getInstance().getResources().getColor(R.color.colorBackgroundAvatar));
+           holder.circleAcant.setVisibility(View.INVISIBLE);
         }
+
+
         Picasso.get()
                 .load(item.getAvatar())
                 .resize(124, 124)
@@ -64,14 +70,16 @@ public class AvatarTeamAdapter extends RecyclerView.Adapter<AvatarTeamAdapter.Vi
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private View container;
+        private CircleImageView circleAcant;
         private CircleImageView circleImageView;
+        private View container;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
-            container = itemView.findViewById(R.id.background_image_item);
+            circleAcant = itemView.findViewById(R.id.background_image_item);
             circleImageView = itemView.findViewById(R.id.team_image);
+            container = itemView.findViewById(R.id.container);
         }
 
 

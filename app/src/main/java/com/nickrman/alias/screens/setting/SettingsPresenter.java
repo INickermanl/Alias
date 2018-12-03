@@ -33,11 +33,6 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private Navigator navigator;
     private BaseActivity activity;
     private BackNavigator backNavigator;
-    private AppDatabase db;
-    private String CON = "TEST";
-    private DialogShower dialogVocabulary;
-    private static int hello = 0;
-    //create listItems and set him to adapter and create callback for item in adapter
     private Handler handler;
     private TeamItem teamItem = new TeamItem();
 
@@ -46,48 +41,13 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private List<TeamAvatarItem> avatarItemList = new ArrayList<>();
 
 
-    private void initVocabularyList() {
 
-        VocabularyItem item1 = new VocabularyItem("book 1");
-        VocabularyItem item2 = new VocabularyItem("book 2");
-        VocabularyItem item3 = new VocabularyItem("book 3");
-        VocabularyItem item4 = new VocabularyItem("book 4");
-        vocabularyItemList.add(item1);
-        vocabularyItemList.add(item2);
-        vocabularyItemList.add(item3);
-        vocabularyItemList.add(item4);
-
-    }
-
-    private void initAvatarItemList() {
-        TeamAvatarItem item = new TeamAvatarItem(R.mipmap.cat);
-        TeamAvatarItem item1 = new TeamAvatarItem(R.mipmap.cat_like);
-        TeamAvatarItem item2 = new TeamAvatarItem(R.mipmap.pic);
-        TeamAvatarItem item3 = new TeamAvatarItem(R.mipmap.cat);
-        TeamAvatarItem item4 = new TeamAvatarItem(R.mipmap.cat);
-        TeamAvatarItem item5 = new TeamAvatarItem(R.mipmap.cat);
-        TeamAvatarItem item6 = new TeamAvatarItem(R.mipmap.cat_like);
-        TeamAvatarItem item7 = new TeamAvatarItem(R.mipmap.cat);
-
-        avatarItemList.add(item);
-        avatarItemList.add(item1);
-        avatarItemList.add(item2);
-        avatarItemList.add(item3);
-        avatarItemList.add(item4);
-        avatarItemList.add(item5);
-        avatarItemList.add(item6);
-        avatarItemList.add(item7);
-    }
 
     public SettingsPresenter(BaseActivity activity) {
         this.handler = new Handler(Looper.getMainLooper());
         initVocabularyList();
         initAvatarItemList();
         this.activity = activity;
-
-        this.dialogVocabulary = new DialogShower(activity);
-        //db = AppDatabase.getInMemoryDatabase(App.getInstance());
-
 
     }
 
@@ -98,8 +58,6 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         setupView();
 
         setupAction();
-
-
     }
 
     private void setupView() {
@@ -108,6 +66,156 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
     public void setupAction() {
 
+        view.setTeamList(teamItemList, new TeamCallback() {
+            @Override
+            public void deleteTeam(int position, TeamItem item) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (teamItemList.size() > 0) {
+                            teamItemList.remove(item);
+
+
+                            TeamAvatarItem teamAvatarItem = new TeamAvatarItem(item.getImageTeam());
+                            avatarItemList.add(0, teamAvatarItem);
+
+                            for (int i = 0; i < avatarItemList.size(); i++) {
+                                avatarItemList.get(i).setBackground(false);
+                            }
+                            view.updateItemList(teamItemList);
+                        }
+                    }
+                }, 40);
+
+
+            }
+        });
+        view.addTeamButtonAction().subscribe(new Observer<Object>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                subscription.add(d);
+            }
+
+            @Override
+            public void onNext(Object o) {
+                avatarItemList.get(0).setBackground(true);
+                view.showSelectTeamDialog(avatarItemList, new SelectAvatarCallback() {
+
+                            @Override
+                            public void selectAvatarCallback(TeamAvatarItem item, int position, Runnable runnable) {
+
+                                for (int i = 0; i < avatarItemList.size(); i++) {
+                                    if (i != position) {
+                                        avatarItemList.get(i).setBackground(false);
+                                    } else {
+
+                                        avatarItemList.get(position).setBackground(true);
+                                    }
+                                }
+                                runnable.run();
+                            }
+                        },
+                        () -> {//cancel
+                            for (int i = 0; i < avatarItemList.size(); i++) {
+                                avatarItemList.get(i).setBackground(false);
+                            }
+                            view.hideDialog(view.getDialogAddTeam());
+                        },
+                        () -> {//ok button
+                            TeamItem itemForItemList = new TeamItem();
+
+                            if (teamItem.getImageTeam() == 0) {
+                                for (TeamAvatarItem avatarItem : avatarItemList) {
+                                    if (avatarItem.isBackground()) {
+                                        itemForItemList.setImageTeam(avatarItem.getAvatar());
+
+                                    }
+                                }
+
+                            } else {
+                                itemForItemList.setImageTeam(teamItem.getImageTeam());
+                            }
+
+                            itemForItemList.setNameTeam(view.getTeamNameFromDialog());
+                            teamItemList.add(itemForItemList);
+                            view.updateItemList(teamItemList);
+
+                            TeamAvatarItem avatarItemMain = new TeamAvatarItem();
+
+                            for (TeamAvatarItem avatarItem : avatarItemList) {
+                                if (avatarItem.getAvatar() == itemForItemList.getImageTeam()) {
+                                    avatarItemMain = avatarItem;
+                                } else {
+                                    avatarItemList.get(0).setBackground(false);
+                                }
+
+                            }
+
+
+                            avatarItemList.remove(avatarItemMain);
+                           /* for (int i = 0; i < avatarItemList.size(); i++) {
+
+                            }*/
+
+                            view.hideDialog(view.getDialogAddTeam());
+
+
+                        },
+                        () ->//add teamName dialog
+                                view.showChangeNameTeamDialog(
+                                        () -> {
+                                            if (!view.getTeamNameFromDialogChangeUserName().equals("")) {
+                                                view.setTeamNameDialogField(view.getTeamNameFromDialogChangeUserName());
+                                            }
+
+
+                                            view.hideDialog(view.getDialogChangeUserTeamName());
+                                        }));
+
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
+        view.selectVocabularyButtonAction().subscribe(new Observer<Object>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                subscription.add(d);
+            }
+
+            @Override
+            public void onNext(Object o) {
+
+
+                view.showVocabularyDialog(vocabularyItemList, new SelectVocabularyCallback() {
+                    @Override
+                    public void itemVocabularyCallback(VocabularyItem item) {
+                        Log.d("LOG", item.getNameVocabulary());
+                        view.setCurrentVocabularyName(item.getNameVocabulary());
+                        view.hideDialog(view.getDialogVocabulary());
+                    }
+                });
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
 
         view.addTenSecondsButtonAction().subscribe(new Observer<Object>() {
             @Override
@@ -156,134 +264,6 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
             }
         });
-        view.selectVocabularyButtonAction().subscribe(new Observer<Object>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                subscription.add(d);
-            }
-
-            @Override
-            public void onNext(Object o) {
-
-
-                view.showVocabularyDialog(vocabularyItemList, new SelectVocabularyCallback() {
-                    @Override
-                    public void itemVocabularyCallback(VocabularyItem item) {
-                        Log.d("LOG", item.getNameVocabulary());
-                        view.setCurrentVocabularyName(item.getNameVocabulary());
-                        view.hideDialog(view.getDialogVocabulary());
-                    }
-                });
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-        view.addTeamButtonAction().subscribe(new Observer<Object>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                subscription.add(d);
-            }
-
-            @Override
-            public void onNext(Object o) {
-                avatarItemList.get(0).setBackground(true);
-                view.showSelectTeamDialog(avatarItemList, new SelectAvatarCallback() {
-
-                            @Override
-                            public void selectAvatarCallback(TeamAvatarItem item, int position, Runnable runnable) {
-
-                                for (int i = 0; i < avatarItemList.size(); i++) {
-                                    if (i != position) {
-                                        avatarItemList.get(i).setBackground(false);
-                                    } else {
-
-                                        avatarItemList.get(position).setBackground(true);
-
-                                    }
-                                }
-                                runnable.run();
-                            }
-                        },
-                        () -> {//cancel
-                            for (int i = 0; i < avatarItemList.size(); i++) {
-                                avatarItemList.get(i).setBackground(false);
-                            }
-                            view.hideDialog(view.getDialogAddTeam());
-                        },
-                        () -> {//add button
-                            TeamItem itemForItemList = new TeamItem();
-
-                            if (teamItem.getImageTeam() == 0) {
-                                for (TeamAvatarItem avatarItem : avatarItemList) {
-                                    if (avatarItem.isBackground()) {
-                                        itemForItemList.setImageTeam(avatarItem.getAvatar());
-
-                                    }
-                                }
-
-                            } else {
-                                itemForItemList.setImageTeam(teamItem.getImageTeam());
-                            }
-
-                            itemForItemList.setNameTeam(view.getTeamNameFromDialog());
-                            teamItemList.add(itemForItemList);
-                            view.updateItemList(teamItemList);
-
-                            TeamAvatarItem avatarItemMain = new TeamAvatarItem();
-
-                            for (TeamAvatarItem avatarItem : avatarItemList) {
-                                if (avatarItem.getAvatar() == itemForItemList.getImageTeam()) {
-                                    avatarItemMain = avatarItem;
-                                } else {
-                                    avatarItemList.get(0).setBackground(false);
-                                }
-
-                            }
-
-
-                            avatarItemList.remove(avatarItemMain);
-                           /* for (int i = 0; i < avatarItemList.size(); i++) {
-
-                            }*/
-
-                            view.hideDialog(view.getDialogAddTeam());
-
-
-                        },
-                        () ->//add teamName dialog
-                                view.showChangeNameTeamDialog(
-                                () -> {
-                                    if (!view.getTeamNameFromDialogChangeUserName().equals("")) {
-                                        view.setTeamNameDialogField(view.getTeamNameFromDialogChangeUserName());
-                                    }
-
-
-                                    view.hideDialog(view.getDialogChangeUserTeamName());
-                                }));
-
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-
-
         view.addTenWordsButtonAction().subscribe(new Observer<Object>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -347,32 +327,6 @@ public class SettingsPresenter implements SettingsContract.Presenter {
             }
         });
 
-
-        view.setTeamList(teamItemList, new TeamCallback() {
-            @Override
-            public void deleteTeam(int position, TeamItem item) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (teamItemList.size() > 0) {
-                            teamItemList.remove(item);
-
-
-                            TeamAvatarItem teamAvatarItem = new TeamAvatarItem(item.getImageTeam());
-                            avatarItemList.add(0, teamAvatarItem);
-
-                            for (int i = 0; i < avatarItemList.size(); i++) {
-                                avatarItemList.get(i).setBackground(false);
-                            }
-                            view.updateItemList(teamItemList);
-                        }
-                    }
-                }, 40);
-
-
-            }
-        });
-
         view.startGameButtonAction().subscribe(new Observer<Object>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -394,8 +348,6 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
             }
         });
-
-
     }
 
     private void takeAwayCurrentCountWords() {
@@ -484,6 +436,38 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     @Override
     public void setBackNavigator(BackNavigator backNavigator) {
         this.backNavigator = backNavigator;
+    }
+    private void initVocabularyList() {
+
+        VocabularyItem item1 = new VocabularyItem("book 1");
+        VocabularyItem item2 = new VocabularyItem("book 2");
+        VocabularyItem item3 = new VocabularyItem("book 3");
+        VocabularyItem item4 = new VocabularyItem("book 4");
+        vocabularyItemList.add(item1);
+        vocabularyItemList.add(item2);
+        vocabularyItemList.add(item3);
+        vocabularyItemList.add(item4);
+
+    }
+
+    private void initAvatarItemList() {
+        TeamAvatarItem item = new TeamAvatarItem(R.mipmap.cat);
+        TeamAvatarItem item1 = new TeamAvatarItem(R.mipmap.cat_like);
+        TeamAvatarItem item2 = new TeamAvatarItem(R.mipmap.pic);
+        TeamAvatarItem item3 = new TeamAvatarItem(R.mipmap.cat);
+        TeamAvatarItem item4 = new TeamAvatarItem(R.mipmap.cat);
+        TeamAvatarItem item5 = new TeamAvatarItem(R.mipmap.cat);
+        TeamAvatarItem item6 = new TeamAvatarItem(R.mipmap.cat_like);
+        TeamAvatarItem item7 = new TeamAvatarItem(R.mipmap.cat);
+
+        avatarItemList.add(item);
+        avatarItemList.add(item1);
+        avatarItemList.add(item2);
+        avatarItemList.add(item3);
+        avatarItemList.add(item4);
+        avatarItemList.add(item5);
+        avatarItemList.add(item6);
+        avatarItemList.add(item7);
     }
 
     void makeList() {
