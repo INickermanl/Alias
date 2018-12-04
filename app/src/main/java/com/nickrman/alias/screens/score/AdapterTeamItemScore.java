@@ -1,11 +1,11 @@
 package com.nickrman.alias.screens.score;
 
+import android.content.pm.PackageInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nickrman.alias.R;
@@ -14,18 +14,20 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class TeamAdapterScore extends RecyclerView.Adapter<TeamAdapterScore.ViewHolder> {
+import de.hdodenhof.circleimageview.CircleImageView;
 
-    List<TeamItem> listTeams;
+public class AdapterTeamItemScore extends RecyclerView.Adapter<AdapterTeamItemScore.ViewHolder> {
 
-    public TeamAdapterScore(List<TeamItem> listTeams) {
-        this.listTeams = listTeams;
+    private List<TeamItem> listTeam;
+
+    public AdapterTeamItemScore(List<TeamItem> listTeam) {
+        this.listTeam = listTeam;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.team_score_item,null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.team_score_item, parent, false);
 
         return new ViewHolder(view);
     }
@@ -33,35 +35,34 @@ public class TeamAdapterScore extends RecyclerView.Adapter<TeamAdapterScore.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        TeamItem item = listTeams.get(position);
-
-        holder.score.setText(String.valueOf(item.getScoreTeam()));
-
-        holder.score.setText(item.getNameTeam());
+        TeamItem item = listTeam.get(position);
 
         Picasso.get()
                 .load(item.getImageTeam())
-                .resize(100,100)
-                .into(holder.imageTeam);
+                .resize(124,124)
+                .into(holder.avatar);
+
+        holder.teamName.setText(item.getNameTeam());
+
+        holder.score.setText(item.getScoreTeam());
+
     }
 
     @Override
     public int getItemCount() {
-        return listTeams.size();
+        return listTeam.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView imageTeam;
-        TextView teamName;
-        TextView score;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        private CircleImageView avatar;
+        private TextView teamName;
+        private TextView score;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
+            avatar = itemView.findViewById(R.id.avatar);
             teamName = itemView.findViewById(R.id.team_name);
             score = itemView.findViewById(R.id.score_player);
-            imageTeam = itemView.findViewById(R.id.image_team_icon);
-
         }
     }
 }

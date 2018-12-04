@@ -5,9 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.nickrman.alias.R;
-import com.nickrman.alias.base.App;
 import com.nickrman.alias.data.models.TeamAvatarItem;
 import com.squareup.picasso.Picasso;
 
@@ -39,20 +39,20 @@ public class AvatarTeamAdapter extends RecyclerView.Adapter<AvatarTeamAdapter.Vi
         TeamAvatarItem item = teamAvatarItemList.get(position);
 
         if(item.isBackground()){
-            holder.circleAcant.setVisibility(View.VISIBLE);
+            holder.avatarBG.setVisibility(View.VISIBLE);
             Picasso.get()
-                    .load(R.mipmap.ic_launcher)
+                    .load(R.mipmap.fon_avatar)
                     .resize(48, 48)
-                    .into(holder.circleAcant);
+                    .into(holder.avatarBG);
         }else{
-           holder.circleAcant.setVisibility(View.INVISIBLE);
+           holder.avatarBG.setVisibility(View.INVISIBLE);
         }
 
 
         Picasso.get()
                 .load(item.getAvatar())
                 .resize(124, 124)
-                .into(holder.circleImageView);
+                .into(holder.avatar);
 
 
         holder.container.setOnClickListener(v -> callback.selectAvatarCallback(item, position, new Runnable() {
@@ -70,15 +70,15 @@ public class AvatarTeamAdapter extends RecyclerView.Adapter<AvatarTeamAdapter.Vi
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private CircleImageView circleAcant;
-        private CircleImageView circleImageView;
+        private CircleImageView avatarBG;
+        private CircleImageView avatar;
         private View container;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
-            circleAcant = itemView.findViewById(R.id.background_image_item);
-            circleImageView = itemView.findViewById(R.id.team_image);
+            avatarBG = itemView.findViewById(R.id.background_image_item);
+            avatar = itemView.findViewById(R.id.team_image);
             container = itemView.findViewById(R.id.container);
         }
 

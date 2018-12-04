@@ -87,7 +87,8 @@ public interface SettingsContract {
 
         String getTeamNameFromDialogChangeUserName();
 
-        RecyclerView.Adapter getAdapterAvatarItem();
+        String getCurrentVocabularyName();
+
     }
 
     interface Presenter {

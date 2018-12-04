@@ -1,5 +1,7 @@
 package com.nickrman.alias.screens.setting;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -10,6 +12,7 @@ import com.nickrman.alias.base.dialogs.DialogShower;
 import com.nickrman.alias.data.db.AppDatabase;
 import com.nickrman.alias.data.models.CollectionImage;
 import com.nickrman.alias.data.models.CollectionTeamName;
+import com.nickrman.alias.data.models.SettingItem;
 import com.nickrman.alias.data.models.TeamAvatarItem;
 import com.nickrman.alias.data.models.VocabularyItem;
 import com.nickrman.alias.services.Navigator;
@@ -17,7 +20,9 @@ import com.nickrman.alias.services.navigation.BackNavigator;
 import com.nickrman.alias.data.models.TeamItem;
 import com.nickrman.alias.services.navigation.Screen;
 import com.nickrman.alias.services.navigation.ScreenType;
+import com.nickrman.alias.utils.Constants;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,8 +44,6 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private List<TeamItem> teamItemList = new ArrayList<>();
     private List<VocabularyItem> vocabularyItemList = new ArrayList();
     private List<TeamAvatarItem> avatarItemList = new ArrayList<>();
-
-
 
 
     public SettingsPresenter(BaseActivity activity) {
@@ -430,13 +433,28 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
     @Override
     public void startGame() {
-        navigator.navigateTo(Screen.GAMING, ScreenType.ACTIVITY);
+        Bundle bundle = new Bundle();
+        String teamsNames = "";
+        String teamsAvatars = "";
+
+        for (TeamItem item : teamItemList) {
+            teamsNames += item.getNameTeam() + ",";
+            teamsAvatars += item.getImageTeam() + ",";
+
+        }
+
+        SettingItem settingItem = new SettingItem(teamsNames, teamsAvatars, view.getCurrentVocabularyName(), 90, 100);
+
+        bundle.putSerializable(Constants.SETTING, settingItem);
+
+        navigator.navigateTo(Screen.GAMING, ScreenType.ACTIVITY, bundle);
     }
 
     @Override
     public void setBackNavigator(BackNavigator backNavigator) {
         this.backNavigator = backNavigator;
     }
+
     private void initVocabularyList() {
 
         VocabularyItem item1 = new VocabularyItem("book 1");
@@ -453,12 +471,12 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private void initAvatarItemList() {
         TeamAvatarItem item = new TeamAvatarItem(R.mipmap.cat);
         TeamAvatarItem item1 = new TeamAvatarItem(R.mipmap.cat_like);
-        TeamAvatarItem item2 = new TeamAvatarItem(R.mipmap.pic);
-        TeamAvatarItem item3 = new TeamAvatarItem(R.mipmap.cat);
-        TeamAvatarItem item4 = new TeamAvatarItem(R.mipmap.cat);
-        TeamAvatarItem item5 = new TeamAvatarItem(R.mipmap.cat);
-        TeamAvatarItem item6 = new TeamAvatarItem(R.mipmap.cat_like);
-        TeamAvatarItem item7 = new TeamAvatarItem(R.mipmap.cat);
+        TeamAvatarItem item2 = new TeamAvatarItem(R.mipmap.edin);
+        TeamAvatarItem item3 = new TeamAvatarItem(R.mipmap.givot);
+        TeamAvatarItem item4 = new TeamAvatarItem(R.mipmap.gnom);
+        TeamAvatarItem item5 = new TeamAvatarItem(R.mipmap.hanter);
+        TeamAvatarItem item6 = new TeamAvatarItem(R.mipmap.rac);
+        TeamAvatarItem item7 = new TeamAvatarItem(R.mipmap.pic);
 
         avatarItemList.add(item);
         avatarItemList.add(item1);

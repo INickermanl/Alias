@@ -17,15 +17,21 @@ public class ScoreFragment extends BaseFragment {
     private ScoreContract.Presenter presenter;
     private BaseActivity activity;
     private ActionBarContract.Presenter presenterActionBar;
+    Bundle data;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_score,container,false);
+        View root = inflater.inflate(R.layout.fragment_score, container, false);
         activity = (BaseActivity) getActivity();
-        view = new ScoreView(root);
-        presenter = new ScorePresenter();
-        presenterActionBar = new ScoreActionBarPresenter(activity, activity.getActionBarView(),"Round 1");
+        data = getActivity().getIntent().getExtras();//activity.getIntent().getExtras();
+        view = new ScoreView(root, activity);
+        presenter = new ScorePresenter(data);
+
+        presenterActionBar = new ScoreActionBarPresenter(activity, activity.getActionBarView(), "Round 1");
+
+
+
         return root;
 
     }

@@ -61,7 +61,6 @@ public class SettingView implements SettingsContract.View {
     private BaseDialog dialogAddTeam;
     private BaseDialog dialogChangeUserTeamName;
 
-    private String TeamNameFromDialog;
     private RecyclerView.Adapter adapterAvatarItem;
 
     public SettingView(View root, BaseActivity baseActivity) {
@@ -319,6 +318,11 @@ public class SettingView implements SettingsContract.View {
     }
 
     @Override
+    public String getCurrentVocabularyName() {
+        return currentVocabularyName.getText().toString().trim();
+    }
+
+    @Override
     public void updateItemList(List<?> item) {
         adapter.notifyDataSetChanged();
     }
@@ -348,8 +352,4 @@ public class SettingView implements SettingsContract.View {
         return userNameTeam.getText().toString().trim();
     }
 
-    @Override
-    public RecyclerView.Adapter getAdapterAvatarItem() {
-        return adapterAvatarItem;
-    }
 }

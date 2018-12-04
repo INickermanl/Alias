@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.nickrman.alias.R;
+import com.nickrman.alias.base.BaseActivity;
 import com.nickrman.alias.data.models.TeamItem;
 import com.squareup.picasso.Picasso;
 
@@ -23,10 +24,12 @@ public class ScoreView implements ScoreContract.View {
     private ImageView imageTeam;
     private TextView scoreTeam;
     private View startGameButton;
-    private TeamAdapterScore adapter;
+    private AdapterTeamItemScore adapter;
+    private BaseActivity activity;
 
-    public ScoreView(View root) {
+    public ScoreView(View root, BaseActivity activity) {
         this.root = root;
+        this.activity = activity;
         initView();
     }
 
@@ -69,7 +72,7 @@ public class ScoreView implements ScoreContract.View {
     @Override
     public void setTeamList(List<TeamItem> items) {
         LinearLayoutManager llm = new LinearLayoutManager(root.getContext(),LinearLayoutManager.VERTICAL, false);
-        adapter = new TeamAdapterScore(items);
+        adapter = new AdapterTeamItemScore(items);
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
     }
