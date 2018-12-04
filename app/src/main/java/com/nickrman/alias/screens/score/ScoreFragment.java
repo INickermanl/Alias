@@ -26,7 +26,7 @@ public class ScoreFragment extends BaseFragment {
         activity = (BaseActivity) getActivity();
         data = getActivity().getIntent().getExtras();//activity.getIntent().getExtras();
         view = new ScoreView(root, activity);
-        presenter = new ScorePresenter(data);
+        presenter = new ScorePresenter(view, data);
 
         presenterActionBar = new ScoreActionBarPresenter(activity, activity.getActionBarView(), "Round 1");
 
@@ -41,7 +41,7 @@ public class ScoreFragment extends BaseFragment {
         super.onStart();
         presenter.setNavigator(activity.getNavigator());
         presenter.setBackNavigator(activity.getNavigationBackManager());
-        presenter.start(view);
+        presenter.start();
         presenterActionBar.start();
 
     }

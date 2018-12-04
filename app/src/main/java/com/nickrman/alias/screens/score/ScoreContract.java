@@ -31,7 +31,7 @@ public interface ScoreContract {
 
     interface Presenter {
 
-        void start(View view);
+        void start();
 
         void stop();
 

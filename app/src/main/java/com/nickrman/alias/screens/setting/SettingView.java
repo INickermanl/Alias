@@ -352,4 +352,9 @@ public class SettingView implements SettingsContract.View {
         return userNameTeam.getText().toString().trim();
     }
 
+    @Override
+    public void setStartButtonClickable(boolean clickable) {
+
+        startGameButton.setEnabled(clickable ? true : false);
+    }
 }

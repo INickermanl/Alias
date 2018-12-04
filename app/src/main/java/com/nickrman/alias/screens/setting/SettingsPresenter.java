@@ -1,6 +1,5 @@
 package com.nickrman.alias.screens.setting;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -8,8 +7,6 @@ import android.util.Log;
 
 import com.nickrman.alias.R;
 import com.nickrman.alias.base.BaseActivity;
-import com.nickrman.alias.base.dialogs.DialogShower;
-import com.nickrman.alias.data.db.AppDatabase;
 import com.nickrman.alias.data.models.CollectionImage;
 import com.nickrman.alias.data.models.CollectionTeamName;
 import com.nickrman.alias.data.models.SettingItem;
@@ -22,7 +19,6 @@ import com.nickrman.alias.services.navigation.Screen;
 import com.nickrman.alias.services.navigation.ScreenType;
 import com.nickrman.alias.utils.Constants;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +28,8 @@ import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public class SettingsPresenter implements SettingsContract.Presenter {
+    private int counter = 0;
+    private boolean checkBook = false;
 
     private SettingsContract.View view;
     private CompositeDisposable subscription;
@@ -46,29 +44,29 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private List<TeamAvatarItem> avatarItemList = new ArrayList<>();
 
 
-    public SettingsPresenter(BaseActivity activity) {
+    public SettingsPresenter(BaseActivity activity, SettingsContract.View view) {
         this.handler = new Handler(Looper.getMainLooper());
+        this.view = view;
         initVocabularyList();
         initAvatarItemList();
         this.activity = activity;
+        setupView();
 
     }
 
 
     @Override
-    public void start(SettingsContract.View view) {
-        this.view = view;
-        setupView();
+    public void start() {
 
+        subscription = new CompositeDisposable();
         setupAction();
     }
 
     private void setupView() {
-        subscription = new CompositeDisposable();
+        view.setStartButtonClickable(false);
     }
 
     public void setupAction() {
-
         view.setTeamList(teamItemList, new TeamCallback() {
             @Override
             public void deleteTeam(int position, TeamItem item) {
@@ -82,10 +80,11 @@ public class SettingsPresenter implements SettingsContract.Presenter {
                             TeamAvatarItem teamAvatarItem = new TeamAvatarItem(item.getImageTeam());
                             avatarItemList.add(0, teamAvatarItem);
 
-                            for (int i = 0; i < avatarItemList.size(); i++) {
-                                avatarItemList.get(i).setBackground(false);
-                            }
+                            --counter;
+                            opportunityCheck();
+
                             view.updateItemList(teamItemList);
+
                         }
                     }
                 }, 40);
@@ -134,7 +133,6 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
                                     }
                                 }
-
                             } else {
                                 itemForItemList.setImageTeam(teamItem.getImageTeam());
                             }
@@ -154,15 +152,10 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
                             }
 
-
                             avatarItemList.remove(avatarItemMain);
-                           /* for (int i = 0; i < avatarItemList.size(); i++) {
-
-                            }*/
-
+                            counter++;
+                            opportunityCheck();
                             view.hideDialog(view.getDialogAddTeam());
-
-
                         },
                         () ->//add teamName dialog
                                 view.showChangeNameTeamDialog(
@@ -170,7 +163,6 @@ public class SettingsPresenter implements SettingsContract.Presenter {
                                             if (!view.getTeamNameFromDialogChangeUserName().equals("")) {
                                                 view.setTeamNameDialogField(view.getTeamNameFromDialogChangeUserName());
                                             }
-
 
                                             view.hideDialog(view.getDialogChangeUserTeamName());
                                         }));
@@ -204,6 +196,8 @@ public class SettingsPresenter implements SettingsContract.Presenter {
                     public void itemVocabularyCallback(VocabularyItem item) {
                         Log.d("LOG", item.getNameVocabulary());
                         view.setCurrentVocabularyName(item.getNameVocabulary());
+                        checkBook = true;
+                        opportunityCheck();
                         view.hideDialog(view.getDialogVocabulary());
                     }
                 });
@@ -501,6 +495,15 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         teamItemList.add(item1);
         teamItemList.add(item2);
         teamItemList.add(item3);
+    }
+
+    void opportunityCheck() {
+
+        if (counter >= 2 && checkBook) {
+            view.setStartButtonClickable(true);
+        } else /*if (counter < 2)*/ {
+            view.setStartButtonClickable(false);
+        }
     }
 
 

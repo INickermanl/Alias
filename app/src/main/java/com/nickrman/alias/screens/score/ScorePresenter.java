@@ -27,14 +27,16 @@ public class ScorePresenter implements ScoreContract.Presenter {
     private Bundle data;
     private List<TeamItem> listTeams = new ArrayList<>();
 
-    public ScorePresenter(Bundle bundle) {
+    public ScorePresenter(ScoreContract.View view, Bundle bundle) {
+        this.view = view;
         this.data = bundle;
+        setupView();
+
     }
 
     @Override
-    public void start(ScoreContract.View view) {
-        this.view = view;
-        setupView();
+    public void start() {
+        subscription = new CompositeDisposable();
         setupAction();
 
     }
@@ -90,11 +92,14 @@ public class ScorePresenter implements ScoreContract.Presenter {
 
     @Override
     public void setupView() {
-        subscription = new CompositeDisposable();
+
 
         createList();
 
         view.setTeamList(listTeams);
+        view.setImageTeam(listTeams.get(0).getImageTeam());
+        view.setScoreTeam(listTeams.get(0).getScoreTeam());
+        view.setTeamName(listTeams.get(0).getNameTeam());
     }
 
 

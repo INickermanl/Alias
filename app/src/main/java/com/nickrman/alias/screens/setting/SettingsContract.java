@@ -89,11 +89,13 @@ public interface SettingsContract {
 
         String getCurrentVocabularyName();
 
+        void setStartButtonClickable(boolean clickable);
+
     }
 
     interface Presenter {
 
-        void start(View view);
+        void start();
 
         void stop();
 

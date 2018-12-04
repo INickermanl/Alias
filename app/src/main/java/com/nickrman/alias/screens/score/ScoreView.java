@@ -59,7 +59,7 @@ public class ScoreView implements ScoreContract.View {
     public void setImageTeam(int res) {
         Picasso.get()
                 .load(res)
-                .resize(100,100)
+                .resize(150,150)
                 .into(imageTeam);
     }
 

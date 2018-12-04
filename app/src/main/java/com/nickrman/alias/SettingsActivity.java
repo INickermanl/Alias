@@ -34,7 +34,7 @@ public class SettingsActivity extends BaseActivity {
         actionBarPresenter = new SettingActionBarPresenter(this,actionBarView,R.string.setting_text_toolbar,bus);
 
         view = new SettingView(root,this);
-        presenter = new SettingsPresenter(this);
+        presenter = new SettingsPresenter(this, view);
 
 
 
@@ -50,7 +50,7 @@ public class SettingsActivity extends BaseActivity {
         bus.register(actionBarPresenter);
 
         actionBarPresenter.start();
-        presenter.start(view);
+        presenter.start();
 
         presenter.setNavigation(getNavigator());
         presenter.setBackNavigator(getNavigationBackManager());
