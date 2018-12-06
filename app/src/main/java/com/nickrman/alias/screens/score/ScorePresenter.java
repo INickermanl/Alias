@@ -2,11 +2,8 @@ package com.nickrman.alias.screens.score;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.ArraySet;
-import android.util.Log;
 
 import com.nickrman.alias.base.BaseActivity;
-import com.nickrman.alias.data.models.SettingItem;
 import com.nickrman.alias.data.models.TeamItem;
 import com.nickrman.alias.services.Navigator;
 import com.nickrman.alias.services.navigation.BackNavigator;
@@ -16,7 +13,6 @@ import com.nickrman.alias.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
@@ -92,7 +88,7 @@ public class ScorePresenter implements ScoreContract.Presenter {
 
     @Override
     public void startGame() {
-        navigator.navigateTo(Screen.GAME, ScreenType.FRAGMENT);
+        navigator.navigateTo(Screen.CARD, ScreenType.FRAGMENT);
     }
 
     @Override

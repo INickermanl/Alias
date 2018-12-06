@@ -80,7 +80,7 @@ public class ScreenNavigationManager implements Navigator {
             case SCORE:
                 navigateToScoreFragment(args);
                 break;
-            case GAME:
+            case CARD:
                 navigateToGameFragment(args);
                 break;
 
@@ -117,7 +117,7 @@ public class ScreenNavigationManager implements Navigator {
     }
 
     private void navigateToGameFragment(Bundle args) {
-        switchFragmentScreen(Screen.GAME, args, ScreenAnimType.NONE_TYPE, true);
+        switchFragmentScreen(Screen.CARD, args, ScreenAnimType.NONE_TYPE, true);
         activity.hideKeyboard();
     }
 

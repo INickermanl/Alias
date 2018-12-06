@@ -14,6 +14,7 @@ public interface ScoreContract {
     interface View {
 
         void setScoreTeam(String score);
+
         void setRound(String round);
 
 
