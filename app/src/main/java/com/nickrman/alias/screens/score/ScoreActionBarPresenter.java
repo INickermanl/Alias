@@ -1,7 +1,5 @@
 package com.nickrman.alias.screens.score;
 
-import android.support.annotation.Nullable;
-
 import com.nickrman.alias.R;
 import com.nickrman.alias.base.BaseActivity;
 import com.nickrman.alias.base.action_bar.ActionBarContract;

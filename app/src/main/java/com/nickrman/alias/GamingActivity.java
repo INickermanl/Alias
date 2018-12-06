@@ -18,7 +18,6 @@ import timber.log.Timber;
 public class GamingActivity extends BaseActivity {
     private ActionBarContract.View actionBarView;
     private View actionBar;
-    private Bundle bundle = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,6 @@ public class GamingActivity extends BaseActivity {
         actionBar = findViewById(R.id.action_bar);
         actionBarView = new ActionBarView(actionBar);
 
-       // bundle = getIntent().getExtras();
 
         getNavigator().navigateTo(Screen.SCORE, ScreenType.FRAGMENT/*, bundle*/);
 

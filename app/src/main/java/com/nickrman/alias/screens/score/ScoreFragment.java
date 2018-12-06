@@ -37,13 +37,6 @@ public class ScoreFragment extends BaseFragment {
 
         presenterActionBar = new ScoreActionBarPresenter(activity, activity.getActionBarView(), "Round " + ++round);
 
-        if (mSettings.contains(Constants.SETTING_COUNT_SECONDS)) {
-            int counter = mSettings.getInt(Constants.SETTING_COUNT_SECONDS, 0);
-
-            Log.d(Constants.SETTING, String.valueOf(counter));
-        }
-
-
         return root;
 
     }
