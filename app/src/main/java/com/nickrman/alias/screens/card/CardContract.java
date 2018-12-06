@@ -21,11 +21,11 @@ public interface CardContract {
         void startAnimation();
 
 
-        void acceptCard();
+        void acceptCard(String explainWords);
 
-        void dismissCard();
+        void dismissCard(String explainWords);
 
-        void startTextVisibility(boolean visibility);
+        void setCardWords(String word);
 
     }
 
@@ -45,6 +45,5 @@ public interface CardContract {
 
         void startAnimation();
 
-        void startFlipAnimation();
     }
 }

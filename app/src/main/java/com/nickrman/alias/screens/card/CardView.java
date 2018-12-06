@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -14,6 +13,8 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.nickrman.alias.R;
 import com.nickrman.alias.base.BaseActivity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import io.reactivex.Observable;
@@ -29,9 +30,10 @@ public class CardView implements CardContract.View {
     private View firstCard;
     private View secondCard;
     private View thirdCard;
+    private TextView explainWords_tv;
 
     BaseActivity activity;
-    GestureDetector gd;
+    private List<String> listWords = new ArrayList<>();
 
     private View root;
 
@@ -49,6 +51,7 @@ public class CardView implements CardContract.View {
         firstCard = root.findViewById(R.id.first_card);
         secondCard = root.findViewById(R.id.second_card);
         thirdCard = root.findViewById(R.id.third_card);
+        explainWords_tv = root.findViewById(R.id.explain_word);
     }
 
     @Override
@@ -84,22 +87,22 @@ public class CardView implements CardContract.View {
     }
 
     @Override
-    public void dismissCard() {
+    public void dismissCard(String explainWords) {
 
         int distanceX = (mainContainer.getLeft() + currentCard.getWidth() + 200) * -1;
-        swipeCard(distanceX);
+        swipeCard(distanceX,explainWords);
 
     }
 
     @Override
-    public void acceptCard() {
+    public void acceptCard(String explainWords) {
         int distanceX = (mainContainer.getRight() + currentCard.getWidth() + 200);
-        swipeCard(distanceX);
+        swipeCard(distanceX, explainWords);
 
 
 
     }
-    private void swipeCard(int distanceX) {
+    private void swipeCard(int distanceX,String explainWords) {
         Random random = new Random();
         int distanceY = (random.nextInt(mainContainer.getTop()) * (random.nextInt(3) - 1));
         ObjectAnimator translateX = ObjectAnimator.ofFloat(currentCard, "translationX", 0.0f, (float) distanceX);
@@ -115,6 +118,7 @@ public class CardView implements CardContract.View {
                 startText.setVisibility(View.GONE);
                 currentCard.setVisibility(View.GONE);
                 currentCard.setTranslationX(0.0f);
+                explainWords_tv.setText(explainWords);
                 currentCard.setTranslationY(0.0f);
                 flipCard.setVisibility(View.VISIBLE);
                 rotateCards();
@@ -144,8 +148,9 @@ public class CardView implements CardContract.View {
 
     }
 
+
     @Override
-    public void startTextVisibility(boolean visibility) {
-        startText.setVisibility(visibility ? View.VISIBLE : View.GONE);
+    public void setCardWords(String word) {
+        explainWords_tv.setText(word);
     }
 }

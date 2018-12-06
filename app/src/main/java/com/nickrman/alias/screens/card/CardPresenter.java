@@ -9,6 +9,9 @@ import com.nickrman.alias.base.App;
 import com.nickrman.alias.services.Navigator;
 import com.nickrman.alias.services.navigation.BackNavigator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -20,10 +23,14 @@ public class CardPresenter implements CardContract.Presenter {
     private BackNavigator backNavigator;
     private CompositeDisposable subscription;
     private GestureDetector gd;
+    private List<String> listWords = new ArrayList<>();
+    int count = 0;
 
     public CardPresenter(CardContract.View view) {
         this.view = view;
+        makeStringList();
         setupView();
+        view.setCardWords(listWords.get(0).toString().trim());
 
     }
 
@@ -45,18 +52,24 @@ public class CardPresenter implements CardContract.Presenter {
         gd = new GestureDetector(App.getInstance(), new CardGestureDetectorListener(new SwipeCallback() {
             @Override
             public void swipeRight() {
-                view.acceptCard();
+
+                validation();
+                view.acceptCard(listWords.get(count));
             }
 
             @Override
             public void swipeLeft() {
-                view.dismissCard();
+
+
+                validation();
+                view.dismissCard(listWords.get(count));
             }
         }));
     }
 
     @Override
     public void setupAction() {
+
         view.flipCard().subscribe(new Observer<Object>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -87,6 +100,7 @@ public class CardPresenter implements CardContract.Presenter {
 
             @Override
             public void onNext(MotionEvent motionEvent) {
+
                 gd.onTouchEvent(motionEvent);
 
             }
@@ -119,9 +133,20 @@ public class CardPresenter implements CardContract.Presenter {
         view.startAnimation();
     }
 
-    @Override
-    public void startFlipAnimation() {
+    void makeStringList() {
+        listWords.add("hello");
+        listWords.add("noyp");
+        listWords.add("test");
+        listWords.add("yep");
+        listWords.add("noyp");
+        listWords.add("test");
+        listWords.add("last");
+    }
 
-
+    void validation() {
+        ++count;
+        if (!(count < listWords.size())) {
+            count = 0;
+        }
     }
 }
