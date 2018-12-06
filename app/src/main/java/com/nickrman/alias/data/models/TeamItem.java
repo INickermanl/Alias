@@ -12,6 +12,12 @@ public class TeamItem {
         this.scoreTeam = "0";
     }
 
+    public TeamItem(int imageTeam, String nameTeam, String scoreTeam) {
+        this.imageTeam = imageTeam;
+        this.nameTeam = nameTeam;
+        this.scoreTeam = scoreTeam;
+    }
+
     public TeamItem() {
     }
 

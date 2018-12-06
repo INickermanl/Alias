@@ -1,15 +1,16 @@
 package com.nickrman.alias.screens.setting;
 
-import android.os.Bundle;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.ArraySet;
 import android.util.Log;
 
 import com.nickrman.alias.R;
 import com.nickrman.alias.base.BaseActivity;
 import com.nickrman.alias.data.models.CollectionImage;
 import com.nickrman.alias.data.models.CollectionTeamName;
-import com.nickrman.alias.data.models.SettingItem;
 import com.nickrman.alias.data.models.TeamAvatarItem;
 import com.nickrman.alias.data.models.VocabularyItem;
 import com.nickrman.alias.services.Navigator;
@@ -21,6 +22,7 @@ import com.nickrman.alias.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
@@ -43,6 +45,8 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private List<VocabularyItem> vocabularyItemList = new ArrayList();
     private List<TeamAvatarItem> avatarItemList = new ArrayList<>();
 
+    private SharedPreferences mSettings;
+
 
     public SettingsPresenter(BaseActivity activity, SettingsContract.View view) {
         this.handler = new Handler(Looper.getMainLooper());
@@ -50,7 +54,9 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         initVocabularyList();
         initAvatarItemList();
         this.activity = activity;
+        mSettings = activity.getSharedPreferences(Constants.SETTING, Context.MODE_PRIVATE);
         setupView();
+
 
     }
 
@@ -427,21 +433,38 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
     @Override
     public void startGame() {
-        Bundle bundle = new Bundle();
+
+
         String teamsNames = "";
         String teamsAvatars = "";
+        String teamScores = "";
 
         for (TeamItem item : teamItemList) {
             teamsNames += item.getNameTeam() + ",";
             teamsAvatars += item.getImageTeam() + ",";
+            teamScores += 0 + ",";
 
         }
 
-        SettingItem settingItem = new SettingItem(teamsNames, teamsAvatars, view.getCurrentVocabularyName(), 90, 100);
+        int countSeconds = view.getCurrentTimeSecond() + (view.getCurrentTimeMinute() * 60);
 
-        bundle.putSerializable(Constants.SETTING, settingItem);
 
-        navigator.navigateTo(Screen.GAMING, ScreenType.ACTIVITY, bundle);
+        SharedPreferences.Editor editor = mSettings.edit();
+
+        editor.putString(Constants.SETTING_TEAM_NAMES, teamsNames);
+        editor.putString(Constants.SETTING_TEAM_AVATARS, teamsAvatars);
+        editor.putString(Constants.SETTING_SCORES, teamScores);
+        editor.putString(Constants.SETTING_VOCABULARY, view.getCurrentVocabularyName());
+
+        editor.putInt(Constants.SETTING_COUNT_SECONDS, countSeconds);
+        editor.putInt(Constants.SETTING_COUNT_WORDS, view.getCurrentCountWords());
+        editor.putInt(Constants.SETTING_ROUND, 0);
+        editor.putInt(Constants.SETTING_PLAY_TEAM, 0);
+
+
+        editor.apply();
+
+        navigator.navigateTo(Screen.GAMING, ScreenType.ACTIVITY);
     }
 
     @Override
@@ -451,10 +474,10 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
     private void initVocabularyList() {
 
-        VocabularyItem item1 = new VocabularyItem("book 1");
-        VocabularyItem item2 = new VocabularyItem("book 2");
-        VocabularyItem item3 = new VocabularyItem("book 3");
-        VocabularyItem item4 = new VocabularyItem("book 4");
+        VocabularyItem item1 = new VocabularyItem("Idiom dictionary");
+        VocabularyItem item2 = new VocabularyItem("Animal Dictionary");
+        VocabularyItem item3 = new VocabularyItem("Former mage dictionary");
+        VocabularyItem item4 = new VocabularyItem("Dictionary of feelings and emotions");
         vocabularyItemList.add(item1);
         vocabularyItemList.add(item2);
         vocabularyItemList.add(item3);

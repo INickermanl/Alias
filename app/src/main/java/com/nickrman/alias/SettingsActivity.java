@@ -1,5 +1,7 @@
 package com.nickrman.alias;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -10,6 +12,7 @@ import com.nickrman.alias.screens.setting.SettingActionBarPresenter;
 import com.nickrman.alias.screens.setting.SettingsPresenter;
 import com.nickrman.alias.screens.setting.SettingView;
 import com.nickrman.alias.screens.setting.SettingsContract;
+import com.nickrman.alias.utils.Constants;
 import com.squareup.otto.Bus;
 
 public class SettingsActivity extends BaseActivity {
@@ -21,26 +24,24 @@ public class SettingsActivity extends BaseActivity {
     private ActionBarContract.View actionBarView;
     private ActionBarContract.Presenter actionBarPresenter;
     private Bus bus;
+    private SharedPreferences mSetting;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
+        mSetting = getSharedPreferences(Constants.SETTING, Context.MODE_PRIVATE);
         bus = new Bus();
+
         root = findViewById(R.id.root);
+
         actionBar = root.findViewById(R.id.action_bar);
         actionBarView = new ActionBarView(actionBar);
-        actionBarPresenter = new SettingActionBarPresenter(this,actionBarView,R.string.setting_text_toolbar,bus);
+        actionBarPresenter = new SettingActionBarPresenter(this, actionBarView, R.string.setting_text_toolbar, bus);
 
-        view = new SettingView(root,this);
+        view = new SettingView(root, this);
         presenter = new SettingsPresenter(this, view);
-
-
-
-
-
-
 
     }
 
@@ -54,7 +55,6 @@ public class SettingsActivity extends BaseActivity {
 
         presenter.setNavigation(getNavigator());
         presenter.setBackNavigator(getNavigationBackManager());
-
 
 
     }

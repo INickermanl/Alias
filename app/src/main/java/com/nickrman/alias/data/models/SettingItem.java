@@ -13,6 +13,8 @@ public class SettingItem implements Serializable {
     private String vocabularyName;
     private int roundTime;
     private int countWords;
+    private int round;
+    private int currentGameUser;
 
     public SettingItem(String teamsNames, String teamsAvatar, String vocabularyName, int roundTime, int countWords) {
         this.teamsNames = teamsNames;
@@ -20,6 +22,8 @@ public class SettingItem implements Serializable {
         this.vocabularyName = vocabularyName;
         this.roundTime = roundTime;
         this.countWords = countWords;
+        this.round = 1;
+        this.currentGameUser = 0;
     }
 
     public String getTeamsNames() {
@@ -62,5 +66,19 @@ public class SettingItem implements Serializable {
         this.countWords = countWords;
     }
 
+    public int getRound() {
+        return round;
+    }
 
+    public void setRound(int round) {
+        this.round = round;
+    }
+
+    public int getCurrentGameUser() {
+        return currentGameUser;
+    }
+
+    public void setCurrentGameUser(int currentGameUser) {
+        this.currentGameUser = currentGameUser;
+    }
 }

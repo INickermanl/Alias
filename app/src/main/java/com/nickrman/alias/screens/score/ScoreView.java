@@ -76,4 +76,9 @@ public class ScoreView implements ScoreContract.View {
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
     }
+
+    @Override
+    public void setRound(String round) {
+        scoreTeam.setText(round);
+    }
 }

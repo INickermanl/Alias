@@ -1,8 +1,11 @@
 package com.nickrman.alias.screens.score;
 
-import android.os.Bundle;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.ArraySet;
 import android.util.Log;
 
+import com.nickrman.alias.base.BaseActivity;
 import com.nickrman.alias.data.models.SettingItem;
 import com.nickrman.alias.data.models.TeamItem;
 import com.nickrman.alias.services.Navigator;
@@ -13,6 +16,7 @@ import com.nickrman.alias.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
@@ -24,12 +28,13 @@ public class ScorePresenter implements ScoreContract.Presenter {
     private BackNavigator backNavigator;
     private CompositeDisposable subscription;
     private ScoreContract.View view;
-    private Bundle data;
     private List<TeamItem> listTeams = new ArrayList<>();
+    private SharedPreferences mSettings;
 
-    public ScorePresenter(ScoreContract.View view, Bundle bundle) {
+    public ScorePresenter(BaseActivity activity, ScoreContract.View view) {
         this.view = view;
-        this.data = bundle;
+        mSettings = activity.getSharedPreferences(Constants.SETTING, Context.MODE_PRIVATE);
+
         setupView();
 
     }
@@ -94,32 +99,45 @@ public class ScorePresenter implements ScoreContract.Presenter {
     public void setupView() {
 
 
+        int playTeam = mSettings.getInt(Constants.SETTING_PLAY_TEAM, 1);
+
+
         createList();
 
+
+
         view.setTeamList(listTeams);
-        view.setImageTeam(listTeams.get(0).getImageTeam());
-        view.setScoreTeam(listTeams.get(0).getScoreTeam());
-        view.setTeamName(listTeams.get(0).getNameTeam());
+        view.setImageTeam(listTeams.get(playTeam).getImageTeam());
+        view.setScoreTeam(listTeams.get(playTeam).getScoreTeam());
+        view.setTeamName(listTeams.get(playTeam).getNameTeam());
     }
 
 
     void createList() {
-        SettingItem settingItem = (SettingItem) data.getSerializable(Constants.SETTING);
+        String myTeamNamesFromSetting = mSettings.getString(Constants.SETTING_TEAM_NAMES, "");
+        String myTeamScoreFromSetting = mSettings.getString(Constants.SETTING_SCORES, "");
+        String myTeamsAvatarsFromSetting = mSettings.getString(Constants.SETTING_TEAM_AVATARS, "");
+
 
         List<String> listTeamName = new ArrayList<>();
         List<String> listAvatars = new ArrayList<>();
+        List<String> listScore = new ArrayList<>();
 
-        for (String retval : settingItem.getTeamsNames().split(",")) {
-            Log.d("LOG", retval);
-            listTeamName.add(retval);
+        for (String data : myTeamNamesFromSetting.split(",")) {
+            listTeamName.add(data);
         }
-        for (String retval : settingItem.getTeamsAvatar().split(",")) {
-            Log.d("LOG", retval);
-            listAvatars.add(retval);
+
+        for (String data : myTeamsAvatarsFromSetting.split(",")) {
+            listAvatars.add(data);
+
         }
+        for (String data : myTeamScoreFromSetting.split(",")) {
+            listScore.add(data);
+        }
+
 
         for (int i = 0; i < listTeamName.size(); i++) {
-            listTeams.add(new TeamItem(Integer.valueOf(listAvatars.get(i)), listTeamName.get(i)));
+            listTeams.add(new TeamItem(Integer.valueOf(listAvatars.get(i)), listTeamName.get(i), listScore.get(i)));
         }
 
 
