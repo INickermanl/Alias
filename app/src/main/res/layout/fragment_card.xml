@@ -20,6 +20,7 @@
 
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/first_card"
             android:layout_width="165dp"
             android:layout_height="250dp"
             android:layout_marginTop="13dp"
@@ -29,6 +30,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/second_card"
             android:layout_width="165dp"
             android:layout_height="250dp"
             android:layout_marginTop="9dp"
@@ -39,6 +41,7 @@
 
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/third_card"
             android:layout_width="165dp"
             android:layout_height="250dp"
             android:layout_marginTop="5dp"

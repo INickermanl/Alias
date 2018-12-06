@@ -5,7 +5,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 public class CardGestureDetectorListener extends GestureDetector.SimpleOnGestureListener {
-
     private static final int SWIPE_MIN_DISTANCE = 50;
     private static final int SWIPE_THRESHOLD_VELOCITY = 100;
     private SwipeCallback callback;
@@ -19,13 +18,10 @@ public class CardGestureDetectorListener extends GestureDetector.SimpleOnGesture
         float deltaX = (e1.getX() - e2.getX());
         if (Math.abs(deltaX) >= SWIPE_MIN_DISTANCE) {
             if (Math.abs(velocityY) >= SWIPE_THRESHOLD_VELOCITY) {
-                if (deltaX > 0) {
-                    callback.swipeLeft();
-                    Log.d("TAG", "swipe left");
-                } else {
-                    callback.swipeRight();
-                    Log.d("TAG", "swipe right");
-                }
+
+                if (deltaX > 0) callback.swipeLeft();
+
+                else callback.swipeRight();
             }
         }
         return false;

@@ -12,8 +12,9 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.nickrman.alias.R;
-import com.nickrman.alias.base.App;
 import com.nickrman.alias.base.BaseActivity;
+
+import java.util.Random;
 
 import io.reactivex.Observable;
 
@@ -25,6 +26,10 @@ public class CardView implements CardContract.View {
     private View currentCard;
     private TextView startText;
     private View mainContainer;
+    private View firstCard;
+    private View secondCard;
+    private View thirdCard;
+
     BaseActivity activity;
     GestureDetector gd;
 
@@ -41,6 +46,9 @@ public class CardView implements CardContract.View {
         currentCard = root.findViewById(R.id.current_card);
         mainContainer = root.findViewById(R.id.main_container);
         startText = root.findViewById(R.id.start_text);
+        firstCard = root.findViewById(R.id.first_card);
+        secondCard = root.findViewById(R.id.second_card);
+        thirdCard = root.findViewById(R.id.third_card);
     }
 
     @Override
@@ -77,49 +85,30 @@ public class CardView implements CardContract.View {
 
     @Override
     public void dismissCard() {
-        float distanceX = (mainContainer.getRight() + currentCard.getWidth() + 50) * -1;
-        float distanceY = (mainContainer.getTop());
-        ObjectAnimator translateX = ObjectAnimator.ofFloat(currentCard, "translationX", 0.0f, distanceX);
-        ObjectAnimator translateY = ObjectAnimator.ofFloat(currentCard, "translationY", distanceY);
-        AnimatorSet set = new AnimatorSet();
-        set.setDuration(200);
-        set.setInterpolator(new AccelerateDecelerateInterpolator());
-        set.playTogether(translateX, translateY);
-        set.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                startText.setVisibility(View.GONE);
-                currentCard.setVisibility(View.GONE);
-                currentCard.setTranslationX(0.0f);
-                currentCard.setTranslationY(0.0f);
-                flipCard.setVisibility(View.VISIBLE);
-                startAnimation();
-            }
 
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
+        int distanceX = (mainContainer.getLeft() + currentCard.getWidth() + 200) * -1;
+        swipeCard(distanceX);
 
-            }
-        });
-        set.start();
     }
 
     @Override
     public void acceptCard() {
-        float distanceX = (mainContainer.getBottom());
-        float distanceY = (mainContainer.getRight() + currentCard.getHeight() + 50) * -1;
+        int distanceX = (mainContainer.getRight() + currentCard.getWidth() + 200);
+        swipeCard(distanceX);
 
-        ObjectAnimator translateX = ObjectAnimator.ofFloat(currentCard, "translationX", 0.0f, distanceX);
-        ObjectAnimator translateY = ObjectAnimator.ofFloat(currentCard, "translationY", distanceY);
+
+
+    }
+    private void swipeCard(int distanceX) {
+        Random random = new Random();
+        int distanceY = (random.nextInt(mainContainer.getTop()) * (random.nextInt(3) - 1));
+        ObjectAnimator translateX = ObjectAnimator.ofFloat(currentCard, "translationX", 0.0f, (float) distanceX);
+        ObjectAnimator translateY = ObjectAnimator.ofFloat(currentCard, "translationY", (float) distanceY);
         AnimatorSet set = new AnimatorSet();
-        set.setDuration(200);
+        set.setDuration(300);
         set.setInterpolator(new AccelerateDecelerateInterpolator());
-        set.playTogether(translateX, translateY);
+        set.playTogether(translateX,translateY);
         set.addListener(new AnimatorListenerAdapter() {
-
-
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
@@ -128,13 +117,28 @@ public class CardView implements CardContract.View {
                 currentCard.setTranslationX(0.0f);
                 currentCard.setTranslationY(0.0f);
                 flipCard.setVisibility(View.VISIBLE);
+                rotateCards();
                 startAnimation();
-
             }
-
-
         });
-
+        set.start();
+    }
+    private void rotateCards(){
+        ObjectAnimator rotationFirstCard;
+        ObjectAnimator rotationSecondCard;
+        ObjectAnimator rotationThirdCard;
+        if(firstCard.getRotation() != 16.0f && secondCard.getRotation() != -16.0f && thirdCard.getRotation() != 10.0f) {
+            rotationFirstCard = ObjectAnimator.ofFloat(firstCard, "rotation", firstCard.getRotation(), 16.0f);
+            rotationSecondCard = ObjectAnimator.ofFloat(secondCard, "rotation", secondCard.getRotation(), -16.0f);
+            rotationThirdCard = ObjectAnimator.ofFloat(thirdCard,"rotation", thirdCard.getRotation(), 10.0f);
+        }else{
+            rotationFirstCard = ObjectAnimator.ofFloat(firstCard, "rotation", firstCard.getRotation(), - 16.0f);
+            rotationSecondCard = ObjectAnimator.ofFloat(secondCard, "rotation", secondCard.getRotation(), 16.0f);
+            rotationThirdCard = ObjectAnimator.ofFloat(thirdCard,"rotation",thirdCard.getRotation(),-10.0f);
+        }
+        AnimatorSet set = new AnimatorSet();
+        set.setDuration(400);
+        set.playTogether(rotationFirstCard,rotationSecondCard, rotationThirdCard);
         set.start();
 
 
