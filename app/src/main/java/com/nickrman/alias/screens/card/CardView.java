@@ -31,6 +31,7 @@ public class CardView implements CardContract.View {
     private View secondCard;
     private View thirdCard;
     private TextView explainWords_tv;
+    private TextView timeToEndGame;
 
     BaseActivity activity;
     private List<String> listWords = new ArrayList<>();
@@ -52,6 +53,7 @@ public class CardView implements CardContract.View {
         secondCard = root.findViewById(R.id.second_card);
         thirdCard = root.findViewById(R.id.third_card);
         explainWords_tv = root.findViewById(R.id.explain_word);
+        timeToEndGame = root.findViewById(R.id.time_to_end);
     }
 
     @Override
@@ -152,5 +154,15 @@ public class CardView implements CardContract.View {
     @Override
     public void setCardWords(String word) {
         explainWords_tv.setText(word);
+    }
+
+    @Override
+    public void setTimeToEndGame(String time) {
+        timeToEndGame.setText(time.toString().trim());
+    }
+
+    @Override
+    public String getTimeToEndGame() {
+        return timeToEndGame.getText().toString().trim();
     }
 }

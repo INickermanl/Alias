@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 
 import com.nickrman.alias.base.App;
 import com.nickrman.alias.screens.card.CardFragment;
+import com.nickrman.alias.screens.result.ResultFragment;
 import com.nickrman.alias.screens.score.ScoreFragment;
 import com.nickrman.alias.services.navigation.Screen;
 
@@ -22,6 +23,8 @@ public class ScreenFragmentFactory {
                 return ScoreFragment.class;
             case CARD:
                 return CardFragment.class;
+            case RESULT:
+                return ResultFragment.class;
 
             default:
                 return ScoreFragment.class;

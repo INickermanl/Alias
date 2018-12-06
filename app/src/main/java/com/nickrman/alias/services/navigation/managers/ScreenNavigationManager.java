@@ -83,9 +83,14 @@ public class ScreenNavigationManager implements Navigator {
             case CARD:
                 navigateToGameFragment(args);
                 break;
+            case RESULT:
+                navigateToResultFragment(args);
+                break;
 
         }
     }
+
+
 
 
     //Activity
@@ -121,6 +126,10 @@ public class ScreenNavigationManager implements Navigator {
         activity.hideKeyboard();
     }
 
+    private void navigateToResultFragment(Bundle args) {
+        switchFragmentScreen(Screen.RESULT,args,ScreenAnimType.NONE_TYPE,true);
+        activity.hideKeyboard();
+    }
 
     private void switchActivityScreen(Screen type, Bundle bundle, ScreenAnimType animate, boolean clearStack) {
         Intent intent = activityFactory.getActivityByType(type);

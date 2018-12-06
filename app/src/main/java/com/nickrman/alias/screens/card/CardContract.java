@@ -27,6 +27,10 @@ public interface CardContract {
 
         void setCardWords(String word);
 
+        void setTimeToEndGame(String time);
+
+        String getTimeToEndGame();
+
     }
 
     interface Presenter {

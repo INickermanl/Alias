@@ -23,7 +23,7 @@ public class CardFragment extends BaseFragment {
         activity = (BaseActivity) getActivity();
 
         view = new CardView(root, activity);
-        presenter = new CardPresenter(view);
+        presenter = new CardPresenter(view, activity);
         presenterActionBar = new CardActionBarPresenter(activity, activity.getActionBarView(), "hello");
 
         return root;
