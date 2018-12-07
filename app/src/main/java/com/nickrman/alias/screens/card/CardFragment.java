@@ -13,8 +13,8 @@ import com.nickrman.alias.base.action_bar.ActionBarContract;
 public class CardFragment extends BaseFragment {
 
     private BaseActivity activity;
-    private CardPresenter presenter;
-    private CardView view;
+    private CardContract.Presenter presenter;
+    private CardContract.View view;
     private ActionBarContract.Presenter presenterActionBar;
 
     @Override

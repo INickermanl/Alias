@@ -11,4 +11,7 @@ public class Constants {
     public static final String SETTING_ROUND = "ROUND";
     public static final String SETTING_PLAY_TEAM = "PLAY_TEAM";
 
+    public static final String USER_WORDS = "USER_WORDS";
+    public static final String USER_ANSWER = "USER_ANSWER";
+
 }

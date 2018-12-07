@@ -3,13 +3,14 @@ package com.nickrman.alias.screens.card;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 
 import com.nickrman.alias.base.App;
 import com.nickrman.alias.base.BaseActivity;
+import com.nickrman.alias.data.models.ItemAnswer;
 import com.nickrman.alias.services.Navigator;
 import com.nickrman.alias.services.navigation.BackNavigator;
 import com.nickrman.alias.services.navigation.Screen;
@@ -32,17 +33,22 @@ public class CardPresenter implements CardContract.Presenter {
     private CompositeDisposable subscription;
     private GestureDetector gd;
     private List<String> listWords = new ArrayList<>();
-    private int count = 0;
+    private int counterListWords = 0;
     private int countTime = 0;
     private CountDownTimer timer;
     private SharedPreferences mSetting;
+    private List<ItemAnswer> listUserAnswer = new ArrayList<>();
 
     public CardPresenter(CardContract.View view, BaseActivity activity) {
         this.view = view;
+        mSetting = activity.getSharedPreferences(Constants.SETTING, Context.MODE_PRIVATE);
+        this.activity = activity;
         makeStringList();
         setupView();
         view.setCardWords(listWords.get(0).trim());
-        mSetting = activity.getSharedPreferences(Constants.SETTING, Context.MODE_PRIVATE);
+        int countSecond = mSetting.getInt(Constants.SETTING_COUNT_SECONDS, 3);
+        view.setTimeToEndGame(String.valueOf(countSecond));
+
 
     }
 
@@ -78,20 +84,38 @@ public class CardPresenter implements CardContract.Presenter {
     @Override
     public void setupView() {
 
+
         gd = new GestureDetector(App.getInstance(), new CardGestureDetectorListener(new SwipeCallback() {
             @Override
             public void swipeRight() {
+                if (counterListWords != 0) {
+                    listUserAnswer.add(new ItemAnswer(listWords.get(counterListWords), true));
+                } else {
+                    // fix after listWord Start counterListWords again == 0 change logic
+                    listUserAnswer.set(0, new ItemAnswer(listWords.get(counterListWords), true));
+
+                }
+
 
                 validation();
-                view.acceptCard(listWords.get(count));
+
+
+                view.acceptCard(listWords.get(counterListWords));
+
             }
 
             @Override
             public void swipeLeft() {
+                if (counterListWords != 0) {
+                    // fix after listWord Start counterListWords again == 0 change logic
+                    listUserAnswer.add(new ItemAnswer(listWords.get(counterListWords), false));
+                }
 
 
                 validation();
-                view.dismissCard(listWords.get(count));
+
+                view.dismissCard(listWords.get(counterListWords));
+
             }
         }));
     }
@@ -107,6 +131,7 @@ public class CardPresenter implements CardContract.Presenter {
 
             @Override
             public void onNext(Object o) {
+                listUserAnswer.add(new ItemAnswer(listWords.get(counterListWords), false));
                 startAnimation();
 
             }
@@ -171,7 +196,18 @@ public class CardPresenter implements CardContract.Presenter {
 
             @Override
             public void onFinish() {
-                navigator.navigateTo(Screen.RESULT, ScreenType.FRAGMENT);
+                Bundle args = new Bundle();
+                String words = "";
+                String answer = "";
+                for (int i = 0; i < listUserAnswer.size(); i++) {
+                    words += listUserAnswer.get(i).getWord() + ",";
+                    answer += listUserAnswer.get(i).isAnswer() + ",";
+
+
+                }
+                args.putString(Constants.USER_WORDS, words);
+                args.putString(Constants.USER_ANSWER, answer);
+                navigator.navigateTo(Screen.RESULT, ScreenType.FRAGMENT, args);
             }
         }.start();
 
@@ -179,19 +215,23 @@ public class CardPresenter implements CardContract.Presenter {
     }
 
     void makeStringList() {
-        listWords.add("hello");
-        listWords.add("noyp");
-        listWords.add("test");
-        listWords.add("yep");
-        listWords.add("noyp");
-        listWords.add("test");
-        listWords.add("last");
+        listWords.add("Злость");
+        listWords.add("Гнев");
+        listWords.add("Возмущение");
+        listWords.add("Обида");
+        listWords.add("Ненависть");
+        listWords.add("Сердитость");
+        listWords.add("Досада");
+        listWords.add("Раздражение");
+        listWords.add("Мстительность");
+        listWords.add("Оскорбленность");
+        listWords.add("Воинственность");
     }
 
     void validation() {
-        ++count;
-        if (!(count < listWords.size())) {
-            count = 0;
+        ++counterListWords;
+        if (!(counterListWords < listWords.size())) {
+            counterListWords = 0;
 
 
         }
