@@ -2,28 +2,74 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorWhite"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     android:clipChildren="false"
     android:clipToPadding="false">
 
     <FrameLayout
-        android:layout_marginTop="16dp"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/background_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:layout_gravity="center"
             android:id="@+id/time_to_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="0"
             android:textSize="40dp" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="70dp"
+        android:layout_height="76dp"
+        android:layout_marginStart="56dp"
+        android:background="@drawable/background_right_answer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1">
+
+        <TextView
+            android:id="@+id/right_answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/colorWhite"
+            android:textSize="40sp" />
+
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="70dp"
+        android:layout_height="76dp"
+        android:layout_marginStart="56dp"
+        android:background="@drawable/background_wrong_answer"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9">
+
+
+        <TextView
+            android:id="@+id/wrong_answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/colorWhite"
+            android:textSize="40sp" />
     </FrameLayout>
 
 

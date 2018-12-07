@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -34,6 +35,8 @@ public class CardPresenter implements CardContract.Presenter {
     private GestureDetector gd;
     private List<String> listWords = new ArrayList<>();
     private int counterListWords = 0;
+    private int counterRightAnswer = 0;
+    private int counterWrongAnswer = 0;
     private int countTime = 0;
     private CountDownTimer timer;
     private SharedPreferences mSetting;
@@ -91,12 +94,18 @@ public class CardPresenter implements CardContract.Presenter {
                 if (counterListWords != 0) {
                     listUserAnswer.add(new ItemAnswer(listWords.get(counterListWords), true));
                 } else {
-                    // fix after listWord Start counterListWords again == 0 change logic
-                    listUserAnswer.set(0, new ItemAnswer(listWords.get(counterListWords), true));
+                    Log.d("LOG", String.valueOf(listUserAnswer.size()));
+
+                    if (listUserAnswer.size() == 1)
+                        listUserAnswer.set(0, new ItemAnswer(listWords.get(counterListWords), true));
+                    else
+                        listUserAnswer.add(new ItemAnswer(listWords.get(counterListWords), true));
+
 
                 }
+                ++counterRightAnswer;
 
-
+                view.setCountRightAnswer(String.valueOf(counterRightAnswer));
                 validation();
 
 
@@ -107,11 +116,16 @@ public class CardPresenter implements CardContract.Presenter {
             @Override
             public void swipeLeft() {
                 if (counterListWords != 0) {
-                    // fix after listWord Start counterListWords again == 0 change logic
                     listUserAnswer.add(new ItemAnswer(listWords.get(counterListWords), false));
+                } else {
+                    Log.d("LOG", String.valueOf(listUserAnswer.size()));
+                    if (listUserAnswer.size() != 1) {
+                        listUserAnswer.add(new ItemAnswer(listWords.get(counterListWords), false));
+                    }
                 }
 
-
+                ++counterWrongAnswer;
+                view.setCountWrongAnswer("-" + String.valueOf(counterWrongAnswer));
                 validation();
 
                 view.dismissCard(listWords.get(counterListWords));
@@ -205,6 +219,9 @@ public class CardPresenter implements CardContract.Presenter {
 
 
                 }
+
+                words += listWords.get(counterListWords) + ",";
+                answer += "false" + ",";
                 args.putString(Constants.USER_WORDS, words);
                 args.putString(Constants.USER_ANSWER, answer);
                 navigator.navigateTo(Screen.RESULT, ScreenType.FRAGMENT, args);
@@ -220,20 +237,18 @@ public class CardPresenter implements CardContract.Presenter {
         listWords.add("Возмущение");
         listWords.add("Обида");
         listWords.add("Ненависть");
-        listWords.add("Сердитость");
+    /*    listWords.add("Сердитость");
         listWords.add("Досада");
         listWords.add("Раздражение");
         listWords.add("Мстительность");
         listWords.add("Оскорбленность");
-        listWords.add("Воинственность");
+        listWords.add("Воинственность");*/
     }
 
     void validation() {
         ++counterListWords;
         if (!(counterListWords < listWords.size())) {
             counterListWords = 0;
-
-
         }
     }
 }

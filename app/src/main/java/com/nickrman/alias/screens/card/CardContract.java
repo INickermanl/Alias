@@ -31,6 +31,10 @@ public interface CardContract {
 
         String getTimeToEndGame();
 
+        void setCountRightAnswer(String rightAnswer);
+
+        void setCountWrongAnswer(String wrongAnswer);
+
     }
 
     interface Presenter {
