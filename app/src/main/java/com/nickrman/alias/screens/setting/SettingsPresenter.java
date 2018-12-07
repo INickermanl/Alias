@@ -477,7 +477,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         VocabularyItem item1 = new VocabularyItem("Idiom dictionary");
         VocabularyItem item2 = new VocabularyItem("Animal Dictionary");
         VocabularyItem item3 = new VocabularyItem("Former mage dictionary");
-        VocabularyItem item4 = new VocabularyItem("Dictionary of feelings and emotions");
+        VocabularyItem item4 = new VocabularyItem("Dictionary of feelings\nand emotions");
         vocabularyItemList.add(item1);
         vocabularyItemList.add(item2);
         vocabularyItemList.add(item3);
@@ -495,14 +495,16 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         TeamAvatarItem item6 = new TeamAvatarItem(R.mipmap.rac);
         TeamAvatarItem item7 = new TeamAvatarItem(R.mipmap.pic);
 
+
+
         avatarItemList.add(item);
-        avatarItemList.add(item1);
+        avatarItemList.add(item7);
         avatarItemList.add(item2);
         avatarItemList.add(item3);
         avatarItemList.add(item4);
         avatarItemList.add(item5);
         avatarItemList.add(item6);
-        avatarItemList.add(item7);
+        avatarItemList.add(item1);
     }
 
     void makeList() {
