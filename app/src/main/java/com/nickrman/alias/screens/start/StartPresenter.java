@@ -1,12 +1,13 @@
 package com.nickrman.alias.screens.start;
 
-import com.nickrman.alias.base.App;
+import android.content.SharedPreferences;
+import android.util.Log;
+
 import com.nickrman.alias.data.db.AppDatabase;
-import com.nickrman.alias.data.db.model.Book;
-import com.nickrman.alias.data.db.model.Word;
 import com.nickrman.alias.services.Navigator;
 import com.nickrman.alias.services.navigation.Screen;
 import com.nickrman.alias.services.navigation.ScreenType;
+import com.nickrman.alias.utils.Constants;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
@@ -19,15 +20,12 @@ public class StartPresenter implements StartContract.Presenter {
     private CompositeDisposable subscriptions;
     private Navigator navigator;
     private AppDatabase db;
+    private SharedPreferences mSetting;
 
 
-
-    //insertBookInBD();
-    // insertWordInDB();
-
-
-    public StartPresenter() {
-    //    db = AppDatabase.getFileDatabase(App.getInstance());
+    public StartPresenter(SharedPreferences mSetting) {
+        //    db = AppDatabase.getFileDatabase(App.getInstance());
+        this.mSetting = mSetting;
     }
 
     @Override
@@ -36,24 +34,21 @@ public class StartPresenter implements StartContract.Presenter {
         setupView();
         setupAction();
     }
-    private void insertWordInDB() {
 
-
-
-    }
-
-
-    private void insertBookInBD() {
-
-
-
-
-
-
-    }
 
     private void setupView() {
         subscriptions = new CompositeDisposable();
+
+        int countWords = mSetting.getInt(Constants.SETTING_COUNT_WORDS,9);
+        if(countWords != 9){
+            Log.d("LOG",String.valueOf(countWords));
+            view.showResumeButton(true);
+        }else{
+            Log.d("LOG",String.valueOf(countWords));
+            view.showResumeButton(false);
+        }
+
+
     }
 
     private void setupAction() {
@@ -80,6 +75,28 @@ public class StartPresenter implements StartContract.Presenter {
 
                     }
                 });
+
+        view.resumeGameButtonAction().subscribe(new Observer<Object>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                subscriptions.add(d);
+            }
+
+            @Override
+            public void onNext(Object o) {
+                navigator.navigateTo(Screen.GAMING,ScreenType.ACTIVITY);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     @Override
@@ -99,5 +116,6 @@ public class StartPresenter implements StartContract.Presenter {
     public void newGame() {
         navigator.navigateTo(Screen.SETTINGS, ScreenType.ACTIVITY);
     }
+
 
 }

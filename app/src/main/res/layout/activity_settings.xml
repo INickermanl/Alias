@@ -634,7 +634,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/start_game"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/colorWhite"
                 android:textSize="24dp" />
         </FrameLayout>
 

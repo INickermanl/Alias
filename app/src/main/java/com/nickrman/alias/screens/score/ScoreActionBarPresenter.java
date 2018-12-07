@@ -10,6 +10,7 @@ public class ScoreActionBarPresenter extends GeneralActionBarPresenter {
     private ActionBarContract.View presenterView;
     private BaseActivity activity;
 
+
     public ScoreActionBarPresenter(BaseActivity activity, ActionBarContract.View view, int titleText) {
         super(activity, view, titleText);
         this.presenterView = view;
@@ -26,6 +27,7 @@ public class ScoreActionBarPresenter extends GeneralActionBarPresenter {
     @Override
     public void setupView() {
         super.setupView();
+        presenterView.showAB(true);
         presenterView.setBackgroundAB(activity.getResources().getColor(R.color.colorAccent));
     }
 }

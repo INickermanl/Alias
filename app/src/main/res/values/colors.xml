@@ -11,6 +11,7 @@
     <color name="colorBackgroundAvatar">#03a9f4</color>
     <color name="colorRed">#F44336</color>
     <color name="colorGreen">#388E3C</color>
+    <color name="colorButton">#5CB2F3</color>
 
 
 </resources>

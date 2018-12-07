@@ -71,7 +71,7 @@ public class AvatarTeamAdapter extends RecyclerView.Adapter<AvatarTeamAdapter.Vi
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private CircleImageView avatarBG;
-        private CircleImageView avatar;
+        private ImageView avatar;
         private View container;
 
 

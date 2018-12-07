@@ -41,10 +41,13 @@ public class CardPresenter implements CardContract.Presenter {
     private CountDownTimer timer;
     private SharedPreferences mSetting;
     private List<ItemAnswer> listUserAnswer = new ArrayList<>();
+    private int time;
 
     public CardPresenter(CardContract.View view, BaseActivity activity) {
         this.view = view;
         mSetting = activity.getSharedPreferences(Constants.SETTING, Context.MODE_PRIVATE);
+        time =   mSetting.getInt(Constants.SETTING_COUNT_SECONDS, 5);
+        initTimer();
         this.activity = activity;
         makeStringList();
         setupView();
@@ -53,6 +56,36 @@ public class CardPresenter implements CardContract.Presenter {
         view.setTimeToEndGame(String.valueOf(countSecond));
 
 
+    }
+
+    private void initTimer() {
+        timer = new CountDownTimer(time * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                view.setTimeToEndGame(String.valueOf(millisUntilFinished / 1000));
+            }
+
+            @Override
+            public void onFinish() {
+                Bundle args = new Bundle();
+                String words = "";
+                String answer = "";
+                for (int i = 0; i < listUserAnswer.size(); i++) {
+                    words += listUserAnswer.get(i).getWord() + ",";
+                    answer += listUserAnswer.get(i).isAnswer() + ",";
+
+
+                }
+                if(listUserAnswer.size() != 1){
+                    words += listWords.get(counterListWords) + ",";
+                    answer += "false" + ",";
+                }
+
+                args.putString(Constants.USER_WORDS, words);
+                args.putString(Constants.USER_ANSWER, answer);
+                navigator.navigateTo(Screen.RESULT, ScreenType.FRAGMENT, args);
+            }
+        };
     }
 
     @Override
@@ -200,33 +233,9 @@ public class CardPresenter implements CardContract.Presenter {
     public void startAnimation() {
         view.startAnimation();
 
-        int time = mSetting.getInt(Constants.SETTING_COUNT_SECONDS, 5);
-
-        timer = new CountDownTimer(time * 1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                view.setTimeToEndGame(String.valueOf(millisUntilFinished / 1000));
-            }
-
-            @Override
-            public void onFinish() {
-                Bundle args = new Bundle();
-                String words = "";
-                String answer = "";
-                for (int i = 0; i < listUserAnswer.size(); i++) {
-                    words += listUserAnswer.get(i).getWord() + ",";
-                    answer += listUserAnswer.get(i).isAnswer() + ",";
 
 
-                }
-
-                words += listWords.get(counterListWords) + ",";
-                answer += "false" + ",";
-                args.putString(Constants.USER_WORDS, words);
-                args.putString(Constants.USER_ANSWER, answer);
-                navigator.navigateTo(Screen.RESULT, ScreenType.FRAGMENT, args);
-            }
-        }.start();
+        timer.start();
 
 
     }

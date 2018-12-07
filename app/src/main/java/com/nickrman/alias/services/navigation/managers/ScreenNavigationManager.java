@@ -101,7 +101,7 @@ public class ScreenNavigationManager implements Navigator {
     }
 
     private void navigateToStart(Bundle args) {
-        switchActivityScreen(Screen.START, args, ScreenAnimType.NONE_TYPE, false);
+        switchActivityScreen(Screen.START, args, ScreenAnimType.NONE_TYPE, true);
         activity.hideKeyboard();
         /*activity.finish();
         activity.freeMemory();*/
@@ -117,17 +117,17 @@ public class ScreenNavigationManager implements Navigator {
 
     //Fragment
     private void navigateToScoreFragment(Bundle args) {
-        switchFragmentScreen(Screen.SCORE, args, ScreenAnimType.NONE_TYPE, true);
+        switchFragmentScreen(Screen.SCORE, args, ScreenAnimType.NONE_TYPE, false);
         activity.hideKeyboard();
     }
 
     private void navigateToGameFragment(Bundle args) {
-        switchFragmentScreen(Screen.CARD, args, ScreenAnimType.NONE_TYPE, true);
+        switchFragmentScreen(Screen.CARD, args, ScreenAnimType.NONE_TYPE, false);
         activity.hideKeyboard();
     }
 
     private void navigateToResultFragment(Bundle args) {
-        switchFragmentScreen(Screen.RESULT,args,ScreenAnimType.NONE_TYPE,true);
+        switchFragmentScreen(Screen.RESULT,args,ScreenAnimType.NONE_TYPE,false);
         activity.hideKeyboard();
     }
 

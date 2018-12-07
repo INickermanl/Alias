@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nickrman.alias.R;
@@ -54,7 +55,7 @@ public class AdapterTeamItemScore extends RecyclerView.Adapter<AdapterTeamItemSc
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private CircleImageView avatar;
+        private ImageView avatar;
         private TextView teamName;
         private TextView score;
 

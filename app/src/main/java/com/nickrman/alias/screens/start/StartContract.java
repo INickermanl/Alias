@@ -9,6 +9,9 @@ public interface StartContract {
 
         Observable<Object> newGameButtonAction();
 
+        void showResumeButton(boolean show);
+        Observable<Object> resumeGameButtonAction();
+
     }
 
     interface Presenter {

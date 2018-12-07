@@ -9,6 +9,7 @@ import com.nickrman.alias.R;
 import com.nickrman.alias.base.BaseActivity;
 import com.nickrman.alias.services.navigation.BackNavigator;
 import com.nickrman.alias.services.navigation.Screen;
+import com.nickrman.alias.services.navigation.ScreenType;
 import com.nickrman.alias.services.navigation.managers.events.BackPressEvent;
 import com.nickrman.alias.services.navigation.managers.events.TryExitActivityEvent;
 import com.nickrman.alias.services.navigation.managers.events.TryNavigateBackEvent;
@@ -58,9 +59,9 @@ public class ScreenNavigationBackManager implements BackNavigator {
         activity.hideKeyboard();
 
         //fragmentManager.getBackStackEntryCount() == 1
-        if (false) {
+        if (Screen.SCORE.equals(activity.getNavigator().getScreen())) {
             if (doubleBackToExitPressedOnce) {
-                exit();
+                exitGame();
             } else {
                 doubleBackToExitPressedOnce = true;
                 Snackbar.make(activity.findViewById(R.id.root), R.string.back_message, Snackbar.LENGTH_LONG)
@@ -72,10 +73,14 @@ public class ScreenNavigationBackManager implements BackNavigator {
         }
     }
 
+    private void exitGame(){
+        activity.getNavigator().navigateTo(Screen.START,ScreenType.ACTIVITY);
+    }
 
     private void exit() {
         activity.finish();
         activity.freeMemory();
+
     }
 
     @Subscribe

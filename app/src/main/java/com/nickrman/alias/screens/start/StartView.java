@@ -9,8 +9,9 @@ import io.reactivex.Observable;
 
 public class StartView implements StartContract.View {
 
-    View root;
-    View newGameButton;
+    private View root;
+    private View newGameButton;
+    private View resumeGameButton;
 
     public StartView(View root) {
         this.root = root;
@@ -19,6 +20,8 @@ public class StartView implements StartContract.View {
 
     private void init() {
         newGameButton = root.findViewById(R.id.new_game_button);
+        resumeGameButton = root.findViewById(R.id.resume_game_button);
+
 
     }
 
@@ -27,5 +30,13 @@ public class StartView implements StartContract.View {
         return RxView.clicks(newGameButton);
     }
 
+    @Override
+    public void showResumeButton(boolean show) {
+        resumeGameButton.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
 
+    @Override
+    public Observable<Object> resumeGameButtonAction() {
+        return RxView.clicks(resumeGameButton);
+    }
 }
