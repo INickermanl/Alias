@@ -67,7 +67,8 @@ public interface SettingsContract {
                                   SelectAvatarCallback callback,
                                   Runnable runnable,
                                   Runnable runnableOkButton,
-                                  Runnable runnableAddTeamNameDialogButton);
+                                  Runnable runnableAddTeamNameDialogButton,
+                                  String nameTeamInDialogSelectTeam);
 
         void showChangeNameTeamDialog(Runnable runnable);
 

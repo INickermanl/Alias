@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.ArraySet;
 import android.util.Log;
 
 import com.nickrman.alias.R;
@@ -22,7 +21,6 @@ import com.nickrman.alias.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
@@ -39,11 +37,12 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private BaseActivity activity;
     private BackNavigator backNavigator;
     private Handler handler;
-    private TeamItem teamItem = new TeamItem();
+    private TeamItem teamItemOkDialogAction = new TeamItem();
 
     private List<TeamItem> teamItemList = new ArrayList<>();
     private List<VocabularyItem> vocabularyItemList = new ArrayList();
     private List<TeamAvatarItem> avatarItemList = new ArrayList<>();
+    private List<String> teamNameList = new ArrayList<>();
 
     private SharedPreferences mSettings;
 
@@ -53,6 +52,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         this.view = view;
         initVocabularyList();
         initAvatarItemList();
+        initTeamNameList();
         this.activity = activity;
         mSettings = activity.getSharedPreferences(Constants.SETTING, Context.MODE_PRIVATE);
         setupView();
@@ -86,6 +86,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
                             TeamAvatarItem teamAvatarItem = new TeamAvatarItem(item.getImageTeam());
                             avatarItemList.add(0, teamAvatarItem);
 
+                            teamNameList.add(0, item.getNameTeam());
                             --counter;
                             opportunityCheck();
 
@@ -106,9 +107,10 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
             @Override
             public void onNext(Object o) {
-                avatarItemList.get(0).setBackground(true);
-                view.showSelectTeamDialog(avatarItemList, new SelectAvatarCallback() {
+                if (avatarItemList.size() != 0)
+                    avatarItemList.get(0).setBackground(true);
 
+                view.showSelectTeamDialog(avatarItemList, new SelectAvatarCallback() {
                             @Override
                             public void selectAvatarCallback(TeamAvatarItem item, int position, Runnable runnable) {
 
@@ -132,7 +134,8 @@ public class SettingsPresenter implements SettingsContract.Presenter {
                         () -> {//ok button
                             TeamItem itemForItemList = new TeamItem();
 
-                            if (teamItem.getImageTeam() == 0) {
+
+                            if (teamItemOkDialogAction.getImageTeam() == 0) {
                                 for (TeamAvatarItem avatarItem : avatarItemList) {
                                     if (avatarItem.isBackground()) {
                                         itemForItemList.setImageTeam(avatarItem.getAvatar());
@@ -140,7 +143,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
                                     }
                                 }
                             } else {
-                                itemForItemList.setImageTeam(teamItem.getImageTeam());
+                                itemForItemList.setImageTeam(teamItemOkDialogAction.getImageTeam());
                             }
 
                             itemForItemList.setNameTeam(view.getTeamNameFromDialog());
@@ -157,6 +160,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
                                 }
 
                             }
+                            teamNameList.remove(0);
 
                             avatarItemList.remove(avatarItemMain);
                             counter++;
@@ -171,10 +175,15 @@ public class SettingsPresenter implements SettingsContract.Presenter {
                                             }
 
                                             view.hideDialog(view.getDialogChangeUserTeamName());
-                                        }));
+                                        }),
+
+                        //setDialogNameTeam
+                        teamNameList.get(0).trim());
 
 
             }
+
+
 
             @Override
             public void onError(Throwable e) {
@@ -496,7 +505,6 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         TeamAvatarItem item7 = new TeamAvatarItem(R.mipmap.pic);
 
 
-
         avatarItemList.add(item);
         avatarItemList.add(item7);
         avatarItemList.add(item2);
@@ -520,6 +528,21 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         teamItemList.add(item1);
         teamItemList.add(item2);
         teamItemList.add(item3);
+    }
+
+    private void initTeamNameList() {
+        teamNameList.add("Vasya");
+        teamNameList.add("Xyi");
+        teamNameList.add("Nik");
+        teamNameList.add("Armen");
+        teamNameList.add("Cat");
+        teamNameList.add("mamka");
+        teamNameList.add("ebanyi c rot team");
+        teamNameList.add("tvoya sychka");
+        teamNameList.add("");
+
+
+
     }
 
     void opportunityCheck() {

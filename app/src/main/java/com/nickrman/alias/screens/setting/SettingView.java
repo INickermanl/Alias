@@ -218,7 +218,8 @@ public class SettingView implements SettingsContract.View {
 
     @Override
     public void showSelectTeamDialog(List<TeamAvatarItem> teamAvatarItemList, SelectAvatarCallback callback,
-                                     Runnable runnableCancel, Runnable runnableOkButton, Runnable runnableAddTeamNameDialogButton) {
+                                     Runnable runnableCancel, Runnable runnableOkButton, Runnable runnableAddTeamNameDialogButton,
+                                     String nameTeamInDialogSelectTeam) {
 
         View view = baseActivity.getLayoutInflater().inflate(R.layout.dialog_select_team, null);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
@@ -227,7 +228,7 @@ public class SettingView implements SettingsContract.View {
         View cancel = view.findViewById(R.id.cancel_btn);
         View ok = view.findViewById(R.id.ok_btn);
         View leftBackButton = view.findViewById(R.id.left_container);
-        teamNameDialogField.setText("test");
+        teamNameDialogField.setText(nameTeamInDialogSelectTeam);
 
         cancel.setOnClickListener(v -> runnableCancel.run());
         ok.setOnClickListener(v -> runnableOkButton.run());
@@ -242,7 +243,11 @@ public class SettingView implements SettingsContract.View {
 
         dialogAddTeam = new BaseDialog(baseActivity);
 
-        createBaseDialog(dialogAddTeam, view, R.layout.dialog_base_choose_team, R.id.dialog_content_container);
+        if(teamAvatarItemList.size() != 0){
+            createBaseDialog(dialogAddTeam, view, R.layout.dialog_base_choose_team, R.id.dialog_content_container);
+        }
+
+
     }
 
     @Override
@@ -264,6 +269,11 @@ public class SettingView implements SettingsContract.View {
     public String getTeamNameFromDialog() {
 
         return teamNameDialogField.getText().toString().trim();
+    }
+
+    @Override
+    public void setTeamNameDialogField(String nameTeam) {
+        teamNameDialogField.setText(nameTeam.toString().trim());
     }
 
     private void createBaseDialog(BaseDialog baseDialog, View view, int resBaseDialog, int resContainerForData) {
@@ -327,10 +337,6 @@ public class SettingView implements SettingsContract.View {
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void setTeamNameDialogField(String nameTeam) {
-        teamNameDialogField.setText(nameTeam.toString().trim());
-    }
 
     @Override
     public BaseDialog getDialogVocabulary() {
