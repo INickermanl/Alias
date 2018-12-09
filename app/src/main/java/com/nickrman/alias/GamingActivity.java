@@ -1,19 +1,13 @@
 package com.nickrman.alias;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.nickrman.alias.base.BaseActivity;
 import com.nickrman.alias.base.action_bar.ActionBarContract;
 import com.nickrman.alias.base.action_bar.ActionBarView;
-import com.nickrman.alias.data.models.SettingItem;
 import com.nickrman.alias.services.navigation.Screen;
 import com.nickrman.alias.services.navigation.ScreenType;
-import com.nickrman.alias.utils.Constants;
-
-
-import timber.log.Timber;
 
 public class GamingActivity extends BaseActivity {
     private ActionBarContract.View actionBarView;
