@@ -32,10 +32,10 @@ public class ScoreFragment extends BaseFragment {
         mSettings = activity.getSharedPreferences(Constants.SETTING, Context.MODE_PRIVATE);
 
         view = new ScoreView(root, activity);
-        presenter = new ScorePresenter(activity, view);
-        int round = mSettings.getInt(Constants.SETTING_ROUND, 2);
+        presenter = new ScorePresenter(mSettings, view);
+        int round = mSettings.getInt(Constants.SETTING_ROUND, 48);
 
-        presenterActionBar = new ScoreActionBarPresenter(activity, activity.getActionBarView(), "Round " + ++round);
+        presenterActionBar = new ScoreActionBarPresenter(activity, activity.getActionBarView(), "Round " + round);
 
         return root;
 

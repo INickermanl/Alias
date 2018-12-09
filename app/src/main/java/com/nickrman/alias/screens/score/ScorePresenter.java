@@ -27,12 +27,11 @@ public class ScorePresenter implements ScoreContract.Presenter {
     private List<TeamItem> listTeams = new ArrayList<>();
     private SharedPreferences mSettings;
 
-    public ScorePresenter(BaseActivity activity, ScoreContract.View view) {
+    public ScorePresenter(SharedPreferences mSettings, ScoreContract.View view) {
         this.view = view;
-        mSettings = activity.getSharedPreferences(Constants.SETTING, Context.MODE_PRIVATE);
+        this.mSettings = mSettings;
 
         setupView();
-
     }
 
     @Override
@@ -44,7 +43,7 @@ public class ScorePresenter implements ScoreContract.Presenter {
 
     @Override
     public void setupAction() {
-        view.startGameButtonAction()
+        view.startEndCurrentGameAction()
                 .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -66,8 +65,6 @@ public class ScorePresenter implements ScoreContract.Presenter {
 
                     }
                 });
-
-
     }
 
     @Override
@@ -100,8 +97,6 @@ public class ScorePresenter implements ScoreContract.Presenter {
 
         createList();
 
-
-
         view.setTeamList(listTeams);
         view.setImageTeam(listTeams.get(playTeam).getImageTeam());
         view.setScoreTeam(listTeams.get(playTeam).getScoreTeam());
@@ -113,7 +108,6 @@ public class ScorePresenter implements ScoreContract.Presenter {
         String myTeamNamesFromSetting = mSettings.getString(Constants.SETTING_TEAM_NAMES, "");
         String myTeamScoreFromSetting = mSettings.getString(Constants.SETTING_SCORES, "");
         String myTeamsAvatarsFromSetting = mSettings.getString(Constants.SETTING_TEAM_AVATARS, "");
-
 
         List<String> listTeamName = new ArrayList<>();
         List<String> listAvatars = new ArrayList<>();

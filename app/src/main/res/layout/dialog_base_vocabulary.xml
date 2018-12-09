@@ -7,7 +7,7 @@
     <FrameLayout
         android:id="@+id/dialog_container"
         android:layout_width="350dp"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@drawable/dialog_bg_select_vocabulary"
         android:orientation="vertical">

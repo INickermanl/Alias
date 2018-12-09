@@ -26,6 +26,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 public class CardPresenter implements CardContract.Presenter {
+    private boolean secondUseTimer = false;
 
     private CardContract.View view;
     private Navigator navigator;
@@ -37,28 +38,45 @@ public class CardPresenter implements CardContract.Presenter {
     private int counterListWords = 0;
     private int counterRightAnswer = 0;
     private int counterWrongAnswer = 0;
-    private int countTime = 0;
     private CountDownTimer timer;
     private SharedPreferences mSetting;
     private List<ItemAnswer> listUserAnswer = new ArrayList<>();
-    private int time;
 
     public CardPresenter(CardContract.View view, BaseActivity activity) {
         this.view = view;
-        mSetting = activity.getSharedPreferences(Constants.SETTING, Context.MODE_PRIVATE);
-        time =   mSetting.getInt(Constants.SETTING_COUNT_SECONDS, 5);
-        initTimer();
         this.activity = activity;
+
         makeStringList();
-        setupView();
         view.setCardWords(listWords.get(0).trim());
+
+
+        setupView();
+        setupData();
+        makeTimer();
+    }
+
+    private void setupData() {
+        mSetting = activity.getSharedPreferences(Constants.SETTING, Context.MODE_PRIVATE);
         int countSecond = mSetting.getInt(Constants.SETTING_COUNT_SECONDS, 3);
         view.setTimeToEndGame(String.valueOf(countSecond));
 
-
     }
 
-    private void initTimer() {
+
+    @Override
+    public void start() {
+        subscription = new CompositeDisposable();
+        setupAction();
+
+        if (secondUseTimer) {
+            makeTimer();
+            timer.start();
+        }
+    }
+
+    private void makeTimer() {
+        int time = Integer.valueOf(view.getTimeToEndGame());
+
         timer = new CountDownTimer(time * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -67,53 +85,15 @@ public class CardPresenter implements CardContract.Presenter {
 
             @Override
             public void onFinish() {
-                Bundle args = new Bundle();
-                String words = "";
-                String answer = "";
-                for (int i = 0; i < listUserAnswer.size(); i++) {
-                    words += listUserAnswer.get(i).getWord() + ",";
-                    answer += listUserAnswer.get(i).isAnswer() + ",";
-
-
-                }
-                if(listUserAnswer.size() != 1){
-                    words += listWords.get(counterListWords) + ",";
-                    answer += "false" + ",";
-                }
-
-                args.putString(Constants.USER_WORDS, words);
-                args.putString(Constants.USER_ANSWER, answer);
-                navigator.navigateTo(Screen.RESULT, ScreenType.FRAGMENT, args);
+                validationEndGame();
             }
         };
-    }
-
-    @Override
-    public void start() {
-        subscription = new CompositeDisposable();
-        setupAction();
-
-        int time = Integer.valueOf(view.getTimeToEndGame());
-        if (countTime > 0) {
-            timer = new CountDownTimer(time * 1000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    view.setTimeToEndGame(String.valueOf(millisUntilFinished / 1000));
-                }
-
-                @Override
-                public void onFinish() {
-                    navigator.navigateTo(Screen.RESULT, ScreenType.FRAGMENT);
-                }
-            }.start();
-        }
     }
 
     @Override
     public void stop() {
         subscription.dispose();
         subscription = null;
-        countTime = 1;
         timer.cancel();
     }
 
@@ -232,11 +212,8 @@ public class CardPresenter implements CardContract.Presenter {
     @Override
     public void startAnimation() {
         view.startAnimation();
-
-
-
         timer.start();
-
+        secondUseTimer = true;
 
     }
 
@@ -246,12 +223,12 @@ public class CardPresenter implements CardContract.Presenter {
         listWords.add("Возмущение");
         listWords.add("Обида");
         listWords.add("Ненависть");
-    /*    listWords.add("Сердитость");
+        listWords.add("Сердитость");
         listWords.add("Досада");
         listWords.add("Раздражение");
         listWords.add("Мстительность");
         listWords.add("Оскорбленность");
-        listWords.add("Воинственность");*/
+        listWords.add("Воинственность");
     }
 
     void validation() {
@@ -259,5 +236,25 @@ public class CardPresenter implements CardContract.Presenter {
         if (!(counterListWords < listWords.size())) {
             counterListWords = 0;
         }
+    }
+
+    private void validationEndGame() {
+        Bundle args = new Bundle();
+        String words = "";
+        String answer = "";
+        for (int i = 0; i < listUserAnswer.size(); i++) {
+            words += listUserAnswer.get(i).getWord() + ",";
+            answer += listUserAnswer.get(i).isAnswer() + ",";
+
+
+        }
+        if (listUserAnswer.size() != 1) {
+            words += listWords.get(counterListWords) + ",";
+            answer += "false" + ",";
+        }
+
+        args.putString(Constants.USER_WORDS, words);
+        args.putString(Constants.USER_ANSWER, answer);
+        navigator.navigateTo(Screen.RESULT, ScreenType.FRAGMENT, args);
     }
 }

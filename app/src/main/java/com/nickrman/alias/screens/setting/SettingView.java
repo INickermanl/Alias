@@ -236,7 +236,7 @@ public class SettingView implements SettingsContract.View {
         addTeamNameDialogButton.setOnClickListener(v -> runnableAddTeamNameDialogButton.run());
 
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(root.getContext(), 4, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(root.getContext(), 3, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(gridLayoutManager);
         adapterAvatarItem = new AvatarTeamAdapter(teamAvatarItemList, callback);
         recyclerView.setAdapter(adapterAvatarItem);

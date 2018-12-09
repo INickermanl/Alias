@@ -15,9 +15,6 @@ public interface ScoreContract {
 
         void setScoreTeam(String score);
 
-        void setRound(String round);
-
-
         void setImageTeam(int res);
 
 
@@ -26,7 +23,7 @@ public interface ScoreContract {
         void setTeamList(List<TeamItem> items);
 
 
-        Observable<Object> startGameButtonAction();
+        Observable<Object> startEndCurrentGameAction();
 
 
     }

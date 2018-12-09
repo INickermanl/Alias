@@ -44,7 +44,7 @@ public class ScoreView implements ScoreContract.View {
     }
 
     @Override
-    public Observable<Object> startGameButtonAction() {
+    public Observable<Object> startEndCurrentGameAction() {
         return RxView.clicks(startGameButton);
     }
 
@@ -77,8 +77,4 @@ public class ScoreView implements ScoreContract.View {
         recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public void setRound(String round) {
-        scoreTeam.setText(round);
-    }
 }

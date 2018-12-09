@@ -8,8 +8,6 @@ import android.util.Log;
 
 import com.nickrman.alias.R;
 import com.nickrman.alias.base.BaseActivity;
-import com.nickrman.alias.data.models.CollectionImage;
-import com.nickrman.alias.data.models.CollectionTeamName;
 import com.nickrman.alias.data.models.TeamAvatarItem;
 import com.nickrman.alias.data.models.VocabularyItem;
 import com.nickrman.alias.services.Navigator;
@@ -28,7 +26,7 @@ import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public class SettingsPresenter implements SettingsContract.Presenter {
-    private int counter = 0;
+    private int counter = 2;
     private boolean checkBook = false;
 
     private SettingsContract.View view;
@@ -50,14 +48,19 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     public SettingsPresenter(BaseActivity activity, SettingsContract.View view) {
         this.handler = new Handler(Looper.getMainLooper());
         this.view = view;
-        initVocabularyList();
-        initAvatarItemList();
-        initTeamNameList();
         this.activity = activity;
+        initList();
         mSettings = activity.getSharedPreferences(Constants.SETTING, Context.MODE_PRIVATE);
         setupView();
 
 
+    }
+
+    private void initList() {
+        initVocabularyList();
+        initAvatarItemList();
+        initTeamNameList();
+        makeTeamList();
     }
 
 
@@ -182,7 +185,6 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
 
             }
-
 
 
             @Override
@@ -467,7 +469,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
         editor.putInt(Constants.SETTING_COUNT_SECONDS, countSeconds);
         editor.putInt(Constants.SETTING_COUNT_WORDS, view.getCurrentCountWords());
-        editor.putInt(Constants.SETTING_ROUND, 0);
+        editor.putInt(Constants.SETTING_ROUND, 1);
         editor.putInt(Constants.SETTING_PLAY_TEAM, 0);
 
 
@@ -496,38 +498,32 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
     private void initAvatarItemList() {
         TeamAvatarItem item = new TeamAvatarItem(R.mipmap.cat);
-        TeamAvatarItem item1 = new TeamAvatarItem(R.mipmap.cat_like);
         TeamAvatarItem item2 = new TeamAvatarItem(R.mipmap.edin);
         TeamAvatarItem item3 = new TeamAvatarItem(R.mipmap.givot);
         TeamAvatarItem item4 = new TeamAvatarItem(R.mipmap.gnom);
         TeamAvatarItem item5 = new TeamAvatarItem(R.mipmap.hanter);
-        TeamAvatarItem item6 = new TeamAvatarItem(R.mipmap.rac);
-        TeamAvatarItem item7 = new TeamAvatarItem(R.mipmap.pic);
+        TeamAvatarItem item6 = new TeamAvatarItem(R.mipmap.pic);
 
 
         avatarItemList.add(item);
-        avatarItemList.add(item7);
         avatarItemList.add(item2);
         avatarItemList.add(item3);
         avatarItemList.add(item4);
         avatarItemList.add(item5);
         avatarItemList.add(item6);
-        avatarItemList.add(item1);
+
     }
 
-    void makeList() {
-
-        TeamItem item1 = new TeamItem();
-        item1.setNameTeam(CollectionTeamName.team3);
-        item1.setImageTeam(CollectionImage.test3);
+    void makeTeamList() {
 
 
-        TeamItem item2 = new TeamItem(CollectionImage.test1, CollectionTeamName.team2);
-        TeamItem item3 = new TeamItem(CollectionImage.test2, CollectionTeamName.test);
+        teamItemList.add(new TeamItem(avatarItemList.get(0).getAvatar(), teamNameList.get(0)));
+        teamItemList.add(new TeamItem(avatarItemList.get(1).getAvatar(), teamNameList.get(1)));
 
-        teamItemList.add(item1);
-        teamItemList.add(item2);
-        teamItemList.add(item3);
+        avatarItemList.remove(0);
+        avatarItemList.remove(0);
+        teamNameList.remove(0);
+        teamNameList.remove(0);
     }
 
     private void initTeamNameList() {
@@ -540,7 +536,6 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         teamNameList.add("ebanyi c rot team");
         teamNameList.add("tvoya sychka");
         teamNameList.add("");
-
 
 
     }

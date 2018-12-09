@@ -40,7 +40,7 @@ public class StartPresenter implements StartContract.Presenter {
         subscriptions = new CompositeDisposable();
 
         int countWords = mSetting.getInt(Constants.SETTING_COUNT_WORDS,9);
-        if(countWords != 9){
+        if(countWords >= 10){
             Log.d("LOG",String.valueOf(countWords));
             view.showResumeButton(true);
         }else{

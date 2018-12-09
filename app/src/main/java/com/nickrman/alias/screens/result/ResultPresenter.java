@@ -86,21 +86,29 @@ public class ResultPresenter implements ResultContract.Presenter {
             @Override
             public void onNext(Object o) {
                 List<String> listScores = new ArrayList<>();
+                SharedPreferences.Editor editor = mSetting.edit();
 
                 String teamScores = mSetting.getString(Constants.SETTING_SCORES, "0");
+                String newTeamScore = "";
                 int currentPlayTeam = mSetting.getInt(Constants.SETTING_PLAY_TEAM, 0);
+                int winScore = mSetting.getInt(Constants.SETTING_COUNT_WORDS, 30);
+                int currentRound = mSetting.getInt(Constants.SETTING_ROUND, 50);
+                int challenger = 0;
 
 
                 for (String score : teamScores.split(",")) {
                     listScores.add(score);
                 }
 
-                int playTeamScore = Integer.valueOf(view.getTeamPoint()) + Integer.valueOf(listScores.get(currentPlayTeam));
+                int currentScorePlayTeam = Integer.valueOf(view.getTeamPoint()) + Integer.valueOf(listScores.get(currentPlayTeam));
 
+                if (currentScorePlayTeam < 0) {
 
-                listScores.set(currentPlayTeam, String.valueOf(playTeamScore));
+                    listScores.set(currentPlayTeam, "0");
+                } else {
+                    listScores.set(currentPlayTeam, String.valueOf(currentScorePlayTeam));
+                }
 
-                String newTeamScore = "";
 
                 for (int i = 0; i < listScores.size(); i++) {
                     newTeamScore += listScores.get(i) + ",";
@@ -109,14 +117,28 @@ public class ResultPresenter implements ResultContract.Presenter {
                 if (currentPlayTeam < listScores.size() - 1) {
                     ++currentPlayTeam;
                 } else {
+
                     //logic and all game fix
+
+                    for (String score : listScores) {
+                        if (Integer.valueOf(score) >= winScore) {
+                            challenger = Integer.valueOf(score);
+                            editor.putInt(Constants.SETTING_COUNT_WORDS, 9);
+                            navigator.navigateTo(Screen.WINNER, ScreenType.ACTIVITY);
+
+                        }
+                    }
+
+
                     currentPlayTeam = 0;
+                    ++currentRound;
+
                 }
 
-                SharedPreferences.Editor editor = mSetting.edit();
 
                 editor.putString(Constants.SETTING_SCORES, newTeamScore);
                 editor.putInt(Constants.SETTING_PLAY_TEAM, currentPlayTeam);
+                editor.putInt(Constants.SETTING_ROUND, currentRound);
 
                 editor.apply();
 

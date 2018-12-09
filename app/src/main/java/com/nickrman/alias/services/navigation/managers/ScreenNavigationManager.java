@@ -72,6 +72,9 @@ public class ScreenNavigationManager implements Navigator {
             case GAMING:
                 navigateToGaming(args);
                 break;
+            case WINNER:
+                navigateToWinner(args);
+                break;
         }
     }
 
@@ -94,11 +97,6 @@ public class ScreenNavigationManager implements Navigator {
 
 
     //Activity
-    private void navigateToSettings(Bundle args) {
-        switchActivityScreen(Screen.SETTINGS, args, ScreenAnimType.NONE_TYPE, false);
-        activity.hideKeyboard();
-
-    }
 
     private void navigateToStart(Bundle args) {
         switchActivityScreen(Screen.START, args, ScreenAnimType.NONE_TYPE, true);
@@ -107,12 +105,26 @@ public class ScreenNavigationManager implements Navigator {
         activity.freeMemory();*/
     }
 
+    private void navigateToSettings(Bundle args) {
+        switchActivityScreen(Screen.SETTINGS, args, ScreenAnimType.NONE_TYPE, false);
+        activity.hideKeyboard();
+
+    }
+
     private void navigateToGaming(Bundle args) {
         switchActivityScreen(Screen.GAMING, args, ScreenAnimType.NONE_TYPE, false);
         activity.hideKeyboard();
         /*activity.finish();
         activity.freeMemory();*/
     }
+
+    private void navigateToWinner(Bundle args) {
+        switchActivityScreen(Screen.WINNER,args,ScreenAnimType.NONE_TYPE,true);
+        activity.hideKeyboard();
+        activity.finish();
+        activity.freeMemory();
+    }
+
 
 
     //Fragment
