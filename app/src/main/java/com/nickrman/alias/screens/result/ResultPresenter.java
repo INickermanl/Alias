@@ -94,6 +94,8 @@ public class ResultPresenter implements ResultContract.Presenter {
                 int winScore = mSetting.getInt(Constants.SETTING_COUNT_WORDS, 30);
                 int currentRound = mSetting.getInt(Constants.SETTING_ROUND, 50);
                 int challenger = 0;
+                int winner = 0;
+                int counterTeam = -1;
 
 
                 for (String score : teamScores.split(",")) {
@@ -123,10 +125,33 @@ public class ResultPresenter implements ResultContract.Presenter {
                     for (String score : listScores) {
                         if (Integer.valueOf(score) >= winScore) {
                             challenger = Integer.valueOf(score);
+                            for (String scoreTeam : listScores) {
+                                counterTeam++;
+                                if (challenger <= Integer.valueOf(scoreTeam)) {
+                                    winner = Integer.valueOf(scoreTeam);
+
+                                }
+
+                            }
+                            editor.putInt(Constants.WINNERtEAMnAME, counterTeam);
+                            editor.putInt(Constants.WINNER, winner);
                             editor.putInt(Constants.SETTING_COUNT_WORDS, 9);
                             navigator.navigateTo(Screen.WINNER, ScreenType.ACTIVITY);
+                            break;
 
                         }
+
+                        /*if (Integer.valueOf(score) >= winScore) {
+
+                            challenger = Integer.valueOf(score);
+
+
+
+                            *//*challenger = Integer.valueOf(score);
+                            editor.putInt(Constants.SETTING_COUNT_WORDS, 9);
+                            navigator.navigateTo(Screen.WINNER, ScreenType.ACTIVITY);*//*
+
+                        }*/
                     }
 
 

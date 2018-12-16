@@ -19,5 +19,7 @@ public class Constants {
     //String value
     public static final String USER_WORDS = "USER_WORDS";
     public static final String USER_ANSWER = "USER_ANSWER";
+    public static final String WINNER = "WINNER TEAM";
+    public static final String WINNERtEAMnAME = "WINNER_TEAM_NAME";
 
 }

@@ -81,6 +81,7 @@ public class CardView implements CardContract.View {
                 super.onAnimationEnd(animation);
                 currentCard.setVisibility(View.VISIBLE);
                 flipCard.setVisibility(View.GONE);
+                flipCard.setClickable(false);
             }
         });
 
