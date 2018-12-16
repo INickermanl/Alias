@@ -32,16 +32,11 @@ public class WinnerPresenter implements WinnerContract.Presenter {
         int winnerScore = mSetting.getInt(Constants.WINNER, 4);
         int counterNameTeamInList = mSetting.getInt(Constants.WINNERtEAMnAME, 5555);
         List<String> listTeamName = new ArrayList<>();
-        --counterNameTeamInList;
 
         for (String teamName : teamNames.split(",")) {
             listTeamName.add(teamName);
-            if ((listTeamName.size() - 1) == counterNameTeamInList){
-                view.setWinnerTeamName(teamName);
-                listTeamName = null;
-                break;
-            }
         }
+        view.setWinnerTeamName(listTeamName.get(counterNameTeamInList));
 
 
         view.setWinnerScore(Integer.toString(winnerScore));

@@ -95,7 +95,7 @@ public class ResultPresenter implements ResultContract.Presenter {
                 int currentRound = mSetting.getInt(Constants.SETTING_ROUND, 50);
                 int challenger = 0;
                 int winner = 0;
-                int counterTeam = -1;
+                int counterTeam = 0;
 
 
                 for (String score : teamScores.split(",")) {
@@ -125,13 +125,14 @@ public class ResultPresenter implements ResultContract.Presenter {
                     for (String score : listScores) {
                         if (Integer.valueOf(score) >= winScore) {
                             challenger = Integer.valueOf(score);
-                            for (String scoreTeam : listScores) {
-                                counterTeam++;
-                                if (challenger <= Integer.valueOf(scoreTeam)) {
-                                    winner = Integer.valueOf(scoreTeam);
 
+                            for (int i = 0; i < listScores.size() - 1; i++) {
+
+                                if (challenger <= Integer.valueOf(listScores.get(i))) {
+                                    challenger = Integer.valueOf(listScores.get(i));
+                                    counterTeam = i;
+                                    winner = Integer.valueOf(listScores.get(i));
                                 }
-
                             }
                             editor.putInt(Constants.WINNERtEAMnAME, counterTeam);
                             editor.putInt(Constants.WINNER, winner);
