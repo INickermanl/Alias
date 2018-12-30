@@ -27,7 +27,6 @@ public class StartActivity extends BaseActivity {
         root = findViewById(R.id.root);
         mSetting = getSharedPreferences(Constants.SETTING, Context.MODE_PRIVATE);
 
-
         view = new StartView(root);
         presenter = new StartPresenter(mSetting);
     }

@@ -2,6 +2,7 @@ package com.nickrman.alias.screens.result;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.nickrman.alias.data.models.ItemAnswer;
 import com.nickrman.alias.services.Navigator;
@@ -126,13 +127,19 @@ public class ResultPresenter implements ResultContract.Presenter {
                         if (Integer.valueOf(score) >= winScore) {
                             challenger = Integer.valueOf(score);
 
-                            for (int i = 0; i < listScores.size() - 1; i++) {
+                            try {
+                                for (int i = 0; i < listScores.size() - 1; i++) {
 
-                                if (challenger <= Integer.valueOf(listScores.get(i))) {
-                                    challenger = Integer.valueOf(listScores.get(i));
-                                    counterTeam = i;
-                                    winner = Integer.valueOf(listScores.get(i));
+                                    if (challenger <= Integer.valueOf(listScores.get(i))) {
+                                        challenger = Integer.valueOf(listScores.get(i));
+                                        counterTeam = i;
+                                        winner = Integer.valueOf(listScores.get(i));
+                                    }
                                 }
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                Log.d("LOG", e.getLocalizedMessage());
                             }
                             editor.putInt(Constants.WINNERtEAMnAME, counterTeam);
                             editor.putInt(Constants.WINNER, winner);

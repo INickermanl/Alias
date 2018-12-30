@@ -254,4 +254,3 @@ public class ScreenNavigationManager implements Navigator {
         return false;
     }
 }
-
