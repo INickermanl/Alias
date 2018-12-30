@@ -3,30 +3,21 @@ package com.nickrman.alias.data.db.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
-import io.reactivex.annotations.NonNull;
+//
+import android.support.annotation.NonNull;
 
-
-@Entity(tableName = "books")
-public class Book {
+@Entity(tableName = "vocabulary")
+public class Vocabulary {
     @NonNull
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "id")
     private int id;
 
 
     @ColumnInfo(name = "nameBook")
     private String nameBook;
-
-    @Ignore
-    public Book(String nameBook) {
-        this.nameBook = nameBook;
-    }
-
-    public Book() {
-    }
 
     public String getNameBook() {
         return nameBook;

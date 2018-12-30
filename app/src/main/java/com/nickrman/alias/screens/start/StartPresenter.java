@@ -1,9 +1,15 @@
 package com.nickrman.alias.screens.start;
 
+import android.arch.persistence.room.Room;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.util.Log;
 
-import com.nickrman.alias.data.db.AppDatabase;
+import com.nickrman.alias.StartActivity;
+import com.nickrman.alias.base.App;
+import com.nickrman.alias.data.MySecondDB;
+import com.nickrman.alias.data.db.MyAppDatabase;
+import com.nickrman.alias.data.db.model.Vocabulary;
 import com.nickrman.alias.services.Navigator;
 import com.nickrman.alias.services.navigation.Screen;
 import com.nickrman.alias.services.navigation.ScreenType;
@@ -19,18 +25,38 @@ public class StartPresenter implements StartContract.Presenter {
     private StartContract.View view;
     private CompositeDisposable subscriptions;
     private Navigator navigator;
-    private AppDatabase db;
+    private MySecondDB db;
     private SharedPreferences mSetting;
+    private Handler handler = new Handler();
 
 
     public StartPresenter(SharedPreferences mSetting) {
-        //    db = AppDatabase.getFileDatabase(App.getInstance());
+        //    db = MyAppDatabase.getFileDatabase(App.getInstance());
         this.mSetting = mSetting;
     }
 
     @Override
     public void start(StartContract.View view) {
         this.view = view;
+
+
+        final Vocabulary vocabulary = new Vocabulary();
+        vocabulary.setId(1);
+        vocabulary.setNameBook("test");
+        Vocabulary vocabulary1 = new Vocabulary();
+        vocabulary.setId(2);
+        vocabulary.setNameBook("test1");
+
+        /*db = MySecondDB.getInstance();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                db.vocabularyDAO().insertBook(vocabulary);
+            }
+        }).start();
+        db.vocabularyDAO().insertBook(vocabulary);
+*/
+
         setupView();
         setupAction();
     }
@@ -39,12 +65,12 @@ public class StartPresenter implements StartContract.Presenter {
     private void setupView() {
         subscriptions = new CompositeDisposable();
 
-        int countWords = mSetting.getInt(Constants.SETTING_COUNT_WORDS,9);
-        if(countWords >= 10){
-            Log.d("LOG",String.valueOf(countWords));
+        int countWords = mSetting.getInt(Constants.SETTING_COUNT_WORDS, 9);
+        if (countWords >= 10) {
+            Log.d("LOG", String.valueOf(countWords));
             view.showResumeButton(true);
-        }else{
-            Log.d("LOG",String.valueOf(countWords));
+        } else {
+            Log.d("LOG", String.valueOf(countWords));
             view.showResumeButton(false);
         }
 
@@ -84,7 +110,7 @@ public class StartPresenter implements StartContract.Presenter {
 
             @Override
             public void onNext(Object o) {
-                navigator.navigateTo(Screen.GAMING,ScreenType.ACTIVITY);
+                navigator.navigateTo(Screen.GAMING, ScreenType.ACTIVITY);
             }
 
             @Override
