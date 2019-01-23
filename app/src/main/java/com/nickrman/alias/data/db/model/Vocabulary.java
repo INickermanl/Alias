@@ -10,14 +10,19 @@ import android.support.annotation.NonNull;
 
 @Entity(tableName = "vocabulary")
 public class Vocabulary {
+
     @NonNull
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
 
 
     @ColumnInfo(name = "nameBook")
     private String nameBook;
+
+    public Vocabulary(String nameBook) {
+        this.nameBook = nameBook;
+    }
 
     public String getNameBook() {
         return nameBook;
@@ -31,7 +36,7 @@ public class Vocabulary {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(@NonNull int id) {
         this.id = id;
     }
 
