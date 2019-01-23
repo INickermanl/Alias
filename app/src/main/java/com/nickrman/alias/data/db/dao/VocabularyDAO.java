@@ -16,16 +16,18 @@ import io.reactivex.Flowable;
 @Dao
 public interface VocabularyDAO {
 
-   @Query("SELECT * FROM vocabulary")
+    @Query("SELECT * FROM vocabulary")
     Flowable<List<Vocabulary>> getListVocabulary();
 
-   @Insert
+    @Insert
     void insertVocabulary(Vocabulary... vocabularies);
 
-   @Update
+    @Update
     void updateVocabulary(Vocabulary vocabulary);
 
-   @Delete
+    @Delete
     void deleteVocabulary(Vocabulary vocabulary);
 
+    @Query("DELETE FROM vocabulary")
+    void deleteAllVocabulary();
 }

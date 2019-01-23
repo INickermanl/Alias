@@ -29,4 +29,6 @@ public interface IWordDataSourse {
 
     void deleteAllWords();
 
+    void deleteAllVocabulary();
+
 }

@@ -66,4 +66,9 @@ public class RepositorySource implements IWordDataSourse {
     public void deleteAllWords() {
         this.wordDao.deleteAllWords();
     }
+
+    @Override
+    public void deleteAllVocabulary() {
+        this.vocabularyDAO.deleteAllVocabulary();
+    }
 }
