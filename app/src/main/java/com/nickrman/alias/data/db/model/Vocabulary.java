@@ -20,8 +20,12 @@ public class Vocabulary {
     @ColumnInfo(name = "nameBook")
     private String nameBook;
 
-    public Vocabulary(String nameBook) {
+    @ColumnInfo(name = "id_vocabulary")
+    private int vocabularyId;
+
+    public Vocabulary(int vocabularyId, String nameBook) {
         this.nameBook = nameBook;
+        this.vocabularyId = vocabularyId;
     }
 
     public String getNameBook() {
@@ -43,5 +47,13 @@ public class Vocabulary {
     @Override
     public String toString() {
         return new StringBuffer(nameBook).toString();
+    }
+
+    public int getVocabularyId() {
+        return vocabularyId;
+    }
+
+    public void setVocabularyId(int vocabularyId) {
+        this.vocabularyId = vocabularyId;
     }
 }

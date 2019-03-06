@@ -528,13 +528,13 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
     private void initTeamNameList() {
         teamNameList.add("Vasya");
-        teamNameList.add("Xyi");
+        teamNameList.add("bem");
         teamNameList.add("Nik");
         teamNameList.add("Armen");
         teamNameList.add("Cat");
         teamNameList.add("mamka");
-        teamNameList.add("ebanyi c rot team");
-        teamNameList.add("tvoya sychka");
+        teamNameList.add("team");
+        teamNameList.add("test");
         teamNameList.add("");
 
 

@@ -44,12 +44,27 @@ public class StartPresenter implements StartContract.Presenter {
         );
     }
 
+    @Override
+    public void start(StartContract.View view) {
+        this.view = view;
+        subscriptions = new CompositeDisposable();
+        setupView();
+        testInsert();
+        setupAction();
+    }
+
+    @Override
+    public void stop() {
+        subscriptions.dispose();
+        subscriptions = null;
+    }
+
     private void testInsert() {
 
         Disposable disposable = Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
             public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
-                Vocabulary vocabulary = new Vocabulary("Test");
+                Vocabulary vocabulary = new Vocabulary(10, "Test");
 
                 mRepository.insertVocabulary(vocabulary);
                 emitter.onComplete();
@@ -93,16 +108,6 @@ public class StartPresenter implements StartContract.Presenter {
                     }
                 });
         subscriptions.add(disposable);
-    }
-
-    @Override
-    public void start(StartContract.View view) {
-        this.view = view;
-        subscriptions = new CompositeDisposable();
-        setupView();
-        testInsert();
-        setupAction();
-
     }
 
 
@@ -169,16 +174,8 @@ public class StartPresenter implements StartContract.Presenter {
     }
 
     @Override
-    public void stop() {
-        subscriptions.dispose();
-        subscriptions = null;
-
-    }
-
-    @Override
     public void setNavigation(Navigator navigation) {
         this.navigator = navigation;
-
     }
 
     @Override
