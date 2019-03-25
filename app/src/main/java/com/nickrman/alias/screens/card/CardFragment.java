@@ -34,6 +34,7 @@ public class CardFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         presenter.start();
+
         presenter.setNavigator(activity.getNavigator());
         presenter.setBackNavigator(activity.getNavigationBackManager());
         presenterActionBar.start();

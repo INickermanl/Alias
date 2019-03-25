@@ -10,6 +10,7 @@ import com.nickrman.alias.base.BaseActivity;
 import com.nickrman.alias.base.action_bar.ActionBarContract;
 import com.nickrman.alias.base.action_bar.ActionBarView;
 import com.nickrman.alias.screens.setting.SettingActionBarPresenter;
+import com.nickrman.alias.screens.setting.SettingActionBarPresenterI;
 import com.nickrman.alias.screens.setting.SettingsPresenter;
 import com.nickrman.alias.screens.setting.SettingView;
 import com.nickrman.alias.screens.setting.SettingsContract;
@@ -39,8 +40,9 @@ public class SettingsActivity extends BaseActivity {
 
         actionBar = root.findViewById(R.id.action_bar);
         actionBarView = new ActionBarView(actionBar);
-        actionBarPresenter = new SettingActionBarPresenter(this, actionBarView, R.string.setting_text_toolbar, bus);
+        //actionBarPresenter = new SettingActionBarPresenter(this, actionBarView, R.string.setting_text_toolbar, bus);
 
+        actionBarPresenter = new SettingActionBarPresenterI(this, actionBarView, R.string.setting_text_toolbar, bus);
         view = new SettingView(root, this);
         presenter = new SettingsPresenter(this, view);
 

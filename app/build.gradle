@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 27
@@ -76,6 +78,10 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     //for watch db in live time in web
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 
+}
+repositories {
+    mavenCentral()
 }

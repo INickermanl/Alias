@@ -32,6 +32,7 @@ public class GeneralActionBarPresenter implements ActionBarContract.Presenter {
         this.titleStringText = titleStringText;
     }
 
+
     @Override
     public void setupView() {
 
