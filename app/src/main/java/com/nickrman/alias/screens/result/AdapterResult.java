@@ -14,12 +14,16 @@ import com.nickrman.alias.data.models.ItemAnswer;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+
 public class AdapterResult extends RecyclerView.Adapter<AdapterResult.ViewHolder> {
 
     private List<ItemAnswer> listItemAnswer;
+    private ListItemCallback callback;
 
-    public AdapterResult(List<ItemAnswer> listItemAnswer) {
+    public AdapterResult(List<ItemAnswer> listItemAnswer, ListItemCallback callback) {
         this.listItemAnswer = listItemAnswer;
+        this.callback = callback;
     }
 
     @NonNull
@@ -35,13 +39,13 @@ public class AdapterResult extends RecyclerView.Adapter<AdapterResult.ViewHolder
 
         ItemAnswer item = listItemAnswer.get(position);
 
-        if(item.isAnswer()){
+        if (item.isAnswer()) {
             holder.backRightAnswer.setBackgroundResource(R.drawable.background_right_answer);
             holder.imageRight.setBackgroundResource(R.drawable.ic_right_answer_visible);
             holder.backWrongAnswer.setBackgroundResource(R.color.colorWhite);
             holder.imageWrong.setBackgroundResource(R.drawable.ic_wrong_answer_unvisible);
 
-        }else{
+        } else {
             holder.backWrongAnswer.setBackgroundResource(R.drawable.background_wrong_answer);
             holder.imageWrong.setBackgroundResource(R.drawable.ic_wrong_answer_visible);
             holder.backRightAnswer.setBackgroundResource(R.color.colorWhite);
@@ -52,12 +56,16 @@ public class AdapterResult extends RecyclerView.Adapter<AdapterResult.ViewHolder
 
     }
 
+    public Observable<List<ItemAnswer>> getListItemAnswer() {
+        return Observable.just(listItemAnswer);
+    }
+
     @Override
     public int getItemCount() {
         return listItemAnswer.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView word;
         View backRightAnswer;
         View backWrongAnswer;
@@ -73,6 +81,34 @@ public class AdapterResult extends RecyclerView.Adapter<AdapterResult.ViewHolder
             imageRight = itemView.findViewById(R.id.image_right_answer);
             imageWrong = itemView.findViewById(R.id.image_wrong_answer);
 
+            backRightAnswer.setOnClickListener(this);
+            backWrongAnswer.setOnClickListener(this);
+
+        }
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.background_right_answer:
+                    listItemAnswer.get(getAdapterPosition()).setAnswer(true);
+                    break;
+                case R.id.background_wrong_answer:
+                    listItemAnswer.get(getAdapterPosition()).setAnswer(false);
+                    break;
+            }
+            notifyDataSetChanged();
+            int countRightAnswer = 0;
+            int countWrongAnswer = 0;
+
+            for (ItemAnswer itemAnswer : listItemAnswer) {
+                if (itemAnswer.isAnswer()) countRightAnswer++;
+                else countWrongAnswer++;
+
+
+            }
+            int result = countRightAnswer - countWrongAnswer;
+
+            callback.back(result > 0 ? result : 0);
         }
     }
 }

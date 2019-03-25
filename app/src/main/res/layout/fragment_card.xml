@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
+    android:background="@mipmap/background_pole"
     android:clipChildren="false"
     android:clipToPadding="false">
 
@@ -156,6 +156,5 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
-
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

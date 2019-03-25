@@ -3,14 +3,14 @@ package com.nickrman.alias.data.db.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
-import io.reactivex.annotations.NonNull;
+//
+import android.support.annotation.NonNull;
 
+@Entity(tableName = "vocabulary")
+public class Vocabulary {
 
-@Entity(tableName = "books")
-public class Book {
     @NonNull
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -20,12 +20,12 @@ public class Book {
     @ColumnInfo(name = "nameBook")
     private String nameBook;
 
-    @Ignore
-    public Book(String nameBook) {
-        this.nameBook = nameBook;
-    }
+    @ColumnInfo(name = "id_vocabulary")
+    private int vocabularyId;
 
-    public Book() {
+    public Vocabulary(int vocabularyId, String nameBook) {
+        this.nameBook = nameBook;
+        this.vocabularyId = vocabularyId;
     }
 
     public String getNameBook() {
@@ -40,12 +40,20 @@ public class Book {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(@NonNull int id) {
         this.id = id;
     }
 
     @Override
     public String toString() {
         return new StringBuffer(nameBook).toString();
+    }
+
+    public int getVocabularyId() {
+        return vocabularyId;
+    }
+
+    public void setVocabularyId(int vocabularyId) {
+        this.vocabularyId = vocabularyId;
     }
 }

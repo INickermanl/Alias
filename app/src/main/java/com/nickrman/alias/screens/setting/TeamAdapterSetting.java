@@ -48,12 +48,12 @@ public class TeamAdapterSetting extends RecyclerView.Adapter<TeamAdapterSetting.
                 .into(holder.crossButton);
 
 
-        holder.crossButton.setOnClickListener(new View.OnClickListener() {
+       /* holder.crossButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 callback.deleteTeam(position, item);
             }
-        });
+        });*/
     }
 
     @Override
@@ -61,7 +61,7 @@ public class TeamAdapterSetting extends RecyclerView.Adapter<TeamAdapterSetting.
         return listTeam.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView teamImage;
         TextView teamName;
         ImageView crossButton;
@@ -71,6 +71,17 @@ public class TeamAdapterSetting extends RecyclerView.Adapter<TeamAdapterSetting.
             teamName = itemView.findViewById(R.id.team_name);
             teamImage = itemView.findViewById(R.id.image_team_icon);
             crossButton = itemView.findViewById(R.id.cross_button);
+
+            crossButton.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.cross_button:
+                    callback.deleteTeam(getAdapterPosition(), listTeam.get(getAdapterPosition()));
+                    break;
+            }
 
         }
     }

@@ -25,7 +25,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
-public class SettingsPresenter implements SettingsContract.Presenter {
+public class SettingsPresenter implements SettingsContract.Presenter, TeamCallback {
     private int counter = 2;
     private boolean checkBook = false;
 
@@ -56,6 +56,28 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
     }
 
+    @Override
+    public void deleteTeam(int position, TeamItem item) {
+        handler.postDelayed(() -> {
+            if (teamItemList.size() > 0) {
+                teamItemList.remove(item);
+
+                TeamAvatarItem teamAvatarItem = new TeamAvatarItem(item.getImageTeam());
+                avatarItemList.add(0, teamAvatarItem);
+
+                teamNameList.add(0, item.getNameTeam());
+                --counter;
+                opportunityCheck();
+
+                view.updateItemList(teamItemList);
+
+            }
+        }, 40);
+
+
+    }
+
+
     private void initList() {
         initVocabularyList();
         initAvatarItemList();
@@ -76,32 +98,8 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     }
 
     public void setupAction() {
-        view.setTeamList(teamItemList, new TeamCallback() {
-            @Override
-            public void deleteTeam(int position, TeamItem item) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (teamItemList.size() > 0) {
-                            teamItemList.remove(item);
+        view.setTeamList(teamItemList, this);
 
-
-                            TeamAvatarItem teamAvatarItem = new TeamAvatarItem(item.getImageTeam());
-                            avatarItemList.add(0, teamAvatarItem);
-
-                            teamNameList.add(0, item.getNameTeam());
-                            --counter;
-                            opportunityCheck();
-
-                            view.updateItemList(teamItemList);
-
-                        }
-                    }
-                }, 40);
-
-
-            }
-        });
         view.addTeamButtonAction().subscribe(new Observer<Object>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -528,13 +526,13 @@ public class SettingsPresenter implements SettingsContract.Presenter {
 
     private void initTeamNameList() {
         teamNameList.add("Vasya");
-        teamNameList.add("Xyi");
+        teamNameList.add("bem");
         teamNameList.add("Nik");
         teamNameList.add("Armen");
         teamNameList.add("Cat");
         teamNameList.add("mamka");
-        teamNameList.add("ebanyi c rot team");
-        teamNameList.add("tvoya sychka");
+        teamNameList.add("team");
+        teamNameList.add("test");
         teamNameList.add("");
 
 

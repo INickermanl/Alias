@@ -81,6 +81,7 @@ public class CardView implements CardContract.View {
                 super.onAnimationEnd(animation);
                 currentCard.setVisibility(View.VISIBLE);
                 flipCard.setVisibility(View.GONE);
+                flipCard.setClickable(false);
             }
         });
 
@@ -94,20 +95,16 @@ public class CardView implements CardContract.View {
 
     @Override
     public void dismissCard(String explainWords) {
-
         int distanceX = (mainContainer.getLeft() + currentCard.getWidth() + 200) * -1;
         swipeCard(distanceX,explainWords);
-
     }
 
     @Override
     public void acceptCard(String explainWords) {
         int distanceX = (mainContainer.getRight() + currentCard.getWidth() + 200);
         swipeCard(distanceX, explainWords);
-
-
-
     }
+
     private void swipeCard(int distanceX,String explainWords) {
         Random random = new Random();
         int distanceY = (random.nextInt(mainContainer.getTop()) * (random.nextInt(3) - 1));

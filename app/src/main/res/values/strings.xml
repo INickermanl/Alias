@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Alias</string>
     <string name="back_message">Please click BACK again to exit</string>
-    <string name="setting_text_toolbar">Select you words book</string>
+    <string name="setting_text_toolbar">Select you words Vocabulary</string>
     <string name="start_game">Start Game</string>
-    <string name="setting_select_vocabulary">Select your vocabulary</string>
+    <string name="setting_select_vocabulary">Select your Vocabulary</string>
     <string name="empty_string"></string>
     <string name="rules_alias">Настольная игра (Alias) Элиас, или Скажи иначе
 Игра Alias - одна из самых популярных настольных игр.
@@ -31,4 +31,5 @@
     <string name="ok">OK</string>
     <string name="click_to_start">Click to Start</string>
     <string name="points_scored">Points scored</string>
+    <string name="team_name">Team Name</string>
 </resources>

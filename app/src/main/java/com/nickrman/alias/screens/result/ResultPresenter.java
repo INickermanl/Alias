@@ -2,6 +2,7 @@ package com.nickrman.alias.screens.result;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.nickrman.alias.data.models.ItemAnswer;
 import com.nickrman.alias.services.Navigator;
@@ -17,7 +18,7 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public class ResultPresenter implements ResultContract.Presenter {
+public class ResultPresenter implements ResultContract.Presenter, ListItemCallback {
     private ResultContract.View view;
     private List<ItemAnswer> listItemAnswer = new ArrayList<>();
     private CompositeDisposable subscription;
@@ -33,6 +34,11 @@ public class ResultPresenter implements ResultContract.Presenter {
         this.mSetting = mSetting;
         makeListAnswer();
 
+    }
+
+    @Override
+    public void back(int countRightAnswer) {
+        view.setTeamPoint(String.valueOf(countRightAnswer));
     }
 
     private void makeListAnswer() {
@@ -62,8 +68,9 @@ public class ResultPresenter implements ResultContract.Presenter {
             }
         }
 
+        int result = teamRightPoint - teamWrongPoint;
 
-        view.setTeamPoint(String.valueOf(teamRightPoint - teamWrongPoint));
+        view.setTeamPoint(String.valueOf(result > 0 ? result : 0));
 
     }
 
@@ -75,7 +82,7 @@ public class ResultPresenter implements ResultContract.Presenter {
     }
 
     private void setupAction() {
-        view.setTeamList(listItemAnswer);
+        view.setTeamList(listItemAnswer, this);
 
         view.endButtonAction().subscribe(new Observer<Object>() {
             @Override
@@ -94,6 +101,8 @@ public class ResultPresenter implements ResultContract.Presenter {
                 int winScore = mSetting.getInt(Constants.SETTING_COUNT_WORDS, 30);
                 int currentRound = mSetting.getInt(Constants.SETTING_ROUND, 50);
                 int challenger = 0;
+                int winner = 0;
+                int counterTeam = 0;
 
 
                 for (String score : teamScores.split(",")) {
@@ -123,10 +132,40 @@ public class ResultPresenter implements ResultContract.Presenter {
                     for (String score : listScores) {
                         if (Integer.valueOf(score) >= winScore) {
                             challenger = Integer.valueOf(score);
+
+                            try {
+                                for (int i = 0; i < listScores.size() - 1; i++) {
+
+                                    if (challenger <= Integer.valueOf(listScores.get(i))) {
+                                        challenger = Integer.valueOf(listScores.get(i));
+                                        counterTeam = i;
+                                        winner = Integer.valueOf(listScores.get(i));
+                                    }
+                                }
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                Log.d("LOG", e.getLocalizedMessage());
+                            }
+                            editor.putInt(Constants.WINNERtEAMnAME, counterTeam);
+                            editor.putInt(Constants.WINNER, winner);
                             editor.putInt(Constants.SETTING_COUNT_WORDS, 9);
                             navigator.navigateTo(Screen.WINNER, ScreenType.ACTIVITY);
+                            break;
 
                         }
+
+                        /*if (Integer.valueOf(score) >= winScore) {
+
+                            challenger = Integer.valueOf(score);
+
+
+
+                            *//*challenger = Integer.valueOf(score);
+                            editor.putInt(Constants.SETTING_COUNT_WORDS, 9);
+                            navigator.navigateTo(Screen.WINNER, ScreenType.ACTIVITY);*//*
+
+                        }*/
                     }
 
 

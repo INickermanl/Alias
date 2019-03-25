@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="Select your vocabulary:"
+        android:text="Select your Vocabulary:"
         android:textColor="@color/colorBackgroundAvatar"
         android:textSize="32sp"
         android:textStyle="bold"
