@@ -18,7 +18,7 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public class ResultPresenter implements ResultContract.Presenter {
+public class ResultPresenter implements ResultContract.Presenter, ListItemCallback {
     private ResultContract.View view;
     private List<ItemAnswer> listItemAnswer = new ArrayList<>();
     private CompositeDisposable subscription;
@@ -34,6 +34,11 @@ public class ResultPresenter implements ResultContract.Presenter {
         this.mSetting = mSetting;
         makeListAnswer();
 
+    }
+
+    @Override
+    public void back(int countRightAnswer) {
+        view.setTeamPoint(String.valueOf(countRightAnswer));
     }
 
     private void makeListAnswer() {
@@ -63,8 +68,9 @@ public class ResultPresenter implements ResultContract.Presenter {
             }
         }
 
+        int result = teamRightPoint - teamWrongPoint;
 
-        view.setTeamPoint(String.valueOf(teamRightPoint - teamWrongPoint));
+        view.setTeamPoint(String.valueOf(result > 0 ? result : 0));
 
     }
 
@@ -76,7 +82,7 @@ public class ResultPresenter implements ResultContract.Presenter {
     }
 
     private void setupAction() {
-        view.setTeamList(listItemAnswer);
+        view.setTeamList(listItemAnswer, this);
 
         view.endButtonAction().subscribe(new Observer<Object>() {
             @Override

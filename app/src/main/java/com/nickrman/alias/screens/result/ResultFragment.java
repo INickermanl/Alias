@@ -45,4 +45,9 @@ public class ResultFragment extends BaseFragment {
         super.onStop();
         presenter.stop();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 }

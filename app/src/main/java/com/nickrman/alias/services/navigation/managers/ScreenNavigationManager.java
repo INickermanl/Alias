@@ -129,7 +129,7 @@ public class ScreenNavigationManager implements Navigator {
 
     //Fragment
     private void navigateToScoreFragment(Bundle args) {
-        switchFragmentScreen(Screen.SCORE, args, ScreenAnimType.NONE_TYPE, false);
+        switchFragmentScreen(Screen.SCORE, args, ScreenAnimType.FADE_TYPE, false);
         activity.hideKeyboard();
     }
 

@@ -28,6 +28,6 @@ public class ScoreActionBarPresenter extends GeneralActionBarPresenter {
     public void setupView() {
         super.setupView();
         presenterView.showAB(true);
-        presenterView.setBackgroundAB(activity.getResources().getColor(R.color.colorAccent));
+       /* presenterView.setBackgroundAB(activity.getResources().getColor(R.color.));*/
     }
 }

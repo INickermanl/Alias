@@ -32,13 +32,14 @@ public class ResultView implements ResultContract.View {
     }
 
     @Override
-    public void setTeamList(List<ItemAnswer> answerList) {
+    public void setTeamList(List<ItemAnswer> answerList, ListItemCallback callback) {
         LinearLayoutManager llm = new LinearLayoutManager(root.getContext(),LinearLayoutManager.VERTICAL,false);
-        adapter = new AdapterResult(answerList);
+        adapter = new AdapterResult(answerList, callback);
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
 
     }
+
 
     @Override
     public void setTeamPoint(String score) {
@@ -54,4 +55,6 @@ public class ResultView implements ResultContract.View {
     public String getTeamPoint() {
         return teamPoint.getText().toString().trim();
     }
+
+
 }
